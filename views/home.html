@@ -1,0 +1,26 @@
+{% extends 'baselayout.html' %}
+{% block title 'Wiki' %}
+
+{% block body %}
+	<div class="content">
+		<h1>Wiki</h1>
+		<p>Search node</p>
+		{{form(form, {'action':path('home'), 'method':'POST'})}}
+	</div>
+
+	<div class="content">
+	  <p>Nodes in the wiki</p>
+	  <ul class="nodes">
+	  {% for node in nodes %}
+		<li>
+		  <P>NAME: {{node.name}} <br>DESCRIPTION: {{node.description}}
+		  <br>
+		  <a href="{{path('node', {id:node.id})}}")>More info</a>
+		  <a href="{{path('update',{id: node.id})}}">Update</a>
+		  </p>
+		</li>
+	  {% endfor %}
+	  </ul>
+	  <a href="{{ path('insert') }}">Insert new info</a>
+	</div>
+{% endblock %}

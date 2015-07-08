@@ -1,0 +1,27 @@
+{% extends 'baselayout.html' %}
+{% block title 'Search' %}
+
+{% block body %}
+	<div class="content">
+		<h1>Search on description</h1>
+		<p>Give the search term</p>
+		{{form(form, {'action':path('search'), 'method':'POST'})}}
+	</div>
+	
+	<div class="content">
+		<p>Search results</p>
+		<ul class="nodes">
+			{% for node in nodes %}
+			<li>
+				<P>NAME: {{node.name}} <br>DESCRIPTION: {{node.description}}
+				<a href="{{path('node', {id:node.id})}}")>More info</a>
+				</p>
+
+			</li>
+			{% endfor %}
+		</ul>
+	</div>
+
+{% endblock %}
+
+
