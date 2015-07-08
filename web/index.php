@@ -113,6 +113,7 @@ $app->match('/insert', function(Request $request) use($app, $db) {
 			'constraints'=>array(new Assert\NotBlank(),new Assert\Length(array('min'=>3))),
 			'attr' => array('class'=>'form-control', 'placeholder'=>'The description of the item')
 		))
+
 		->add('property', 'choice', array(
 			'choices'=>$options,
 			'attr'=>array('class'=>'form-control','placeholder'=>'The property for the item')
@@ -120,16 +121,15 @@ $app->match('/insert', function(Request $request) use($app, $db) {
 		->add('value', 'text', array(
 			'constraints'=>array(new Assert\NotBlank(),new Assert\Length(array('min'=>3))),
 			'attr' => array('class'=>'form-control', 'placeholder'=>'The value for the property or relation')
-		))
+		))		
 		->add('send', 'submit', array(
 			'attr' => array('class'=>'btn btn-default')
 		))
 		->getForm();
-			
+		
 	$form->handleRequest($request);
 	
 	if($form->isValid()) {
-	
 		$data=$form->getData();
 		
 		//add the node to the db
