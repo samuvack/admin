@@ -83,6 +83,22 @@ $app->match('/', function(Application $app, Request $request) use($db) {
 })->bind('home');
 
 $app->match('/insert', function(Request $request) use($app, $db) {
+	//get the available properties (id, name)
+	$queryProps = "
+		SELECT id,name 
+		FROM properties
+	";
+	
+	$stm1 = $db->prepare($queryProps);
+	$stm1->execute();
+	$properties = $stm1->fetchAll();
+	
+	//store the properties in an array format id=>name for the choice form field
+	$options = array();
+	foreach($properties as $p){
+		$options[$p['id']]=$p['name'];
+	}
+
 	$default = array(
 		'name' =>'',
 		'description'=>''
@@ -97,9 +113,10 @@ $app->match('/insert', function(Request $request) use($app, $db) {
 			'constraints'=>array(new Assert\NotBlank(),new Assert\Length(array('min'=>3))),
 			'attr' => array('class'=>'form-control', 'placeholder'=>'The description of the item')
 		))
-		->add('property', 'integer', array(
-			'constraints'=>array(new Assert\NotBlank()),
-			'attr' => array('class'=>'form-control', 'placeholder'=>'The property or relation name')
+
+		->add('property', 'choice', array(
+			'choices'=>$options,
+			'attr'=>array('class'=>'form-control','placeholder'=>'The property for the item')
 		))
 		->add('value', 'text', array(
 			'constraints'=>array(new Assert\NotBlank(),new Assert\Length(array('min'=>3))),
