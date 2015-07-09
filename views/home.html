@@ -13,11 +13,11 @@
 	  <ul class="nodes">
 	  {% for node in nodes %}
 		<li>
-		  <P>NAME: {{node.name}} <br>DESCRIPTION: {{node.description}}
-		  <br>
+		  <h4>{{node.name}} </h4>
+		  <p>DESCRIPTION: {{node.description}}<p>
 		  <a href="{{path('node', {id:node.id})}}")>More info</a>
 		  <a href="{{path('update',{id: node.id})}}">Update</a>
-		  </p>
+		  <br><br>
 		</li>
 	  {% endfor %}
 	  </ul>
