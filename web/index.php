@@ -231,9 +231,9 @@ $app->get('/node/{id}', function(Application $app, $id) use($db) {
 	
 	//get relations starting from the node
 	$queryRelFrom = "
-		SELECT s.id as sid,p.id as pid,p.name as pname, p.datatype as ptype, s.value as svalue
-		FROM statements as s, properties as p
-		WHERE s.startID = :id and s.propertyName = p.id
+		SELECT s.id as sid,p.id as pid,p.name as pname, p.datatype as ptype, s.value as svalue, n.name as nstart
+		FROM statements as s, properties as p, nodes as n
+		WHERE s.startID = :id and s.propertyName = p.id and s.startID = n.id
 	";
 				
 	$stm2 = $db->prepare($queryRelFrom);
