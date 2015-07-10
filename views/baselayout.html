@@ -8,9 +8,11 @@
 
     <title>{% block title "A basic web application" %}</title>
     <!--<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.2/normalize.min.css">-->
-    <link rel="stylesheet" href="/Wiki_Silex/web/style/style.css">
+    {% block links%}
+	<link rel="stylesheet" href="/Wiki_Silex/web/style/style.css">
 	<link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
     <link href="//maxcdn.bootstrapcdn.com/bootswatch/3.2.0/darkly/bootstrap.min.css" rel="stylesheet">
+	{% endblock links %}
 	
     {% block style "" %}
   </head>

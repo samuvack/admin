@@ -1,9 +1,60 @@
 {% extends 'baselayout.html' %}
-{% block title 'Invoer' %}
+{% block title 'Map overview' %}
+
+
 
 {% block body %}
+	<script type="text/javascript" src="/../../Harris_test_application_v2/openlayers/lib/OpenLayers.js"></script>
+	<link rel="stylesheet" href="/../../Harris_test_application_v2/openlayers/theme/default/style.css" type="text/css">
+		
+	<script>
+		var map = new OpenLayers.Map("map");
+		
+		vector6= new OpenLayers.Layer.Vector(
+			//the name of the layer, e.g. used in the layer switcher
+			"l6", {
+			strategies: [new OpenLayers.Strategy.BBOX()],
+			protocol: new OpenLayers.Protocol.WFS({
+				version: "1.0.0",
+				url: "http://localhost:8080/geoserver/harris/wfs",
+				featurePrefix: "harris",
+				featureType: "l6",
+				featureNS: "http://localhost/harris",
+				geometryName: "geom",
+				srsName: "EPSG:4326"
+			}),
+			srsName: "EPSG:4326"
+			}
+		);
+		
+		
+		
+		var vector1= new OpenLayers.Layer.Vector(
+			//the name of the layer, e.g. used in the layer switcher
+			"nodes", {
+			strategies: [new OpenLayers.Strategy.BBOX()],
+			protocol: new OpenLayers.Protocol.WFS({
+				version: "1.0.0",
+				url: "http://localhost:8080/geoserver/archeowiki/wfs",
+				featurePrefix: "archeowiki",
+				featureType: "geometries_point",
+				featureNS: "http://localhost/archeowiki",
+				geometryName: "geom",
+				srsName: "EPSG:31370"
+			}),
+			srsName: "EPSG:31370"
+			}
+		);
+		map.addLayers([vector6]);
+		//map.zoomToMaxExtent();
+		
+	</script>
+
 	<div class="content">
 		<h1>Map view</h1>
+		
+		<div id="map" style="width:60%; height:399px;"></div>
+		
 		<p>All nodes with geographical information</p>
 			
 		<ul class="nodes">
@@ -11,7 +62,8 @@
 			<li>
 				<p>NAME: {{node.name}} <br>DESCRIPTION: {{node.description}}</p>
 			</li>
-		  {% endfor %}
-		</ul>		
+			{% endfor %}
+		</ul>	
+		
 	</div>
 {% endblock %}
