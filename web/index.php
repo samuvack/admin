@@ -278,7 +278,7 @@ $app->match('/search', function (Application $app, Request $request) use($db) {
 		
 		//search in the database
 		$query="
-			SELECT * FROM nodes WHERE descr@@to_tsquery('english',:term);
+			SELECT * FROM nodes WHERE descr@@plainto_tsquery('english',:term);
 		";
 	
 		$stm = $db->prepare($query);
