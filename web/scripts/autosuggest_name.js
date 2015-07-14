@@ -4,8 +4,8 @@ $(function() {
 	  //$( "#results" ).scrollTop( 0 );
 	}*/
 
-	$( "#form_description" ).autocomplete({
-	  source: "scripts/autocomplete.php",//"search.php",
+	$( "input:first-of-type" ).autocomplete({
+	  source: "scripts/autocomplete_name.php",//"search.php",
 	  minLength: 2/*,
 	  select: function( event, ui ) {
 		log( ui.item ?

@@ -44,7 +44,7 @@ $app->match('/', function(Application $app, Request $request) use($db) {
 	$form = $app['form.factory']->createBuilder('form', $default)
 		->add('name', 'search', array(
 			'constraints' => array(new Assert\NotBlank()),
-			'attr' => array('class'=>'form-control')
+			'attr' => array('class'=>'form-control', 'id'=>'form_search')
 		))
 		->add('send', 'submit', array(
 			'attr' => array('class'=>'btn btn-default')
@@ -243,7 +243,7 @@ $app->match('/search', function (Application $app, Request $request) use($db) {
 	);
 		
 	$form = $app['form.factory']->createBuilder('form', $default)
-		->add('search', 'search', array(
+		->add('description', 'search', array(
 			'constraints' => array(new Assert\NotBlank()),
 			'attr' => array('class'=>'form-control')
 		))

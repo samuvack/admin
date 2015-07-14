@@ -40,9 +40,9 @@ $p = count($parts);
 /**
  * Create SQL
  */
-$sql = "SELECT id,description FROM nodes WHERE lower(description) LIKE lower('%" . $parts[0] ."%')";
+$sql = "SELECT id, name FROM nodes WHERE lower(name) LIKE lower('%" . $parts[0] ."%')";
 for($i = 1; $i < $p; $i++) {
-  $sql .= " AND lower(description) LIKE lower('%" . $parts[$i] . "%')";
+  $sql .= " AND name LIKE lower('%" . $parts[$i] . "%')";
 }
 
 $rs = pg_query($dbconn, $sql);
@@ -52,9 +52,9 @@ if($rs === false) {
 }
  
 while($row = pg_fetch_assoc($rs)) {
-  $a_json_row["id"] = $row['id'];
-  $a_json_row["item"] = $row['description'];
-  $a_json_row["label"] = $row['description'];
+  $a_json_row["id"] = $row['name'];
+  $a_json_row["item"] = $row['name'];
+  $a_json_row["label"] = $row['name'];
   array_push($a_json, $a_json_row);
 }
  
