@@ -83,6 +83,22 @@ $app->match('/', function(Application $app, Request $request) use($db) {
 })->bind('home');
 
 $app->match('/insert', function(Request $request) use($app, $db) {
+	//get the available properties (id, name)
+	$queryProps = "
+		SELECT id,name 
+		FROM properties
+	";
+	
+	$stm1 = $db->prepare($queryProps);
+	$stm1->execute();
+	$properties = $stm1->fetchAll();
+	
+	//store the properties in an array format id=>name for the choice form field
+	$options = array();
+	foreach($properties as $p){
+		$options[$p['id']]=$p['name'];
+	}
+
 	$default = array(
 		'name' =>'',
 		'description'=>''
@@ -97,22 +113,23 @@ $app->match('/insert', function(Request $request) use($app, $db) {
 			'constraints'=>array(new Assert\NotBlank(),new Assert\Length(array('min'=>3))),
 			'attr' => array('class'=>'form-control', 'placeholder'=>'The description of the item')
 		))
-		->add('property', 'integer', array(
-			'constraints'=>array(new Assert\NotBlank()),
-			'attr' => array('class'=>'form-control', 'placeholder'=>'The property or relation name')
+		->add('property', 'choice', array(
+			'choices'=>$options,
+			'attr'=>array('class'=>'form-control','placeholder'=>'The property for the item')
 		))
 		->add('value', 'text', array(
 			'constraints'=>array(new Assert\NotBlank(),new Assert\Length(array('min'=>3))),
 			'attr' => array('class'=>'form-control', 'placeholder'=>'The value for the property or relation')
-		))		
+		))
 		->add('send', 'submit', array(
 			'attr' => array('class'=>'btn btn-default')
 		))
 		->getForm();
-		
+			
 	$form->handleRequest($request);
 	
 	if($form->isValid()) {
+	
 		$data=$form->getData();
 		
 		//add the node to the db
@@ -214,9 +231,9 @@ $app->get('/node/{id}', function(Application $app, $id) use($db) {
 	
 	//get relations starting from the node
 	$queryRelFrom = "
-		SELECT s.id as sid,p.id as pid,p.name as pname, p.datatype as ptype, s.value as svalue
-		FROM statements as s, properties as p
-		WHERE s.startID = :id and s.propertyName = p.id
+		SELECT s.id as sid,p.id as pid,p.name as pname, p.datatype as ptype, s.value as svalue, n.name as nstart
+		FROM statements as s, properties as p, nodes as n
+		WHERE s.startID = :id and s.propertyName = p.id and s.startID = n.id
 	";
 				
 	$stm2 = $db->prepare($queryRelFrom);
