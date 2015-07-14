@@ -4,9 +4,9 @@
 
 
 {% block body %}
-	<script type="text/javascript" src="/../../Harris_test_application_v2/openlayers/lib/OpenLayers.js"></script>
-	<link rel="stylesheet" href="/../../Harris_test_application_v2/openlayers/theme/default/style.css" type="text/css">
-		
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/openlayers/2.13.1/OpenLayers.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/openlayers/2.13.1/theme/default/style.css" type="text/css">
+	
 	<script>
 		var map = new OpenLayers.Map("map");
 		
@@ -45,8 +45,8 @@
 			srsName: "EPSG:31370"
 			}
 		);
-		map.addLayers([vector6]);
-		//map.zoomToMaxExtent();
+		map.addLayer(vector6);
+		map.zoomToMaxExtent();
 		
 	</script>
 
