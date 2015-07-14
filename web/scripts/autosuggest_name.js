@@ -6,11 +6,13 @@ $(function() {
 
 	$( "input:first-of-type" ).autocomplete({
 	  source: "scripts/autocomplete_name.php",//"search.php",
-	  minLength: 2/*,
+	  minLength: 2,
 	  select: function( event, ui ) {
-		log( ui.item ?
+		  $("input:first-of-type").val(ui.item.id);
+		  $("form:first-of-type").submit();
+		/*log( ui.item ?
 		  "Selected: " + ui.item.value + " aka " + ui.item.id :
-		  "Nothing selected, input was " + this.value );
-	  }*/
+		  "Nothing selected, input was " + this.value );*/
+	  }
 	});
 });
