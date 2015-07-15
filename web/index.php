@@ -44,7 +44,7 @@ $app->match('/', function(Application $app, Request $request) use($db) {
 	$form = $app['form.factory']->createBuilder('form', $default)
 		->add('name', 'search', array(
 			'constraints' => array(new Assert\NotBlank()),
-			'attr' => array('class'=>'form-control')
+			'attr' => array('class'=>'form-control', 'id'=>'form_search')
 		))
 		->add('send', 'submit', array(
 			'attr' => array('class'=>'btn btn-default')
@@ -260,7 +260,7 @@ $app->match('/search', function (Application $app, Request $request) use($db) {
 	);
 		
 	$form = $app['form.factory']->createBuilder('form', $default)
-		->add('search', 'search', array(
+		->add('description', 'search', array(
 			'constraints' => array(new Assert\NotBlank()),
 			'attr' => array('class'=>'form-control')
 		))
@@ -274,11 +274,11 @@ $app->match('/search', function (Application $app, Request $request) use($db) {
 	if ($form->isValid()) {
 		//get the search term
 		$data = $form->getData();
-		$term = $data['search'];
+		$term = $data['description'];
 		
 		//search in the database
 		$query="
-			SELECT * FROM nodes WHERE descr@@to_tsquery('english',:term);
+			SELECT * FROM nodes WHERE descr@@plainto_tsquery('english',:term);
 		";
 	
 		$stm = $db->prepare($query);
