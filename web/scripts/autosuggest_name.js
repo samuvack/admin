@@ -8,7 +8,7 @@ $(function() {
 	  source: "scripts/autocomplete_name.php",//"search.php",
 	  minLength: 2,
 	  select: function( event, ui ) {
-		  $("input:first-of-type").val(ui.item.id);
+		  $("#form_name").val(ui.item.id);
 		  $("form:first-of-type").submit();
 		/*log( ui.item ?
 		  "Selected: " + ui.item.value + " aka " + ui.item.id :
