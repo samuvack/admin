@@ -291,12 +291,12 @@ $app->match('/search', function (Application $app, Request $request) use($db) {
 })->bind('search');
 
 $app->get('/map', function(Application $app) use ($db) {
-	$query = "SELECT nodes.*, geometries_point.geom
-				FROM nodes, statements, properties, geometries_point
+	$query = "SELECT nodes.*, geometries.geom
+				FROM nodes, statements, properties, geometries
 				WHERE properties.datatype = 'geometry' and 
 					properties.id = statements.propertyname and 
 					nodes.id = statements.startID and 
-					statements.value::integer = geometries_point.id
+					statements.value::integer = geometries.id
 				";
 		
 	$stm = $db->prepare($query);

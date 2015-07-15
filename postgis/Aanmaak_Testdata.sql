@@ -1,5 +1,5 @@
 ﻿---Tabellen leegmaken---
-TRUNCATE nodes, nodes_logging, properties, properties_logging, statements, statements_logging, geometries_point;
+TRUNCATE nodes, nodes_logging, properties, properties_logging, statements, statements_logging, geometries;
 
 ---TEST DATA TOEVOEGEN (concept)---
 INSERT INTO nodes (id, name, description) VALUES (default, 'node1', 'Description number 1. This is a test.');
@@ -89,8 +89,7 @@ INSERT INTO properties (id, name, datatype) VALUES ('5', 'is part of', 'node');
 INSERT INTO properties (id, name, datatype) VALUES ('6', 'has dating', 'interval');
 
 --GEOMETRIES
-SELECT UpdateGeometrySRID('geometries_point', 'geom', 31370);
-INSERT INTO geometries_point (id,geom) VALUES ('1', ST_GeomFromText('POINT(96168.50 160099.71)', 31370));
-INSERT INTO geometries_point (id,geom) VALUES ('2', ST_GeomFromText('POINT(96171.85 160115.32)', 31370));
-INSERT INTO geometries_point (id,geom) VALUES ('3', ST_GeomFromText('POINT(96165.60 160107.65)', 31370));
-INSERT INTO geometries_point (id,geom) VALUES ('4', ST_GeomFromText('POINT(96164.01 160101.70)', 31370));
+INSERT INTO geometries (id,geom) VALUES ('1', ST_GeomFromText('POINT(96168.50 160099.71)', 31370));
+INSERT INTO geometries (id,geom) VALUES ('2', ST_GeomFromText('POINT(96171.85 160115.32)', 31370));
+INSERT INTO geometries (id,geom) VALUES ('3', ST_GeomFromText('POINT(96165.60 160107.65)', 31370));
+INSERT INTO geometries (id,geom) VALUES ('4', ST_GeomFromText('POINT(96164.01 160101.70)', 31370));

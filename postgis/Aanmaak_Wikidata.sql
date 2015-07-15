@@ -17,6 +17,6 @@ CREATE TRIGGER tsvectorupdateprop BEFORE INSERT OR UPDATE
 	ON properties FOR EACH ROW EXECUTE PROCEDURE
 	tsvector_update_trigger(descr, 'pg_catalog.english', description, name);
 
-DROP TABLE IF EXISTS geometries_point;
-CREATE TABLE geometries_point (id serial primary key);
-ALTER TABLE geometries_point ADD COLUMN geom geometry(Point,4326);
+DROP TABLE IF EXISTS geometries;
+CREATE TABLE geometries (id serial primary key, geom geometry);
+SELECT UpdateGeometrySRID('geometries', 'geom', 31370);
