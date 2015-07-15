@@ -257,11 +257,11 @@ $app->match('/search', function (Application $app, Request $request) use($db) {
 	if ($form->isValid()) {
 		//get the search term
 		$data = $form->getData();
-		$term = $data['search'];
+		$term = $data['description'];
 		
 		//search in the database
 		$query="
-			SELECT * FROM nodes WHERE descr@@to_tsquery('english',:term);
+			SELECT * FROM nodes WHERE descr@@plainto_tsquery('english',:term);
 		";
 	
 		$stm = $db->prepare($query);
