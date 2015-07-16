@@ -144,10 +144,6 @@ $app->match('/insert', function(Request $request) use($app, $db) {
 		$stm2->execute(['name'=>$data['name'],'description'=>$data['description']]);	
 		$id = $stm2->fetch();
 		
-		//check if propertyname is in database
-		//if in db, get id
-		//if not in db, new record
-		
 		//add the relation or property to the statements table
 		$queryRelations = 'insert into statements(startID,propertyname,value) values(:start, :prop, :value)';
 		$stm3 = $db->prepare($queryRelations);
