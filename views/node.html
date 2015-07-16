@@ -3,13 +3,13 @@
 
 {% block body %}
 <div class="content">
-	<h1>Info on {{node.name}}</h1>
-	<h4>{{node.name}}</h4>
+	<h1>Info on {{node.getName}}</h1>
+	<h4>{{node.getName}}</h4>
 	<ul class="nodes">
-		<li>{{node.description}}</li>
+		<li>{{node.getDescription}}</li>
 	</ul>
 	
-	<h3>Properties and relations on {{node.name}}</h3>
+	<h3>Properties and relations on {{node.getName}}</h3>
 	<ul class="nodes">
 		{% for relation in relFrom %}
 		<li>{{relation.pname}} 
@@ -22,11 +22,11 @@
 		{% endfor %}
 	</ul>
 	
-	<h3>Relations to {{node.name}}</h3>
+	<h3>Relations to {{node.getName}}</h3>
 	<ul class="nodes">
 		{% for relation in relTo %}
 			<li><a href="{{ path('node', {id:relation.sstart}) }}">{{relation.nstart}}</a>
-			{{relation.pname}} {{node.name}}
+			{{relation.pname}} {{node.getName}}
 			</li>
 		{% endfor %}
 	</ul>
