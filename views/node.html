@@ -31,6 +31,7 @@
 		{% endfor %}
 	</ul>
 	<a href="{{path('history', {id:node.id})}}"> Show history </a> <br>
+	<a href="{{path('update',{id: node.id})}}">Update</a> <br>
 	<a href="{{ path('home') }}">Back to overview</a>
 </div>
 {% endblock %}
