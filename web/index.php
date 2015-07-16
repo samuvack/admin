@@ -328,7 +328,6 @@ $app->get('/history/{id}', function(Application $app, $id) use ($db) {
 	return $app['twig']->render('history.html', ['node'=>$node, 'edits'=>$history]);
 })->bind('history');
 
-
 $app->match('/filter', function(Application $app, Request $request) use($db) {
 	//create form
 	$default = array(
@@ -342,6 +341,23 @@ $app->match('/filter', function(Application $app, Request $request) use($db) {
 		'2'=>'geometry',
 		'3'=>'other'
 	);
+	
+	//query for the properties based on type (variable $selectedType)
+	$selectedType = null;
+	$queryProp = "
+		SELECT id, name 
+		FROM properties
+		WHERE id = :type
+	";
+	$stm1 = $db->prepare($queryProp);
+	$stm1->execute(['type'=>$selectedType]);
+	$prop = $stm1->fetchAll();
+	
+	//store the properties in an array format id=>name for the choice form field
+	$properties = array();
+	foreach($prop as $p){
+		$properties[$p['id']]=$p['name'];
+	}
 	
 	//first form containing dropdown to choose the type of filtering
 	//the available properties for that type should be loaded in the property field
