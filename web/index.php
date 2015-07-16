@@ -328,6 +328,51 @@ $app->get('/history/{id}', function(Application $app, $id) use ($db) {
 	return $app['twig']->render('history.html', ['node'=>$node, 'edits'=>$history]);
 })->bind('history');
 
+
+$app->match('/filter', function(Application $app, Request $request) use($db) {
+	//create form
+	$default = array(
+		'property'=>'',
+		'value' =>''
+	);	
+	
+	//store the fitler types in an array format id=>name for the choice form field
+	$options = array(
+		'1'=>'time',
+		'2'=>'geometry',
+		'3'=>'other'
+	);
+	
+	//first form containing dropdown to choose the type of filtering
+	//the available properties for that type should be loaded in the property field
+	$form = $app['form.factory']->createBuilder('form', $default)		
+		->add('type', 'choice', array(
+			'choices'=>$options,
+			'attr'=>array('class'=>'form-control','placeholder'=>'The filter type'),
+			'label'=>'Filter on'
+		))
+		->add('property', 'text', array(
+			'constraints'=>array(new Assert\NotBlank(),new Assert\Length(array('min'=>3))),
+			'attr' => array('class'=>'form-control', 'placeholder'=>'The filter property or relation'),
+			'label'=>'Where node has property or relation:'
+		))
+		->add('value', 'text', array(
+			'constraints'=>array(new Assert\NotBlank(),new Assert\Length(array('min'=>3))),
+			'attr' => array('class'=>'form-control', 'placeholder'=>'The filter value'),
+			'label'=>'With value:'
+		))
+		->getForm();
+	$form->handleRequest($request);
+	
+	if ($form->isValid()) {
+		//ADD form handling//
+		return $app['twig']->render('filter.html', array('form'=>$form->createView()));
+		
+	}
+	
+	return $app['twig']->render('filter.html', array('form'=>$form->createView()));
+})->bind('filter');
+
 $app->run();
 
 ?>

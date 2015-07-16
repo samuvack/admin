@@ -1,0 +1,13 @@
+{% extends 'baselayout.html' %}
+{% block title 'Filter' %}
+
+{% block body %}
+	<div class="content">
+		<h1>Filter</h1>
+		<p>Filter nodes</p>
+		{{form(form, {'action':path('filter'), 'method':'POST'})}}
+		{{form_rest(form)}}
+	</div>
+
+	
+{% endblock %}
