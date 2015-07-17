@@ -190,7 +190,7 @@
 		}
 		
 		//display the form
-		return $app['twig']->render('update.html', array('form'=> $form->createView(), 'nummer'=>$id));
+		return $app['twig']->render('update.html', array('form'=> $form->createView(), 'nodeid'=>$id));
 	})->bind('update');
 
 	$app->match('/search', function (Application $app, Request $request) use($DB) {
@@ -217,13 +217,14 @@
 			$term = $data['description'];
 			
 			//search in the database
-			$query="
+			/*$query="
 				SELECT * FROM nodes WHERE descr@@plainto_tsquery('english',:term);
 			";
 		
 			$stm = $DB->prepare($query);
 			$stm->execute(['term'=>$term]);
-			$result = $stm->fetchAll();
+			$result = $stm->fetchAll();*/
+			$result = Node::findByDescription($term);
 		
 			return $app['twig']->render('search.html', array('form'=>$form->createView(),'nodes'=>$result));
 		}

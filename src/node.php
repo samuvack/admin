@@ -86,6 +86,23 @@
 			return $nodes;
 		}
 		
+		static function findByDescription($search_term)
+		{
+			$returned_nodes = $GLOBALS['DB']->query("SELECT * FROM nodes WHERE descr@@plainto_tsquery('english','" .$search_term ."');");
+			
+			$nodes = array();
+			foreach ($returned_nodes as $node) {
+				$id = $node['id'];
+				$name = $node['name'];
+				$description = $node['description'];
+				$descr = $node['descr'];
+				$new_node = new Node($id, $name, $description, $descr);
+				array_push($nodes, $new_node);
+			}
+			
+			return $nodes;
+		}
+		
 		function save()
 		{
 			$statement = $GLOBALS['DB']->query("INSERT INTO nodes(name, description) VALUES ('{$this->getName()}','{$this->getDescription()}') RETURNING id, descr;");
