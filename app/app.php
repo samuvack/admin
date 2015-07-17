@@ -76,19 +76,21 @@
 
 	$app->match('/insert', function(Request $request) use($app, $DB) {
 		//get the available properties (id, name)
-		$queryProps = "
+		/*$queryProps = "
 			SELECT id,name 
 			FROM properties
 		";
 		
 		$stm1 = $DB->prepare($queryProps);
 		$stm1->execute();
-		$properties = $stm1->fetchAll();
+		$properties = $stm1->fetchAll();*/
+		
+		$properties = Property::getAll();
 		
 		//store the properties in an array format id=>name for the choice form field
 		$options = array();
 		foreach($properties as $p){
-			$options[$p['id']]=$p['name'];
+			$options[$p->getId()]=$p->getName();
 		}
 
 		$default = array(
@@ -124,24 +126,16 @@
 		
 			$data=$form->getData();
 			
-			//add the node to the db
-			$queryNode = 'insert into nodes(name, description) values(:name, :description)';
-				
-			$stm1 = $DB->prepare($queryNode);
-			$resultNode = $stm1->execute(['name'=>$data['name'],'description'=>$data['description']]);
+			//create new node and save to db
+			$new_node = new Node(null, $data['name'], $data['description'], null);
+			$new_node->save();
+			$node_id = $new_node->getId();
 			
-			//determine id from newly inserted records
-			$queryId = 'select id from nodes where name=:name and description=:description Limit 1';
-			$stm2 = $DB->prepare($queryId);
-			$stm2->execute(['name'=>$data['name'],'description'=>$data['description']]);	
-			$id = $stm2->fetch();
+			//create new relation and add to db
+			$relation = new Relation($id = null, $node_id, $data['property'], $data['value'], null, null);
+			$relation->save();
 			
-			//add the relation or property to the statements table
-			$queryRelations = 'insert into statements(startID,propertyname,value) values(:start, :prop, :value)';
-			$stm3 = $DB->prepare($queryRelations);
-			$resultRel = $stm3->execute(['start'=>$id[0], 'prop'=>$data['property'], 'value'=>$data['value']]);
-			
-			if($resultNode && $resultRel){
+			if($new_node && $relation){
 				return $app->redirect($app->path('home'));
 			}
 		}

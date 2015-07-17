@@ -88,10 +88,10 @@
 		
 		function save()
 		{
-			$statement = $GLOBALS['DB']->exec("INSERT INTO nodes(name, description) VALUES ('{$this->getName()}','{$this->getDescription()}') RETURNING id, descr;");
+			$statement = $GLOBALS['DB']->query("INSERT INTO nodes(name, description) VALUES ('{$this->getName()}','{$this->getDescription()}') RETURNING id, descr;");
 			$result = $statement->fetch(PDO::FETCH_ASSOC);
 			$this->setId($result['id']);
-			$this->setDescr($result['descr']);
+			$this->setDescr($result['descr']);		
 		}
 		
 		//find all relations starting form this node

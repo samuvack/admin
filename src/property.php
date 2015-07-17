@@ -101,7 +101,7 @@
 		
 		function save()
 		{
-			$statement = $GLOBALS['DB']->exec("INSERT INTO properties(name, description, datatype) VALUES ('{$this->getName()}','{$this->getDescription()}','{$this->getDatatype()}') RETURNING id, descr;");
+			$statement = $GLOBALS['DB']->query("INSERT INTO properties(name, description, datatype) VALUES ('{$this->getName()}','{$this->getDescription()}','{$this->getDatatype()}') RETURNING id, descr;");
 			$result = $statements->fetch(PDO::FETCH_ASSOC);
 			$this->setId($result['id']);
 			$this->setDescr($result['descr']);

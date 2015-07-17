@@ -5,15 +5,17 @@
 		private $start_node;
 		private $property;
 		private $value;
-		private $qulifier;
+		private $qualifier;
 		private $rank;
 		
-        function __construct($id = null, $start_node, $property, $value)
+        function __construct($id = null, $start_node, $property, $value, $qualifier=null, $rank=null)
         {
             $this->id = $id;
             $this->start_node = $start_node;
 			$this->property = $property;
 			$this->value = $value;
+			$this->qualifier = $qualifier;
+			$this->rank = $rank;
         }
 
 		function setId($new_Id)
@@ -113,7 +115,7 @@
 				
 				$qualifier = $rel['qualifier'];
 				$rank =$rel['rank'];
-				$new_rel = new Relation($id, $start, $property, $value);
+				$new_rel = new Relation($id, $start, $property, $value, $qualifier, $rank);
 				$new_rel->setQualifier($qualifier);
 				$new_rel->setRank($rank);
 				array_push($relations, $new_rel);
@@ -143,9 +145,21 @@
 		
 		function save()
 		{
-			$statement = $GLOBALS['DB']->exec("
+			if($this->getRank()){
+				$rank = $this->getRank();
+			}else{
+				$rank = 'null';
+			}
+			
+			if ($this->getQualifier()){
+				$qualifier = $this->getQualifier();
+			}else{
+				$qualifier = 'null';
+			}
+			
+			$statement = $GLOBALS['DB']->query("
 				INSERT INTO statements(startid, propertyname, value, qualifier, rank) 
-				VALUES ('{$this->getStart()}','{$this->getProperty()}','{$this->getValue()}','{$this->getQualifier()}','{$this->getRank()}') 
+				VALUES ({$this->getStart()},{$this->getProperty()},'{$this->getValue()}',$qualifier,$rank) 
 				RETURNING id;");
 			$result = $statement->fetch(PDO::FETCH_ASSOC);
 			$this->setId($result['id']);
