@@ -94,6 +94,14 @@
 			$this->setDescr($result['descr']);		
 		}
 		
+		function update($new_name, $new_description)
+		{
+            $GLOBALS['DB']->exec("UPDATE nodes SET name = '{$new_name}', description = '{$new_description}' WHERE id = {$this->getId()};");
+            $this->setName($new_name);
+			$this->setDescription($new_description);
+        
+		}
+		
 		//find all relations starting form this node
 		function findRelations()
 		{

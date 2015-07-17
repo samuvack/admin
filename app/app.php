@@ -154,20 +154,13 @@
 	})->bind('node');	
 	
 	$app->match('/update/{id}', function(Application $app, Request $request, $id) use($DB) {
-		//get the information for the given id
-		$query= '
-			SELECT * FROM nodes
-			WHERE id = :id
-		';
-		
-		$stm=$DB->prepare($query);
-		$stm->execute(['id'=>$id]);
-		$node= $stm->fetch();
+		//get the information for the given id	
+		$node = Node::findById($id);
 		
 		//default form values
 		$data = array(
-			'name' => $node['name'],
-			'description' => $node['description']
+			'name' => $node->getName(),
+			'description' => $node->getDescription()
 		);
 		
 		//create form
@@ -185,26 +178,15 @@
 			))
 			->getForm();
 		$form->handleRequest($request);
+		
 		//check form
 		if ($form->isValid()) {
 			$data = $form->getData();
-			
 			//update the record in the db
-			$name = $data['name'];
-			$descr = $data['description'];
-		
-			$query='
-				UPDATE nodes SET name= :name, description= :descr
-				WHERE id= :id
-			';
-		
-			$stm = $DB->prepare($query);
-			$stm->execute(['name'=>$name, 'descr'=>$descr, 'id'=>$id]);
-			$result = $stm->fetch();
+			$node->update($data['name'],$data['description']);
 		
 			//redirect to home page
 			return $app->redirect($app->path('home'));
-
 		}
 		
 		//display the form
