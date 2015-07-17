@@ -143,6 +143,28 @@
 			return $found_relations;
 		}
 		
+		//searches the statements with a property which has datatype geometry
+		//the value of the statement is replaced by the text representation of the geom
+		static function getGeometryRelations()
+		{
+			$found_relations = array();
+			$relations = Relation::getAll();
+			
+			foreach($relations as $rel) {
+				$rel_prop = $rel->getProperty();
+				$prop_datatype = $rel_prop->getDatatype();
+				$rel_value = $rel->getValue();
+				if($prop_datatype == 'geometry') {
+					$geom = $GLOBALS['DB']->query("SELECT st_astext(geom) as geom FROM geometries WHERE id=" .$rel_value .";");
+					$result = $geom->fetch(PDO::FETCH_ASSOC);
+					$geom_text = $result['geom'];
+					$rel->setValue($geom_text);
+					array_push($found_relations, $rel);
+				}
+			}
+			return $found_relations;
+		}
+		
 		function save()
 		{
 			if($this->getRank()){

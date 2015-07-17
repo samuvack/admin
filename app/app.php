@@ -225,17 +225,7 @@
 	})->bind('search');
 
 	$app->get('/map', function(Application $app) use ($DB) {
-		$query = "SELECT nodes.*, geometries.geom
-					FROM nodes, statements, properties, geometries
-					WHERE properties.datatype = 'geometry' and 
-						properties.id = statements.propertyname and 
-						nodes.id = statements.startID and 
-						statements.value::integer = geometries.id
-					";
-			
-		$stm = $DB->prepare($query);
-		$stm->execute();
-		$geonodes = $stm->fetchAll();
+		$geonodes = Node::getAllGeoNodes();
 		
 		return $app['twig']->render('map.html', ['nodes'=>$geonodes]);
 	})->bind('map');

@@ -134,6 +134,22 @@
 			return $relations;
 		}
 		
+		//find all nodes with geometric relation
+		static function getAllGeoNodes()
+		{
+			$georelations = Relation::getGeometryRelations();			
+			$returned_nodes = array();
+			$stored_ids = array();
+			foreach ($georelations as $rel){
+				$node_id = $rel->getStart()->getId();
+				if(!in_array($node_id, $stored_ids)){
+					array_push($returned_nodes, Node::findById($node_id));
+					array_push($stored_ids, $node_id);
+				}				
+			}
+			return $returned_nodes;
+		}
+		
 		function findHistory()
 		{
 			$returned_history = $GLOBALS['DB']->query("
@@ -141,20 +157,7 @@
 				FROM nodes_logging 
 				WHERE id=" .$this->getId() ."
 				ORDER BY action_time;"
-			);
-			
-			/*$history = array();
-			foreach ($returned_history as $h) {
-				$name = $h['name'];
-				$description = $h['description'];
-				$action = $h['action'];
-				$action_by = $h['action_by'];
-				$action_time = $h['action_time'];
-				
-				$new_node = new Node($id, $name, $description, $descr);
-				array_push($nodes, $new_node);
-			}*/
-			
+			);		
 			return $returned_history;
 		}
 		

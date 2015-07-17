@@ -98,7 +98,7 @@
 			
 			return $props;
 		}
-		
+			
 		function save()
 		{
 			$statement = $GLOBALS['DB']->query("INSERT INTO properties(name, description, datatype) VALUES ('{$this->getName()}','{$this->getDescription()}','{$this->getDatatype()}') RETURNING id, descr;");
