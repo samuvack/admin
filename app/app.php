@@ -217,13 +217,6 @@
 			$term = $data['description'];
 			
 			//search in the database
-			/*$query="
-				SELECT * FROM nodes WHERE descr@@plainto_tsquery('english',:term);
-			";
-		
-			$stm = $DB->prepare($query);
-			$stm->execute(['term'=>$term]);
-			$result = $stm->fetchAll();*/
 			$result = Node::findByDescription($term);
 		
 			return $app['twig']->render('search.html', array('form'=>$form->createView(),'nodes'=>$result));
@@ -249,22 +242,8 @@
 
 	$app->get('/history/{id}', function(Application $app, $id) use ($DB) {
 		//get node info
-		$queryNode = "
-			SELECT * FROM nodes
-			WHERE id = :id
-		";
-		$stm1 = $DB->prepare($queryNode);
-		$stm1->execute(['id'=>$id]);
-		$node = $stm1->fetch();
-
-		$queryHistory = "SELECT * 
-							FROM nodes_logging
-							WHERE id = :id
-							ORDER BY action_time
-		";
-		$stm2 = $DB->prepare($queryHistory);
-		$stm2->execute(['id'=>$id]);
-		$history = $stm2->fetchAll();
+		$node = Node::findById($id);
+		$history = $node->findHistory();
 		
 		return $app['twig']->render('history.html', ['node'=>$node, 'edits'=>$history]);
 	})->bind('history');
