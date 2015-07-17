@@ -1,6 +1,8 @@
 <?php
 	require_once __DIR__.'/../vendor/autoload.php';
 	require_once __DIR__.'/../src/node.php';
+	require_once __DIR__.'/../src/property.php';
+	require_once __DIR__.'/../src/relation.php';
 
 	use Symfony\Component\HttpFoundation\Request;
 	use Symfony\Component\HttpFoundation\Response;
@@ -150,28 +152,9 @@
 	$app->get('/node/{id}', function(Application $app, $id) use($DB) {
 		//get node info
 		$node = Node::findById($id);
-		
-		//get relations starting from the node
-		/*$queryRelFrom = "
-			SELECT s.id as sid,p.id as pid,p.name as pname, p.datatype as ptype, s.value as svalue, n.name as nstart
-			FROM statements as s, properties as p, nodes as n
-			WHERE s.startID = :id and s.propertyName = p.id and s.startID = n.id
-		";
-					
-		$stm2 = $DB->prepare($queryRelFrom);
-		$stm2->execute(['id'=>$id]);
-		$relFrom = $stm2->fetchAll();*/
+		//get relations from and to this node
 		$relFrom = $node->findRelations();
-		
-		//get relations with the node as value
-		$queryRelTo = "	
-			SELECT s.id as sid, p.id as pid, p.name as pname, s.startID as sstart, n.name as nstart, s.value as svalue, p.datatype as ptype 
-			FROM statements as s, properties as p, nodes as n
-			WHERE s.value = :id and s.propertyName = p.id and p.datatype='node' and n.id = s.startID;
-		";
-		$stm3 = $DB->prepare($queryRelTo);
-		$stm3->execute(['id'=>$id]);
-		$relTo = $stm3->fetchAll();
+		$relTo = $node->findEndRelations();
 		
 		return $app['twig']->render('node.html', ['node'=>$node, 'relFrom'=>$relFrom, 'relTo'=>$relTo]);
 	})->bind('node');	

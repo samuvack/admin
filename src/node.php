@@ -94,16 +94,19 @@
 			$this->setDescr($result['descr']);
 		}
 		
-		//create a relation class?
+		//find all relations starting form this node
 		function findRelations()
 		{
-			$relations = $GLOBALS['DB']->query("
-				SELECT s.id as sid,p.id as pid,p.name as pname, p.datatype as ptype, s.value as svalue, n.name as nstart
-				FROM statements as s, properties as p, nodes as n
-				WHERE s.startID = '{$this->getId()}' and s.propertyName = p.id and s.startID = n.id;
-				");			
+			$relations = Relation::findByStart($this->id);
 			return $relations;
 			
+		}
+		
+		//find all relations where this node is the value
+		function findEndRelations()
+		{
+			$relations = Relation::findByValue($this->id);
+			return $relations;
 		}
 		
 		static function getAll()

@@ -4,7 +4,7 @@
 		private $id;
 		private $name;
 		private $description;
-		private $datatype
+		private $datatype;
 		private $descr;
 		
         function __construct($id = null, $name, $description, $datatype, $descr=null)
@@ -109,18 +109,18 @@
 		
 		static function getAll()
 		{
-			$returned_pros = $GLOBALS['DB']->query("SELECT * FROM properties ORDER BY id;");
+			$returned_props = $GLOBALS['DB']->query("SELECT * FROM properties ORDER BY id;");
 			$props = array();
-			foreach ($returned_props as $) {
-				$id = $['id'];
-				$name = $['name'];
-				$description = $['description'];
-				$datatype = $['datatype'];
+			foreach ($returned_props as $p) {
+				$id = $p['id'];
+				$name = $p['name'];
+				$description = $p['description'];
+				$datatype = $p['datatype'];
 				$descr = $p['descr'];
 				$new_prop = new Property($id, $name, $description, $datatype, $descr);
 				array_push($props, $new_prop);
 			}
-			return $props;			
+			return $props;	
 		}
 	}
 		
