@@ -3,6 +3,7 @@
 	require_once __DIR__.'/../src/node.php';
 	require_once __DIR__.'/../src/property.php';
 	require_once __DIR__.'/../src/relation.php';
+	require_once __DIR__.'/../src/NodeType.php';
 
 	use Symfony\Component\HttpFoundation\Request;
 	use Symfony\Component\HttpFoundation\Response;
@@ -75,16 +76,7 @@
 	})->bind('home');
 
 	$app->match('/insert', function(Request $request) use($app, $DB) {
-		//get the available properties (id, name)
-		/*$queryProps = "
-			SELECT id,name 
-			FROM properties
-		";
-		
-		$stm1 = $DB->prepare($queryProps);
-		$stm1->execute();
-		$properties = $stm1->fetchAll();*/
-		
+		//get the available properties (id, name)	
 		$properties = Property::getAll();
 		
 		//store the properties in an array format id=>name for the choice form field
@@ -95,10 +87,11 @@
 
 		$default = array(
 			'name' =>'',
-			'description'=>''
+			'description'=>'',
+			'property'=>$options
 		);
 
-		$form = $app['form.factory']->createBuilder('form', $default)
+		/*$form = $app['form.factory']->createBuilder('form', $default)
 			->add('name','text', array(
 				'constraints'=>array(new Assert\NotBlank(),new Assert\Length(array('min'=>3))),
 				'attr' => array('class'=>'form-control', 'placeholder'=>'The name of the item')
@@ -118,7 +111,8 @@
 			->add('send', 'submit', array(
 				'attr' => array('class'=>'btn btn-default')
 			))
-			->getForm();
+			->getForm();*/
+			$form = $app['form.factory']->createBuilder(new NodeType(), $default)->getForm();
 				
 		$form->handleRequest($request);
 		
