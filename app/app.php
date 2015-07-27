@@ -4,6 +4,7 @@
 	require_once __DIR__.'/../src/property.php';
 	require_once __DIR__.'/../src/relation.php';
 	require_once __DIR__.'/../src/NodeType.php';
+	require_once __DIR__.'/../src/RelationType.php';
 
 	use Symfony\Component\HttpFoundation\Request;
 	use Symfony\Component\HttpFoundation\Response;
@@ -76,62 +77,24 @@
 	})->bind('home');
 
 	$app->match('/insert', function(Request $request) use($app, $DB) {
-		//get the available properties (id, name)	
-		$properties = Property::getAll();
+
+		//default data for the form to be displayed
+		$node = new Node(null, '', '', null);
+		$relation1 = new Relation(null, null, null, null, null, null);
+		$node->addRelation($relation1);			
 		
-		//store the properties in an array format id=>name for the choice form field
-		$options = array();
-		foreach($properties as $p){
-			$options[$p->getId()]=$p->getName();
-		}
-
-		$default = array(
-			'name' =>'',
-			'description'=>'',
-			'property'=>$options
-		);
-
-		/*$form = $app['form.factory']->createBuilder('form', $default)
-			->add('name','text', array(
-				'constraints'=>array(new Assert\NotBlank(),new Assert\Length(array('min'=>3))),
-				'attr' => array('class'=>'form-control', 'placeholder'=>'The name of the item')
-			))
-			->add('description', 'textarea', array(
-				'constraints'=>array(new Assert\NotBlank(),new Assert\Length(array('min'=>3))),
-				'attr' => array('class'=>'form-control', 'placeholder'=>'The description of the item')
-			))
-			->add('property', 'choice', array(
-				'choices'=>$options,
-				'attr'=>array('class'=>'form-control','placeholder'=>'The property for the item')
-			))
-			->add('value', 'text', array(
-				'constraints'=>array(new Assert\NotBlank(),new Assert\Length(array('min'=>3))),
-				'attr' => array('class'=>'form-control', 'placeholder'=>'The value for the property or relation')
-			))
-			->add('send', 'submit', array(
-				'attr' => array('class'=>'btn btn-default')
-			))
-			->getForm();*/
-			$form = $app['form.factory']->createBuilder(new NodeType(), $default)->getForm();
+		//generate the form
+		$form = $app['form.factory']->createBuilder(new NodeType(), $node)->getForm();
 				
 		$form->handleRequest($request);
 		
 		if($form->isValid()) {
 		
 			$data=$form->getData();
+			$node->save();
 			
-			//create new node and save to db
-			$new_node = new Node(null, $data['name'], $data['description'], null);
-			$new_node->save();
-			$node_id = $new_node->getId();
+			return $app->redirect($app->path('home'));
 			
-			//create new relation and add to db
-			$relation = new Relation($id = null, $node_id, $data['property'], $data['value'], null, null);
-			$relation->save();
-			
-			if($new_node && $relation){
-				return $app->redirect($app->path('home'));
-			}
 		}
 			
 		return $app['twig']->render('insert.html', array('form'=>$form->createView()));;

@@ -5,6 +5,7 @@
 		private $name;
 		private $description;
 		private $descr;
+		private $relations;
 		
         function __construct($id = null, $name, $description, $descr=null)
         {
@@ -12,6 +13,7 @@
             $this->description = $description;
 			$this->id = $id;
 			$this->descr = $descr;
+			$this->relations = array();
         }
 
 		function setId($new_Id)
@@ -52,6 +54,21 @@
 		function getDescr()
 		{
 			return $this->descr;
+		}
+		
+		public function getRelations()
+		{
+			return $this->relations;
+		}
+		
+		public function addRelation(Relation $newRelation)
+		{
+			array_push($this->relations, $newRelation);
+		}
+		
+		function removeRelation(Relation $oldRelation)
+		{
+			//to be completed
 		}
 		
 		//here the getAll method is used and then loop over array of nodes
@@ -109,6 +126,12 @@
 			$result = $statement->fetch(PDO::FETCH_ASSOC);
 			$this->setId($result['id']);
 			$this->setDescr($result['descr']);		
+			
+			//save the relations
+			foreach($this->relations as $rel){
+				$rel->setStart($this->id);
+				$rel->save();
+			}
 		}
 		
 		function update($new_name, $new_description)
