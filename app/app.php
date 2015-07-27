@@ -91,6 +91,7 @@
 		if($form->isValid()) {
 		
 			$data=$form->getData();
+			echo(count($node->getRelations()));
 			$node->save();
 			
 			return $app->redirect($app->path('home'));

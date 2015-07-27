@@ -168,20 +168,20 @@
 		function save()
 		{
 			if($this->getRank()){
-				$rank = $this->getRank();
+				$rank = (string) "'" .$this->getRank() ."'";
 			}else{
-				$rank = 'null';
+				$rank = (string) 'null';
 			}
 			
 			if ($this->getQualifier()){
-				$qualifier = $this->getQualifier();
+				$qualifier = (string) "'" .$this->getQualifier() ."'";
 			}else{
-				$qualifier = 'null';
+				$qualifier = (string) 'null';
 			}
 			
 			$statement = $GLOBALS['DB']->query("
 				INSERT INTO statements(startid, propertyname, value, qualifier, rank) 
-				VALUES ({$this->getStart()},{$this->getProperty()},'{$this->getValue()}',$qualifier,$rank) 
+				VALUES ({$this->getStart()},{$this->getProperty()},'{$this->getValue()}', $qualifier, $rank)
 				RETURNING id;");
 			$result = $statement->fetch(PDO::FETCH_ASSOC);
 			$this->setId($result['id']);

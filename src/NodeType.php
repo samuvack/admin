@@ -19,7 +19,8 @@
 				))
 			->add('relations', 'collection', array(
 				'type' => new RelationType(),
-				'by_reference'=>false
+				'allow_add' => true,
+				'by_reference'=>false,				
 				))
 			->add('send', 'submit', array(
 				'attr' => array('class'=>'btn btn-default')

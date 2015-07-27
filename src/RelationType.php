@@ -15,7 +15,7 @@
 				'attr'=>array('class'=>'form-control','placeholder'=>'The property for the item')
 				))
 			->add('value', 'text', array(
-				'constraints'=>array(new Assert\NotBlank(),new Assert\Length(array('min'=>3))),
+				'constraints'=>array(new Assert\NotBlank()),
 				'attr' => array('class'=>'form-control', 'placeholder'=>'The value for the property or relation')
 				))
 			->add('rank', 'choice', array(
