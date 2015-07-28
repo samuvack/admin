@@ -5,6 +5,7 @@
 	require_once __DIR__.'/../src/relation.php';
 	require_once __DIR__.'/../src/NodeType.php';
 	require_once __DIR__.'/../src/RelationType.php';
+	require_once __DIR__.'/../src/FilterType.php';
 
 	use Symfony\Component\HttpFoundation\Request;
 	use Symfony\Component\HttpFoundation\Response;
@@ -184,13 +185,7 @@
 			'value' =>''
 		);	
 		
-		//store the fitler types in an array format id=>name for the choice form field
-		$options = array(
-			'1'=>'time',
-			'2'=>'geometry',
-			'3'=>'other'
-		);
-		
+		/*
 		//query for the properties based on type (variable $selectedType)
 		$selectedType = null;
 		$queryProp = "
@@ -208,31 +203,14 @@
 			$properties[$p['id']]=$p['name'];
 		}
 		
-		//first form containing dropdown to choose the type of filtering
-		//the available properties for that type should be loaded in the property field
-		$form = $app['form.factory']->createBuilder('form', $default)		
-			->add('type', 'choice', array(
-				'choices'=>$options,
-				'attr'=>array('class'=>'form-control','placeholder'=>'The filter type'),
-				'label'=>'Filter on'
-			))
-			->add('property', 'text', array(
-				'constraints'=>array(new Assert\NotBlank(),new Assert\Length(array('min'=>3))),
-				'attr' => array('class'=>'form-control', 'placeholder'=>'The filter property or relation'),
-				'label'=>'Where node has property or relation:'
-			))
-			->add('value', 'text', array(
-				'constraints'=>array(new Assert\NotBlank(),new Assert\Length(array('min'=>3))),
-				'attr' => array('class'=>'form-control', 'placeholder'=>'The filter value'),
-				'label'=>'With value:'
-			))
-			->getForm();
+		*/
+		
+		$form = $app['form.factory']->createBuilder(new FilterType(), $default)->getForm();
 		$form->handleRequest($request);
 		
 		if ($form->isValid()) {
 			//ADD form handling//
 			return $app['twig']->render('filter.html', array('form'=>$form->createView()));
-			
 		}
 		return $app['twig']->render('filter.html', array('form'=>$form->createView()));
 	})->bind('filter');
