@@ -98,7 +98,26 @@
 			
 			return $props;
 		}
+		
+		//search all the properties where the type is of the given argument
+		static function findByType($search_type)
+		{
+			$returned_props = $$GLOBALS['DB']->query("SELECT * FROM properties WHERE datatype='" .$search_type ."';");
 			
+			$props = array();
+			foreach ($returned_props as $p) {
+				$id = $p['id'];
+				$name = $p['name'];
+				$description = $p['description'];
+				$datatype = $p['datatype'];
+				$descr = $p['descr'];
+				$new_prop = new Property($id, $name, $description, $datatype, $descr);
+				array_push($props, $new_prop);
+			}
+			
+			return $props;
+		}
+		
 		function save()
 		{
 			$statement = $GLOBALS['DB']->query("INSERT INTO properties(name, description, datatype) VALUES ('{$this->getName()}','{$this->getDescription()}','{$this->getDatatype()}') RETURNING id, descr;");
