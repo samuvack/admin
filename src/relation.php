@@ -167,6 +167,7 @@
 		
 		function save()
 		{
+			
 			if($this->getRank()){
 				$rank = (string) "'" .$this->getRank() ."'";
 			}else{

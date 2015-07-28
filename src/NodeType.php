@@ -31,6 +31,7 @@
 		public function setDefaultOptions(OptionsResolverInterface $resolver) {
 			$resolver->setDefaults(array(
 				'data_class' => 'Node',
+				'empty_data' => new Node(null, null, null, null),
 			));
 		}
 		
