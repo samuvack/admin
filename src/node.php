@@ -82,6 +82,8 @@
 					$found_node = $node;
 				}
 			}
+			//This will store the relations starting at this node in the relations property
+			//$found_node->findRelations();
 			return $found_node;
 		}
 		
@@ -146,6 +148,8 @@
 		function findRelations()
 		{
 			$relations = Relation::findByStart($this->id);
+			//the relations will be stored in the property relations
+			//$this->relations = $relations;
 			return $relations;
 			
 		}

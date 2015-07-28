@@ -89,9 +89,7 @@
 		$form->handleRequest($request);
 		
 		if($form->isValid()) {
-		
 			$data=$form->getData();
-			echo(count($node->getRelations()));
 			$node->save();
 			
 			return $app->redirect($app->path('home'));
@@ -112,38 +110,21 @@
 	})->bind('node');	
 	
 	$app->match('/update/{id}', function(Application $app, Request $request, $id) use($DB) {
-		//get the information for the given id	
+		//get the node information for the given id	
 		$node = Node::findById($id);
 		
-		//default form values
-		$data = array(
-			'name' => $node->getName(),
-			'description' => $node->getDescription()
-		);
+		//store all available relations in the relations property of the node
 		
-		//create form
-		$form = $app['form.factory']->createBuilder('form', $data)
-			->add('name', 'text', array(
-				'constraints' => array(new Assert\NotBlank(), new Assert\Length(array('min'=>3))),
-				'attr' => array('class'=>'form-control')
-			))
-			->add('description', 'textarea', array(
-				'constraints' => array(new Assert\NotBlank(), new Assert\Length(array('min'=>3))),
-				'attr' => array('class'=>'form-control')
-			))
-			->add('send', 'submit', array(
-				'attr' => array('class'=>'btn btn-default')
-			))
-			->getForm();
+		
+		$form = $app['form.factory']->createBuilder(new NodeType(), $node)->getForm();
 		$form->handleRequest($request);
 		
 		//check form
 		if ($form->isValid()) {
-			$data = $form->getData();
-			//update the record in the db
-			$node->update($data['name'],$data['description']);
-		
-			//redirect to home page
+			$node->update($node->getName(), $node->getDescription());
+			//update the relations
+			//insert newly added relations
+			
 			return $app->redirect($app->path('home'));
 		}
 		

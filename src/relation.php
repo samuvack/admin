@@ -116,8 +116,6 @@
 				$qualifier = $rel['qualifier'];
 				$rank =$rel['rank'];
 				$new_rel = new Relation($id, $start, $property, $value, $qualifier, $rank);
-				$new_rel->setQualifier($qualifier);
-				$new_rel->setRank($rank);
 				array_push($relations, $new_rel);
 			}
 			
@@ -186,6 +184,16 @@
 				RETURNING id;");
 			$result = $statement->fetch(PDO::FETCH_ASSOC);
 			$this->setId($result['id']);
+		}
+		
+		function update($new_name, $new_value, $new_rank, $new_qualifier)
+		{
+            $GLOBALS['DB']->exec("UPDATE nodes SET propertyname = '{$new_name}', value = '{$new_value}', rank = '{$new_rank}', qualifier = '{$new_qualifier}'  WHERE id = {$this->getId()};");
+            $this->setProperty($new_name);
+			$this->setValue($new_value);
+			$this->setQualifier($new_qualifier);
+			$this->setRank($new_rank);
+        
 		}
 		
 		//returns all the relations stored in the database as relation objects
