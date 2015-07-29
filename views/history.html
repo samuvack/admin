@@ -13,13 +13,13 @@
 	<ul class="nodes">
 		{% for edit in edits %}
 			{% if edit.action == 'I'%}
-				<li> INSERTED ON {{edit.action_time|date("j-n-Y g:i")}} BY {{edit.action_by}} : 
-				{{edit.name}}, {{edit.description}} </li>
+				<li> INSERTED ON {{edit.action_time|date("j-n-Y g:i")}} BY {{edit.action_by}} : <br> 
+				{{edit.name}}, {{edit.description}} </li><br>
 			{% elseif edit.action == 'D'%}
-				<li> DELETED ON {{edit.action_time}} BY {{edit.action_by}}
+				<li> DELETED ON {{edit.action_time|date("j-n-Y g:i")}} BY {{edit.action_by}} </li><br>
 			{% elseif edit.action == 'U' %}
-				<li> UPDATED ON {{edit.action_time}} BY {{edit.action_by}} : 
-				{{edit.name}}, {{edit.description}} </li>
+				<li> UPDATED ON {{edit.action_time|date("j-n-Y g:i")}} BY {{edit.action_by}} : <br>
+				{{edit.name}}, {{edit.description}} </li><br>
 			{%endif%}	
 		{% endfor %}
 	</ul>
