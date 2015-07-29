@@ -102,7 +102,7 @@
 		//search all the properties where the type is of the given argument
 		static function findByType($search_type)
 		{
-			$returned_props = $$GLOBALS['DB']->query("SELECT * FROM properties WHERE datatype='" .$search_type ."';");
+			$returned_props = $GLOBALS['DB']->query("SELECT * FROM properties WHERE datatype='" .$search_type ."';");
 			
 			$props = array();
 			foreach ($returned_props as $p) {

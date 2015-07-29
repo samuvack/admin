@@ -4,15 +4,32 @@
 {% block body %}
 	<div class="content">
 		<h1>Filter</h1>
-		<p>Filter nodes</p>
+		<div>
+			<h3>Filter options</h3>
 		
-		{{ form_start(form) }}
-			{# render the fields #}
-			{{ form_row(form.type) }}
-			{{ form_row(form.property) }}
-			{{ form_row(form.value) }}
+			{{ form_start(form) }}
+				{# render the fields #}
+				{{ form_row(form.type) }}
+				{{ form_row(form.property) }}
+				{{ form_row(form.value) }}
 
-		{{ form_end(form) }}
+			{{ form_end(form) }}
+		</div>
+	
+		<div>
+		  <h3>Result</h3>
+		  <ul class="nodes">
+		  {% for node in nodes %}
+			<li>
+			  <h4>{{node.getName}} </h4>
+			  <p>DESCRIPTION: {{node.getDescription}}<p>
+			  <a href="{{path('node', {id:node.getId})}}")>More info</a>
+			  <a href="{{path('update',{id: node.getId})}}">Update</a>
+			  <br><br>
+			</li>
+		  {% endfor %}
+		  </ul>
+		</div>
 	</div>
 {% endblock %}
 {% block script %}

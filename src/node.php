@@ -80,6 +80,7 @@
 				$node_id = $node->getId();
 				if($node_id == $search_id) {
 					$found_node = $node;
+					ChromePhp::log('found findById');
 				}
 			}
 			//This will store the relations starting at this node in the relations property
@@ -119,6 +120,17 @@
 				array_push($nodes, $new_node);
 			}
 			
+			return $nodes;
+		}
+		
+		//get all the nodes with corresponding statements
+		static function findByPropertyValue($prop_id, $rel_value){
+			$returned_nodes = Relation::findByPropertyValue($prop_id, $rel_value);
+			$nodes = array();
+			foreach ($returned_nodes as $n_id) {
+				$new_node = Node::findById($n_id);
+				array_push($nodes, $new_node);
+			}
 			return $nodes;
 		}
 		

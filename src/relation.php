@@ -141,6 +141,18 @@
 			return $found_relations;
 		}
 		
+		
+		//searches all the statements which have the property-value and returns array of startid's
+		//value is case insensitive
+		static function findByPropertyValue($property_id, $value){
+			$returned_relations = $GLOBALS['DB']->query("SELECT startid FROM statements WHERE propertyname=" .$property_id ." and lower(value)=lower('" .$value ."');");
+			$starts = array();
+			foreach($returned_relations as $r){
+				array_push($starts, $r['startid']);
+			}
+			return $starts;
+		}
+		
 		//searches the statements with a property which has datatype geometry
 		//the value of the statement is replaced by the text representation of the geom
 		static function getGeometryRelations()

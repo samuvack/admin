@@ -24,24 +24,25 @@
 			//callback function for modifying the form
 			$formModifier = function(FormInterface $form, $type) {
 				//get the properties for this datatype
-				if($type === null){
+				if($type === null){ //no filter type is selected
 					$properties = array();
-				} elseif ($type = 'other'){
+				} elseif ($type == 'other'){ // the filter type 'other' is selected
 					$properties = array();
 					$returned_props = Property::getAll();
 					foreach($returned_props as $p){
 						$datatype = $p->getDataType();
-						if($datatype = 'time' or $datatype = 'geometry'){
+						if($datatype == 'time' or $datatype == 'geometry'){
 							//do nothing
 						} else {
 							array_push($properties, $p);
 						}
 						
 					}
-				} else {
+				} else { // time or geometry was selected as fitler type
 					$properties = Property::findByType($type);
 				}
 				
+				//create an array with the property id as index and the name as value
 				$prop_options = array();
 				foreach($properties as $p){
 					$prop_options[$p->getId()]=$p->getName();
@@ -66,20 +67,22 @@
 				));
 			};
 			
+			//add an event listener to populate the field property at page loading
 			$builder->addEventListener(
 				FormEvents::PRE_SET_DATA,
 				function(FormEvent $event) use ($formModifier){
-					$data = $event->getData();					
-					$formModifier($event->getForm(), $data);
+					$data = $event->getData();
+					$type = $data['type'];
+					$formModifier($event->getForm(), $type);
 				}
 			);
 			
+			//add event listener to populate the field when the type field has been submitted
 			$builder->get('type')->addEventListener(
 				FormEvents::POST_SUBMIT,
 				function(FormEvent $event) use ($formModifier) {
 					$datatype = $event->getForm()->getData();
-					
-					$formModifier($event->getForm()->getParent(), $datatype['type']);
+					$formModifier($event->getForm()->getParent(), $datatype);
 				}
 			);
 		}

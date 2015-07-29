@@ -6,6 +6,8 @@
 	require_once __DIR__.'/../src/NodeType.php';
 	require_once __DIR__.'/../src/RelationType.php';
 	require_once __DIR__.'/../src/FilterType.php';
+	//include the php library for the Chrome logger to print variables to the Chrome Console
+	include 'ChromePhp.php';
 
 	use Symfony\Component\HttpFoundation\Request;
 	use Symfony\Component\HttpFoundation\Response;
@@ -48,7 +50,6 @@
 		$default = array(
 			'name' =>''
 		);
-			
 		$form = $app['form.factory']->createBuilder('form', $default)
 			->add('name', 'search', array(
 				'constraints' => array(new Assert\NotBlank()),
@@ -72,7 +73,6 @@
 		
 		//use the getAll function of the Node class to gather all the nodes
 		$nodes = Node::getAll();
-		
 		return $app['twig']->render('home.html', array('form'=>$form->createView(), 'nodes'=>$nodes));
 		
 	})->bind('home');
@@ -179,40 +179,28 @@
 	})->bind('history');
 
 	$app->match('/filter', function(Application $app, Request $request) use($DB) {
-		//create form
+		//create form with default data
 		$default = array(
+			'type'=>'',
 			'property'=>'',
 			'value' =>''
 		);	
 		
-		/*
-		//query for the properties based on type (variable $selectedType)
-		$selectedType = null;
-		$queryProp = "
-			SELECT id, name 
-			FROM properties
-			WHERE id = :type
-		";
-		$stm1 = $DB->prepare($queryProp);
-		$stm1->execute(['type'=>$selectedType]);
-		$prop = $stm1->fetchAll();
-		
-		//store the properties in an array format id=>name for the choice form field
-		$properties = array();
-		foreach($prop as $p){
-			$properties[$p['id']]=$p['name'];
-		}
-		
-		*/
-		
 		$form = $app['form.factory']->createBuilder(new FilterType(), $default)->getForm();
 		$form->handleRequest($request);
 		
-		if ($form->isValid()) {
-			//ADD form handling//
-			return $app['twig']->render('filter.html', array('form'=>$form->createView()));
+		if ($form->isValid()) {			
+			//get the property id and value
+			$data = $form->getData();
+			$id = $data['property'];
+			$value = $data['value'];
+			
+			//get the nodes with this property and value
+			$nodes = Node::findByPropertyValue($id, $value);
+			
+			return $app['twig']->render('filter.html', array('form'=>$form->createView(), 'nodes'=>$nodes));
 		}
-		return $app['twig']->render('filter.html', array('form'=>$form->createView()));
+		return $app['twig']->render('filter.html', array('form'=>$form->createView(), 'nodes'=>array()));
 	})->bind('filter');
 
 	return $app;
