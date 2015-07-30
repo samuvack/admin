@@ -13,6 +13,7 @@
 	use Symfony\Component\HttpFoundation\Response;
 	use Symfony\Component\Validator\Constraints as Assert;
 	use Silex\Privider\FormServiceProvider;
+	use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 	Class Application extends Silex\Application {
 		use \Silex\Application\TwigTrait;
@@ -97,9 +98,124 @@
 			
 		}
 			
-		return $app['twig']->render('insert.html', array('form'=>$form->createView()));;
+		return $app['twig']->render('insert.html', array('form'=>$form->createView()));
 	})->bind('insert');
 
+	$app->match('/import', function(Request $request) use($app) {
+		
+		//generate the form
+		$form = $app['form.factory']->createBuilder('form')
+			->add('file', 'file')
+			->add('Import', 'submit', array('label'=>'Start import'))
+			->getForm();
+		
+		//handle the form
+		$form->handleRequest($request);
+		if($form->isValid()){
+			//get the file
+			$file=$form['file']->getData();
+			//check the extension of the selected file
+			if($file->guessExtension() == 'txt') {
+				//get the file contents
+				$contents = file($file->getPathname());
+				
+				//get column names
+					//remove line break
+					//split string by ; in array
+				$contents[0]=preg_replace( "/\r|\n/", "", $contents[0] );
+				$columns = explode(";", $contents[0]);
+				
+				//show form to select the node's name and description columns
+					//...TO BE WRITTEN					
+				//store the index of columns
+				$nameCol = 2;
+				$descriptionCol = null;
+				
+				//show form to select the relation columns
+				//...TO BE WRITTEN
+				//store in array as index of $columns
+				$relColumns = array(4,5,6,0);
+				
+				//show form to select the appropriate property for each selected column
+				//store in array using the id of the property
+				$relProps = array(1,6,5,5);			
+				
+				//ask the type of the node, for the obligatory node type
+				//..TO BE WRITTEN
+				$nodeType = 'spoor';
+				
+				//loop the rows
+				for ($i=1; $i<count($contents); $i++){
+					//convert the string into array by separator ;
+					$contents[$i]=preg_replace( "/\r|\n/", "", $contents[$i]);
+					$contents[$i]=explode(";", $contents[$i]);
+					
+					//create new node
+					$nodeName = $contents[$i][$nameCol];
+					//check if a description column exists
+					if($descriptionCol) {
+						$nodeDescription = $contents[$i][$descriptionCol];
+					} else {
+						//provide a default description in which to replace the name
+						//TO BE WRITTEN
+						$nodeDescription = "Spoor met naam " .$nodeName;
+					}
+					//before adding, check if node with this name-description combi does not already exist
+					//TO BE WRITTEN
+					$node = new Node(null, $nodeName, $nodeDescription, null);
+					
+					//create new relations and add to the node, no qualifier and rank
+					for($j=0; $j<count($relColumns); $j++){
+						//check if a value exist, otherwise do not store the relation
+						$relValue = $contents[$i][$relColumns[$j]];
+		
+						if($relValue) {
+							//check the datatype of the property
+							$relType = Property::findById($relProps[$j])->getDatatype();
+							
+							//change value based on property datatype
+							if($relType == 'node'){ //if the datatype is node
+								//search if a node with this name exists
+								$nodeValue = Node::findByName($relValue);
+								if($nodeValue){
+									//if exists, store id as value of the relation
+									$relValue = $nodeValue->getId();
+									$relation = new Relation(null, null, $relProps[$j], $relValue, null, null);
+									$node->addRelation($relation);
+								} else { 
+									//if not exists, show a dialog with similar nodes or possiblity to add new
+									//TO BE WRITTEN (place then new relation and addRelation outside if-structure)
+								}
+							} elseif($relType == 'data'){ //if the datatype is date
+								//change the representation of the node ~ISO8601 or ISO19108
+							} elseif($relType == 'geometry') { //if datatype is geometry
+								//convert to PostGIS geometry	
+							} else {
+								$relation = new Relation(null, null, $relProps[$j], $relValue, null, null);
+								$node->addRelation($relation);
+							}
+							
+
+						}
+
+					}
+					
+					//add an obligatory 'is of type attribute for all values
+					$relation = new Relation(null, null, 1, $nodeType, null, null);
+					$node->addRelation($relation);
+					
+					//save the node to the db
+					$node->save();
+				}
+				
+			}
+
+			return $app->render('import.html', array('form'=>$form->createView(), 'text'=>'file successfully imported'));
+		}
+		
+		return $app['twig']->render('import.html', array('form'=>$form->createView(), 'text'=>'no file imported'));
+	})->bind('import');
+	
 	$app->get('/node/{id}', function(Application $app, $id) use($DB) {
 		//get node info
 		$node = Node::findById($id);

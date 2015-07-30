@@ -1,0 +1,16 @@
+{% extends 'baselayout.html' %}
+{% block title 'Import' %}
+
+{% block body %}
+	<div class="content">
+		<h1>Import</h1>
+		<p>Import file</p>
+		{{form(form, {'action':path('import'), 'method':'POST'})}}
+		{{form_rest(form)}}
+	</div>
+
+	<div class="content">
+		<p>File</p>
+		<p> {{text}} </p>
+	</div>
+{% endblock %}

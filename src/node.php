@@ -80,7 +80,6 @@
 				$node_id = $node->getId();
 				if($node_id == $search_id) {
 					$found_node = $node;
-					ChromePhp::log('found findById');
 				}
 			}
 			//This will store the relations starting at this node in the relations property
