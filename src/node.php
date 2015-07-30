@@ -71,7 +71,12 @@
 			//to be completed
 		}
 		
-		//here the getAll method is used and then loop over array of nodes
+		/**
+		* getAll() is used, then loop over array of nodes
+		*
+		* @param integer $search_id
+		* @return Node node with given id
+		*/
 		static function findById($search_id)
 		{
 			$found_node = null;
@@ -87,7 +92,12 @@
 			return $found_node;
 		}
 		
-		//here the other option is used by executing a db query and then create a new node
+		/**
+		* db query to find node and then create a new node
+		*
+		* @param string $search_name
+		* @return Nodes[]
+ 		*/
 		static function findByName($search_name)
 		{
 			$returned_nodes = $GLOBALS['DB']->query("SELECT * FROM nodes WHERE name='" .$search_name ."';");
@@ -105,6 +115,11 @@
 			return $nodes;
 		}
 		
+		/**
+		*
+		* @param string $search_term
+		* @return Nodes[]
+		*/
 		static function findByDescription($search_term)
 		{
 			$returned_nodes = $GLOBALS['DB']->query("SELECT * FROM nodes WHERE descr@@plainto_tsquery('english','" .$search_term ."');");
@@ -122,7 +137,13 @@
 			return $nodes;
 		}
 		
-		//get all the nodes with corresponding statements
+		/**
+		*get all the nodes with corresponding statements
+		*
+		* @param integer $prop_id
+		* @param string $rel_value
+		* @return Node[]
+		*/
 		static function findByPropertyValue($prop_id, $rel_value){
 			$returned_nodes = Relation::findByPropertyValue($prop_id, $rel_value);
 			$nodes = array();
@@ -133,6 +154,9 @@
 			return $nodes;
 		}
 		
+		/**
+		*Saves a node to the database as well as all its relations
+		*/
 		function save()
 		{
 			$statement = $GLOBALS['DB']->query("INSERT INTO nodes(name, description) VALUES ('{$this->getName()}','{$this->getDescription()}') RETURNING id, descr;");
@@ -147,6 +171,11 @@
 			}
 		}
 		
+		/**
+		*
+		* @param string $new_name
+		* @param string $new_description
+		*/
 		function update($new_name, $new_description)
 		{
             $GLOBALS['DB']->exec("UPDATE nodes SET name = '{$new_name}', description = '{$new_description}' WHERE id = {$this->getId()};");
