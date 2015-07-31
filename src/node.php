@@ -61,11 +61,21 @@
 			return $this->relations;
 		}
 		
+		/**
+		* Adds the relation to the attribute relations
+		*
+		* @param $Relation newRelation the relation to be added
+		*/
 		public function addRelation(Relation $newRelation)
 		{
 			array_push($this->relations, $newRelation);
 		}
 		
+		/**
+		* Removes the given relation from the relations attribute
+		*
+		* @param Relation $oldRelation
+		*/
 		function removeRelation(Relation $oldRelation)
 		{
 			//to be completed
@@ -184,7 +194,11 @@
         
 		}
 		
-		//find all relations starting form this node
+		/**
+		* Gives all the relations which start form this node
+		*
+		* @return Relations[]
+		*/
 		function findRelations()
 		{
 			$relations = Relation::findByStart($this->id);
@@ -194,14 +208,22 @@
 			
 		}
 		
-		//find all relations where this node is the value
+		/**
+		* Gives all the relations where this node is the value
+		*
+		* @return Relations[]
+		*/
 		function findEndRelations()
 		{
 			$relations = Relation::findByValue($this->id);
 			return $relations;
 		}
 		
-		//find all nodes with geometric relation
+		/**
+		* Gives all the nodes with a geometric relation
+		*
+		* @return Nodes[]
+		*/
 		static function getAllGeoNodes()
 		{
 			$georelations = Relation::getGeometryRelations();			
@@ -217,6 +239,11 @@
 			return $returned_nodes;
 		}
 		
+		/**
+		* Gives the history of the node
+		*
+		* @return string[] database rows of nodes_logging
+		*/
 		function findHistory()
 		{
 			$returned_history = $GLOBALS['DB']->query("
@@ -228,6 +255,11 @@
 			return $returned_history;
 		}
 		
+		/**
+		* Returns all the nodes stored in the database
+		*
+		* @return Node[]
+		*/
 		static function getAll()
 		{
 			$returned_nodes = $GLOBALS['DB']->query("SELECT * FROM nodes ORDER BY id;");
