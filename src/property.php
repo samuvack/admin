@@ -69,7 +69,7 @@
 		/**
 		* Uses the getAll method and then loops over array of properties
 		*
-		* @param $search_id integer
+		* @param integer $search_id 
 		* @return Property[] properties with given id
 		*/
 		static function findById($search_id)
@@ -88,7 +88,7 @@
 		/**
 		* Executes a db query to get the properties with given name
 		*
-		* @param $search_name string
+		* @param string $search_name
 		* @return Property[]
 		*/
 		static function findByName($search_name)
@@ -112,7 +112,7 @@
 		/**
 		* Executes specific db query to get properties with given datatype
 		*
-		* @param $search_type string
+		* @param string $search_type
 		* @return Property[]
 		*/
 		static function findByType($search_type)
