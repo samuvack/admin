@@ -78,7 +78,12 @@
 			return $this->rank;
 		}
 		
-		//here the getAll method is used and then loop over array of relations
+		/**
+		* Uses getAll() and then loops over array of relations
+		*
+		* @param $search_id integer
+		* @return Relation
+		*/
 		static function findById($search_id)
 		{
 			$found_rel = null;
@@ -92,9 +97,14 @@
 			return $found_rel;
 		}
 		
-		//here the other option is used by executing a db query and then create a new relation
-		//the property attribute of the relation is here set to a property object
-		//if the datatype of the property is node, the value is a node object
+		/**
+		* Specific db query to search relations with given start node.
+		* The property attribute of the relation is set to a Property object
+		* The value attribute of the relation is set to a node object, if property datatype is node
+		*
+		* @param integer $start_node
+		* @return Relation[]
+		*/
 		static function findByStart($start_node)
 		{
 			$returned_relations = $GLOBALS['DB']->query("SELECT * FROM statements WHERE startid=" .$start_node .";");
@@ -122,9 +132,14 @@
 			return $relations;
 		}
 		
-		//searches the statements table to find relations where value equals the $value_node
-		//the property attribute of the relation is here set to a property object
-		//the start attribute of the relation is here set to a node object
+		/**
+		* Uses getAll() to find all relations where value equals the $value_node
+		* The property attribute of the relation is here set to a property object
+		* The start attribute of the relation is here set to a node object
+		*
+		* @param integer $value_node
+		* @return Relation[]
+		*/
 		static function findByValue($value_node)
 		{
 			$found_relations = array();
@@ -141,9 +156,14 @@
 			return $found_relations;
 		}
 		
-		
-		//searches all the statements which have the property-value and returns array of startid's
-		//value is case insensitive
+		/**
+		* Use specific db query to get relations with the given property-value
+		* Value is case insensitive
+		* 
+		* @param integer $property_id
+		* @param string $value
+		* @return integer[] A array of start id's		
+		*/
 		static function findByPropertyValue($property_id, $value){
 			$returned_relations = $GLOBALS['DB']->query("SELECT startid FROM statements WHERE propertyname=" .$property_id ." and lower(value)=lower('" .$value ."');");
 			$starts = array();
@@ -153,8 +173,12 @@
 			return $starts;
 		}
 		
-		//searches the statements with a property which has datatype geometry
-		//the value of the statement is replaced by the text representation of the geom
+		/**
+		* Uses getAll() to get all statements with a geometry property
+		* The value of statement is text representation
+		*
+		* @return Relation[]
+		*/
 		static function getGeometryRelations()
 		{
 			$found_relations = array();
@@ -175,6 +199,10 @@
 			return $found_relations;
 		}
 		
+		/**
+		* Saves the relation object to the database
+		*
+		*/
 		function save()
 		{
 			
@@ -198,6 +226,14 @@
 			$this->setId($result['id']);
 		}
 		
+		/**
+		* Updates the object and updates the database
+		*
+		* @param string $new_name
+		* @param string $new_value
+		* @param string $new_rank
+		* @param integer $new_qualifier
+		*/
 		function update($new_name, $new_value, $new_rank, $new_qualifier)
 		{
             $GLOBALS['DB']->exec("UPDATE nodes SET propertyname = '{$new_name}', value = '{$new_value}', rank = '{$new_rank}', qualifier = '{$new_qualifier}'  WHERE id = {$this->getId()};");
@@ -208,9 +244,13 @@
         
 		}
 		
-		//returns all the relations stored in the database as relation objects
-		//the property attribute of the relation is here set to a property object
-		//the start attribute of the relation is set to a node object
+		/**
+		* Returns all the relations stored in the database as relation objects
+		* The property attribute of the relation is here set to a property object
+		* The start attribute of the relation is set to a node object
+		*
+		* @retun Relation[]
+		*/
 		static function getAll()
 		{
 			$returned_relations = $GLOBALS['DB']->query("SELECT * FROM statements ORDER BY id;");
