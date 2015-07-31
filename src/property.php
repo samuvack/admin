@@ -66,7 +66,12 @@
 			return $this->descr;
 		}
 		
-		//here the getAll method is used and then loop over array of properties
+		/**
+		* Uses the getAll method and then loops over array of properties
+		*
+		* @param $search_id integer
+		* @return Property[] properties with given id
+		*/
 		static function findById($search_id)
 		{
 			$found_prop = null;
@@ -80,7 +85,12 @@
 			return $found_prop;
 		}
 		
-		//here the other option is used by executing a db query and then create a new prop
+		/**
+		* Executes a db query to get the properties with given name
+		*
+		* @param $search_name string
+		* @return Property[]
+		*/
 		static function findByName($search_name)
 		{
 			$returned_props = $GLOBALS['DB']->query("SELECT * FROM properties WHERE name='" .$search_name ."';");
@@ -99,7 +109,12 @@
 			return $props;
 		}
 		
-		//search all the properties where the type is of the given argument
+		/**
+		* Executes specific db query to get properties with given datatype
+		*
+		* @param $search_type string
+		* @return Property[]
+		*/
 		static function findByType($search_type)
 		{
 			$returned_props = $GLOBALS['DB']->query("SELECT * FROM properties WHERE datatype='" .$search_type ."';");
@@ -118,6 +133,10 @@
 			return $props;
 		}
 		
+		/**
+		* Stores the property object to the database
+		* 
+		*/
 		function save()
 		{
 			$statement = $GLOBALS['DB']->query("INSERT INTO properties(name, description, datatype) VALUES ('{$this->getName()}','{$this->getDescription()}','{$this->getDatatype()}') RETURNING id, descr;");
@@ -126,6 +145,11 @@
 			$this->setDescr($result['descr']);
 		}
 		
+		/**
+		* Returns all the properties stored in the db 
+		*
+		* @return Property[]
+		*/
 		static function getAll()
 		{
 			$returned_props = $GLOBALS['DB']->query("SELECT * FROM properties ORDER BY id;");
