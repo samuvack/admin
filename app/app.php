@@ -126,22 +126,27 @@
 				$columns = explode(";", $contents[0]);
 				
 				//show form to select the node's name and description columns
-					//...TO BE WRITTEN					
+					//...TO BE WRITTEN
+					//... It is possible to have multiple node columns in one file
+					//... use and array: array([node1, descr1], [node2,descr2])??
 				//store the index of columns
 				$nameCol = 2;
 				$descriptionCol = null;
 				
 				//show form to select the relation columns
-				//...TO BE WRITTEN
+					//...TO BE WRITTEN
+					//... repeat for all identified node name columns
 				//store in array as index of $columns
 				$relColumns = array(4,5,6,0);
 				
 				//show form to select the appropriate property for each selected column
+					//...TO BE WRITTEN
 				//store in array using the id of the property
 				$relProps = array(1,6,5,5);			
 				
 				//ask the type of the node, for the obligatory node type
-				//..TO BE WRITTEN
+					//..TO BE WRITTEN
+					//... Repeat for each node column
 				$nodeType = 'spoor';
 				
 				//loop the rows
@@ -151,17 +156,19 @@
 					$contents[$i]=explode(";", $contents[$i]);
 					
 					//create new node
+						//...TO BE WRITTEN
+						//... change for multiple nodes
 					$nodeName = $contents[$i][$nameCol];
 					//check if a description column exists
 					if($descriptionCol) {
 						$nodeDescription = $contents[$i][$descriptionCol];
 					} else {
 						//provide a default description in which to replace the name
-						//TO BE WRITTEN
-						$nodeDescription = "Spoor met naam " .$nodeName;
+							//..TO BE WRITTEN
+						$nodeDescription = $nodeType ." met naam " .$nodeName;
 					}
 					//before adding, check if node with this name-description combi does not already exist
-					//TO BE WRITTEN
+						//...TO BE WRITTEN
 					$node = new Node(null, $nodeName, $nodeDescription, null);
 					
 					//create new relations and add to the node, no qualifier and rank
@@ -179,13 +186,15 @@
 								$nodeValue = Node::findByName($relValue);
 								if($nodeValue){
 									//if exists, store id as value of the relation
+										//...TO BE WRITTEN
+										//...Allow user to confirm that this is the right value based on the node description
+										//...Allow user to select the right value if multiple nodes with this name exist
 									$relValue = $nodeValue->getId();
 									$relation = new Relation(null, null, $relProps[$j], $relValue, null, null);
 									$node->addRelation($relation);
 								} else { 
 									//if not exists, show a dialog with similar nodes or possiblity to add new
-									//TO BE WRITTEN (place then new relation and addRelation outside if-structure)
-								}
+									//TO BE WRITTEN
 							} elseif($relType == 'data'){ //if the datatype is date
 								//change the representation of the node ~ISO8601 or ISO19108
 							} elseif($relType == 'geometry') { //if datatype is geometry
@@ -205,6 +214,8 @@
 					$node->addRelation($relation);
 					
 					//save the node to the db
+						//...To BE WRITTEN
+						//...Save all the nodes to the database
 					$node->save();
 				}
 				
