@@ -4,10 +4,41 @@
 {% block body %}
 	<div class="content">
 		<h1>Filter</h1>
-		<p>Filter nodes</p>
-		{{form(form, {'action':path('filter'), 'method':'POST'})}}
-		{{form_rest(form)}}
-	</div>
+		<div>
+			<h3>Filter options</h3>
+		
+			{{ form_start(form) }}
+				{# render the fields #}
+				{{ form_row(form.type) }}
+				{{ form_row(form.property) }}
+				{{ form_row(form.value) }}
 
+			{{ form_end(form) }}
+		</div>
 	
+		<div>
+		  <h3>Result</h3>
+		  <ul class="nodes">
+		  {% if nodes %}
+			  {% for node in nodes %}
+				<li>
+				  <h4>{{node.getName}} </h4>
+				  <p>DESCRIPTION: {{node.getDescription}}<p>
+				  <a href="{{path('node', {id:node.getId})}}")>More info</a>
+				  <a href="{{path('update',{id: node.getId})}}">Update</a>
+				  <br><br>
+				</li>
+			  {% endfor %}
+		  {% else %}
+			<li>Nothing found...</li>
+		  {% endif %}
+		  </ul>
+		</div>
+	</div>
+{% endblock %}
+{% block script %}
+	<script src="http://code.jquery.com/jquery-2.1.4.min.js" type="text/javascript"></script>
+	<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js" type="text/javascript"></script>
+	<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+	<script src="scripts/updateFilterProperty.js" type="text/javascript"></script>
 {% endblock %}
