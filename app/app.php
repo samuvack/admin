@@ -195,6 +195,7 @@
 								} else { 
 									//if not exists, show a dialog with similar nodes or possiblity to add new
 									//TO BE WRITTEN
+								}
 							} elseif($relType == 'data'){ //if the datatype is date
 								//change the representation of the node ~ISO8601 or ISO19108
 							} elseif($relType == 'geometry') { //if datatype is geometry
