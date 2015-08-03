@@ -13,8 +13,8 @@
 		<ul class="nodes">
 			{% for node in nodes %}
 			<li>
-				<P>NAME: {{node.name}} <br>DESCRIPTION: {{node.description}}
-				<a href="{{path('node', {id:node.id})}}")>More info</a>
+				<P>NAME: {{node.getName}} <br>DESCRIPTION: {{node.getDescription}}
+				<a href="{{path('node', {id:node.getId})}}")>More info</a>
 				</p>
 
 			</li>

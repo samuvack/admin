@@ -3,30 +3,43 @@
 
 {% block body %}
 <div class="content">
+<<<<<<< HEAD
 	<h1>Info on {{node.name}}</h1>
 	<h3>{{node.name}}</h3>
+=======
+	<h1>Info on {{node.getName}}</h1>
+	<h4>{{node.getName}}</h4>
+>>>>>>> origin/master
 	<ul class="nodes">
-		<li>{{node.description}}</li>
+		<li>{{node.getDescription}}</li>
 	</ul>
 	
+<<<<<<< HEAD
 	<h4>Properties and relations on {{node.name}}</h4>
+=======
+	<h3>Properties and relations on {{node.getName}}</h3>
+>>>>>>> origin/master
 	<ul class="nodes">
 		{% for relation in relFrom %}
-		<li>{{relation.pname}} 
-			{% if relation.ptype == 'node' %}
-				<a href="{{ path('node', {id:relation.svalue}) }}">{{relation.nstart}}</a>
+		<li>{{relation.getProperty.getName}} 
+			{% if relation.getProperty.getDatatype == 'node' %}
+				<a href="{{ path('node', {id:relation.getValue.getId}) }}">{{relation.getValue.getName}}</a>
 			{% else %}
-				{{relation.svalue}}
+				{{relation.getValue}}
 			{% endif %}
 			</li>	
 		{% endfor %}
 	</ul>
 	
+<<<<<<< HEAD
 	<h4>Relations to {{node.name}}</h4>
+=======
+	<h3>Relations to {{node.getName}}</h3>
+>>>>>>> origin/master
 	<ul class="nodes">
 		{% for relation in relTo %}
-			<li><a href="{{ path('node', {id:relation.sstart}) }}">{{relation.nstart}}</a>
-			{{relation.pname}} {{node.name}}
+			<li><a href="{{ path('node', {id:relation.getStart.getId}) }}">{{relation.getStart.getName}}</a>
+			{{relation.getProperty.getName}} {{node.getName}}
 			</li>
 		{% endfor %}
 	</ul>
