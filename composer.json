@@ -14,7 +14,8 @@
     
     "autoload": {
         "psr-4": {
-            "MyApp\\Entities\\": "src/entities"
+            "MyApp\\Entities\\": "src/entities",
+            "MyApp\\DBConverters\\": "src/DBConverters"
         }
     }
 }

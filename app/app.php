@@ -1,15 +1,17 @@
 <?php
 	require_once __DIR__.'/../vendor/autoload.php';
-	//require_once __DIR__.'/../src/Entities/Node.php';
-	require_once __DIR__.'/../src/property.php';
-	require_once __DIR__.'/../src/relation.php';
+	//require_once __DIR__.'/../src/entities/Node.php';
+	//require_once __DIR__.'/../src/property.php';
+	//require_once __DIR__.'/../src/relation.php';
 	require_once __DIR__.'/../src/NodeType.php';
 	require_once __DIR__.'/../src/RelationType.php';
 	require_once __DIR__.'/../src/FilterType.php';
         use Silex\Provider\DoctrineServiceProvider;
         use Dflydev\Silex\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
-        use Doctrine\ORM\Tools\Setup;
-        use Doctrine\ORM\EntityManager;
+        use Doctrine\DBAL\Types\Type;
+        use MyApp\Entities\Node;
+        use MyApp\Entities\Property;
+        use MyApp\Entities\Relation;
 
         $DEBUG = true; // TODO: move to config file
         if($DEBUG) {
@@ -47,18 +49,15 @@
         $app->register(new DoctrineOrmServiceProvider, array(
             "orm.em.options" => array(
                 "mappings" => array(
-                    // Using actual filesystem paths
                     array(
                         "type" => "annotation",
                         "namespace" => "MyApp\Entities",
-                        "path" => __DIR__."/../src/entities",
+                        "path" => __DIR__."/../src/entities/",
                         "alias" => ""
                     )
                 ),
             ),
         ));
-        $entityManager = $app['orm.em'];
-
 
 	$DB = new PDO('pgsql:
 		host=localhost;
@@ -75,50 +74,49 @@
 	$app->register(new \Silex\Provider\TranslationServiceProvider(), array('translator.domains'=>array(),));
 	//$app->register(new \Silex\Provider\SessionServiceProvider());
 
+        $app->register(new MyApp\DBConverters\NodeConverter());
+
+
+        Type::addType('dynamicType', '\MyApp\DBConverters\DynamicType');
+        $app['orm.em']->getConnection()->getDatabasePlatform()->registerDoctrineTypeMapping('dynamicType', 'dynamicType');
 
 	$app->before(function($request) use($app) {
             $app['twig']->addGlobal('active',$request->get("_route"));
 	});
 
-	$app->match('/', function(Application $app, Request $request) use($entityManager) {
-		//create form
-		$default = array(
-			'name' =>''
-		);
-		$form = $app['form.factory']->createBuilder('form', $default)
-			->add('name', 'search', array(
-				'constraints' => array(new Assert\NotBlank()),
-				'attr' => array('class'=>'form-control', 'id'=>'form_search')
-			))
-			->add('send', 'submit', array(
-				'attr' => array('class'=>'btn btn-default')
-			))
-			->getForm();
-		$form->handleRequest($request);
+	$app->match('/', function(Application $app, Request $request) {
+            $nodeRepository = $app['orm.em']->getRepository(':Node');
+            //create form
+            $form = $app['form.factory']->createBuilder('form', array('name' =>''))
+                    ->add('name', 'search', array(
+                            'constraints' => array(new Assert\NotBlank()),
+                            'attr' => array('class'=>'form-control', 'id'=>'form_search')
+                    ))
+                    ->add('send', 'submit', array(
+                            'attr' => array('class'=>'btn btn-default')
+                    ))
+                    ->getForm();
+            $form->handleRequest($request);
 
-		//check form
-		if ($form->isValid()) {
-			//get the search term
-			$data = $form->getData();
-			$term = $data['name'];
-			$result = Node::findByName($term);
+            //check form
+            if ($form->isValid()) {
+                //get the search term
+                $data = $form->getData();
+                $term = $data['name'];
+                $result = $nodeRepository->findBy(array('name'=>$term));
 
-			return $app['twig']->render('home.html', array('form'=>$form->createView(),'nodes'=>$result));
-		}
+                return $app['twig']->render('home.html', array('form'=>$form->createView(),'nodes'=>$result));
+            }
 
-		//use the getAll function of the Node class to gather all the nodes
-                $nodeRepository = $entityManager->getRepository(':Node');
-		$nodes = $nodeRepository->findAll();
-		return $app['twig']->render('home.html', array('form'=>$form->createView(), 'nodes'=>$nodes));
-
+            //use the getAll function of the Node class to gather all the nodes
+            $nodes = $nodeRepository->findAll();
+            return $app['twig']->render('home.html', array('form'=>$form->createView(), 'nodes'=>$nodes));
 	})->bind('home');
 
-	$app->match('/insert', function(Request $request) use($app, $DB) {
+	$app->match('/insert', function(Request $request) use($app) {
 
 		//default data for the form to be displayed
-		$node = new Node(null, '', '', null);
-		$relation1 = new Relation(null, null, null, null, null, null);
-		$node->addRelation($relation1);
+		$node = new Node();
 
 		//generate the form
 		$form = $app['form.factory']->createBuilder(new NodeType(), $node)->getForm();
@@ -126,11 +124,14 @@
 		$form->handleRequest($request);
 
 		if($form->isValid()) {
-			$data=$form->getData();
-			$node->save();
+                    $em = $app['orm.em'];
+                    foreach($node->getRelations() as $relation)
+                        $em->persist($relation); // Relation is on the owning side
 
-			return $app->redirect($app->path('home'));
+                    $em->persist($node);
+                    $em->flush();
 
+                    return $app->redirect($app->path('home'));
 		}
 
 		return $app['twig']->render('insert.html', array('form'=>$form->createView()));
@@ -263,12 +264,12 @@
 		return $app['twig']->render('import.html', array('form'=>$form->createView(), 'text'=>'no file imported'));
 	})->bind('import');
 
-	$app->get('/node/{id}', function(Application $app, $id) use($DB) {
-		//get node info
-		$node = Node::findById($id);
+	$app->get('/node/{id}', function(Application $app, $id) {
+                $node = $app['orm.em']->getRepository(':Node')->find($id);
 		//get relations from and to this node
-		$relFrom = $node->findRelations();
-		$relTo = $node->findEndRelations();
+		$relFrom = $node->getRelations();
+                $relTo = $app['orm.em']->getRepository(':Relation')->find($id);
+		//$relTo = $node->findEndRelations();
 
 		return $app['twig']->render('node.html', ['node'=>$node, 'relFrom'=>$relFrom, 'relTo'=>$relTo]);
 	})->bind('node');
