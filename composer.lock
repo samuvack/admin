@@ -4,57 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "7607adae907490b1e1d5f39e1eae4f0e",
+    "hash": "d2b52f44f7972515e64525e6a1593162",
     "packages": [
-        {
-            "name": "dbtlr/silex-doctrine-migrations",
-            "version": "v1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/dbtlr/silex-doctrine-migrations.git",
-                "reference": "126a6901b831be4f3bc168b77134ed79a567d6a7"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/dbtlr/silex-doctrine-migrations/zipball/126a6901b831be4f3bc168b77134ed79a567d6a7",
-                "reference": "126a6901b831be4f3bc168b77134ed79a567d6a7",
-                "shasum": ""
-            },
-            "require": {
-                "doctrine/dbal": "~2.5",
-                "doctrine/migrations": "1.0.*@dev",
-                "knplabs/console-service-provider": "~1.0",
-                "php": ">=5.3.2",
-                "silex/silex": "~1.2"
-            },
-            "suggest": {
-                "dflydev/doctrine-orm-service-provider": "1.0.x-dev"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Dbtlr\\MigrationProvider\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Drew Butler",
-                    "homepage": "http://dbtlr.com"
-                }
-            ],
-            "description": "Doctrine migration service provider for Silex",
-            "homepage": "http://github.com/dbtlr/silex-doctrine-migrations",
-            "keywords": [
-                "doctrine2",
-                "migration",
-                "silex"
-            ],
-            "time": "2015-05-22 12:05:26"
-        },
         {
             "name": "dflydev/doctrine-orm-service-provider",
             "version": "v1.0.6",
@@ -641,73 +592,6 @@
             "time": "2014-09-09 13:34:57"
         },
         {
-            "name": "doctrine/migrations",
-            "version": "v1.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/doctrine/migrations.git",
-                "reference": "3a787de7c4a64460436dc2eb2e3cde8920d5fadd"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/migrations/zipball/3a787de7c4a64460436dc2eb2e3cde8920d5fadd",
-                "reference": "3a787de7c4a64460436dc2eb2e3cde8920d5fadd",
-                "shasum": ""
-            },
-            "require": {
-                "doctrine/dbal": "~2.2",
-                "php": ">=5.4.0",
-                "symfony/console": "~2.3",
-                "symfony/yaml": "~2.3"
-            },
-            "require-dev": {
-                "doctrine/coding-standard": "dev-master",
-                "doctrine/orm": "2.*",
-                "johnkary/phpunit-speedtrap": "~1.0@dev",
-                "mockery/mockery": "^0.9.4",
-                "phpunit/phpunit": "~4.7",
-                "satooshi/php-coveralls": "0.6.*"
-            },
-            "suggest": {
-                "symfony/console": "to run the migration from the console"
-            },
-            "bin": [
-                "bin/doctrine-migrations"
-            ],
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "Doctrine\\DBAL\\Migrations": "lib"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "LGPL-2.1"
-            ],
-            "authors": [
-                {
-                    "name": "Benjamin Eberlei",
-                    "email": "kontakt@beberlei.de"
-                },
-                {
-                    "name": "Jonathan Wage",
-                    "email": "jonwage@gmail.com"
-                }
-            ],
-            "description": "Database Schema migrations using Doctrine DBAL",
-            "homepage": "http://www.doctrine-project.org",
-            "keywords": [
-                "database",
-                "migrations"
-            ],
-            "time": "2015-07-29 20:43:19"
-        },
-        {
             "name": "doctrine/orm",
             "version": "v2.5.0",
             "source": {
@@ -909,6 +793,68 @@
                 "psr-3"
             ],
             "time": "2012-12-21 11:40:51"
+        },
+        {
+            "name": "robmorgan/phinx",
+            "version": "v0.4.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/robmorgan/phinx.git",
+                "reference": "b4b7d1e045d679278d4cb9ab18fd513f15f4797e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/robmorgan/phinx/zipball/b4b7d1e045d679278d4cb9ab18fd513f15f4797e",
+                "reference": "b4b7d1e045d679278d4cb9ab18fd513f15f4797e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2",
+                "symfony/config": "~2.7",
+                "symfony/console": "~2.7",
+                "symfony/yaml": "~2.7"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "3.7.*",
+                "squizlabs/php_codesniffer": "dev-phpcs-fixer"
+            },
+            "bin": [
+                "bin/phinx"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Phinx\\": "src/Phinx"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Rob Morgan",
+                    "email": "robbym@gmail.com",
+                    "homepage": "http://robmorgan.id.au",
+                    "role": "Lead Developer"
+                },
+                {
+                    "name": "Woody Gilk",
+                    "email": "woody.gilk@gmail.com",
+                    "homepage": "http://shadowhand.me",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Phinx makes it ridiculously easy to manage the database migrations for your PHP app.",
+            "homepage": "https://phinx.org",
+            "keywords": [
+                "database",
+                "database migrations",
+                "db",
+                "migrations",
+                "phinx"
+            ],
+            "time": "2015-06-14 13:02:38"
         },
         {
             "name": "silex/silex",

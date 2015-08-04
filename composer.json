@@ -10,8 +10,8 @@
 		"symfony/translation":"~2.3",
         "symfony/finder": "~2.7",
         "dflydev/doctrine-orm-service-provider": "1.0.*",
-        "dbtlr/silex-doctrine-migrations": "^1.0",
-        "knplabs/console-service-provider": "^1.0"
+        "knplabs/console-service-provider": "^1.0",
+        "robmorgan/phinx": "^0.4.4"
     },
     
     "autoload": {

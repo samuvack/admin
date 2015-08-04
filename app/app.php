@@ -65,9 +65,9 @@
                 ),
             ),
         ));
-        $app->register(new \Dbtlr\MigrationProvider\Provider\MigrationServiceProvider(), array(
+      /*  $app->register(new \Dbtlr\MigrationProvider\Provider\MigrationServiceProvider(), array(
             'db.migrations.path' => __DIR__ . '/migrations',
-        ));
+        ));*/
 	$DB = new PDO('pgsql:
 		host=localhost;
 		dbname=Wikidata;
