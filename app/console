@@ -31,5 +31,22 @@ $cli->addCommands(array(
     new \Doctrine\ORM\Tools\Console\Command\InfoCommand(),
     new \Doctrine\ORM\Tools\Console\Command\MappingDescribeCommand(),
 ));
+
+$phinxCommands= array(
+    new \Phinx\Console\Command\Init(),
+    new \Phinx\Console\Command\Create(),
+    new \Phinx\Console\Command\Migrate(),
+    new \Phinx\Console\Command\Rollback(),
+    new \Phinx\Console\Command\Status(),
+    new \Phinx\Console\Command\Test()
+);
+
+foreach($phinxCommands as $command) {
+    // Prefix commands for clarity and to avoid collisions
+    $command->setName("migrate:".$command->getName());
+}
+
+$cli->addCommands($phinxCommands);
+
 $cli->run();
 
