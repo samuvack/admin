@@ -9,7 +9,9 @@
 		"symfony/config":"~2.3",
 		"symfony/translation":"~2.3",
         "symfony/finder": "~2.7",
-        "dflydev/doctrine-orm-service-provider": "1.0.*"
+        "dflydev/doctrine-orm-service-provider": "1.0.*",
+        "dbtlr/silex-doctrine-migrations": "^1.0",
+        "knplabs/console-service-provider": "^1.0"
     },
     
     "autoload": {

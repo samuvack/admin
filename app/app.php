@@ -22,7 +22,7 @@
 	use Symfony\Component\HttpFoundation\Request;
 	use Symfony\Component\HttpFoundation\Response;
 	use Symfony\Component\Validator\Constraints as Assert;
-	use Silex\Privider\FormServiceProvider;
+	use Silex\Provider\FormServiceProvider;
 	use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 	Class Application extends Silex\Application {
@@ -34,6 +34,13 @@
 
 	$app = new Application();
 	$app['debug'] = $DEBUG;
+	use Knp\Provider\ConsoleServiceProvider;
+
+	$app->register(new ConsoleServiceProvider(), array(
+		'console.name'              => 'MyApplication',
+		'console.version'           => '1.0.0',
+		'console.project_directory' => __DIR__.'/..'
+	));
 
         $app->register(new DoctrineServiceProvider, array(
             "db.options" =>
@@ -58,7 +65,9 @@
                 ),
             ),
         ));
-
+        $app->register(new \Dbtlr\MigrationProvider\Provider\MigrationServiceProvider(), array(
+            'db.migrations.path' => __DIR__ . '/migrations',
+        ));
 	$DB = new PDO('pgsql:
 		host=localhost;
 		dbname=Wikidata;
@@ -74,11 +83,9 @@
 	$app->register(new \Silex\Provider\TranslationServiceProvider(), array('translator.domains'=>array(),));
 	//$app->register(new \Silex\Provider\SessionServiceProvider());
 
-        $app->register(new MyApp\DBConverters\NodeConverter());
 
-
-        Type::addType('dynamicType', '\MyApp\DBConverters\DynamicType');
-        $app['orm.em']->getConnection()->getDatabasePlatform()->registerDoctrineTypeMapping('dynamicType', 'dynamicType');
+	Type::addType('dynamicType', '\MyApp\DBConverters\DynamicType');
+	$app['orm.em']->getConnection()->getDatabasePlatform()->registerDoctrineTypeMapping('dynamicType', 'dynamicType');
 
 	$app->before(function($request) use($app) {
             $app['twig']->addGlobal('active',$request->get("_route"));
