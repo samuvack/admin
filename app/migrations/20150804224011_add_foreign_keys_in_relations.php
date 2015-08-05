@@ -13,6 +13,8 @@ class AddForeignKeysInRelations extends AbstractMigration
      * http://docs.phinx.org/en/latest/migrations.html#the-abstractmigration-class
      */
     public function change() {
-
+        $relations = $this->table("relations");
+        $relations->addColumn("nodevalue","integer");
+        $relations->addColumn("geometryvalue","integer");
     }
 }
