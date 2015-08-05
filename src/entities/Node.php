@@ -6,7 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 
 /**
- * @Entity
+ * @Entity(repositoryClass="MyApp\Entities\Repositories\NodeRepository")
  * @Table(name="nodes")
  */
 class Node {
@@ -20,7 +20,7 @@ class Node {
     private $name;
     /** @Column(type="text") */
     private $description;
-    /** @Column(type="text") */
+    /** @Column(type="tsvector") */
     private $descr;
     /**
      * @OneToMany(targetEntity="Relation", mappedBy="startNode", cascade={"all"})

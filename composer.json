@@ -11,13 +11,17 @@
         "symfony/finder": "~2.7",
         "dflydev/doctrine-orm-service-provider": "1.0.*",
         "knplabs/console-service-provider": "^1.0",
-        "robmorgan/phinx": "^0.4.4"
+        "robmorgan/phinx": "^0.4.4",
+        "opsway/doctrine-dbal-postgresql": "^0.7.0"
     },
     
     "autoload": {
         "psr-4": {
             "MyApp\\Entities\\": "src/entities",
-            "MyApp\\Converters\\": "src/converters"
+            "MyApp\\Converters\\": "src/converters",
+            "MyApp\\Entities\\Repositories\\": "src/entities/repositories",
+            "MyApp\\Database\\Functions\\": "src/database/functions",
+            "MyApp\\Database\\Types\\": "src/database/types"
         }
     }
 }

@@ -64,6 +64,10 @@
                     )
                 ),
             ),
+			"orm.custom.functions.string" => array(
+				"plainto_tsquery" => "MyApp\Database\Functions\PlainToTsquery",
+				"TS_MATCH_OP" => "MyApp\Database\Functions\TsMatch"
+			)
         ));
 
 	$DB = new PDO('pgsql:
@@ -80,6 +84,8 @@
 	$app->register(new \Silex\Provider\ValidatorServiceProvider());
 	$app->register(new \Silex\Provider\TranslationServiceProvider(), array('translator.domains'=>array(),));
 	//$app->register(new \Silex\Provider\SessionServiceProvider());
+
+	Type::addType('tsvector', 'MyApp\Database\Types\Tsvector');
 
 	$app->before(function($request) use($app) {
             $app['twig']->addGlobal('active',$request->get("_route"));
@@ -275,9 +281,11 @@
 		return $app['twig']->render('node.html', ['node'=>$node, 'relFrom'=>$relFrom, 'relTo'=>$relTo]);
 	})->bind('node');
 
-	$app->match('/update/{id}', function(Application $app, Request $request, $id) use($DB) {
+	$app->match('/update/{id}', function(Application $app, Request $request, $id) {
+		$em = $app['orm.em'];
+		$noderepo = $em->getRepository(':Node');
 		//get the node information for the given id
-		$node = Node::findById($id);
+		$node = $noderepo->find($id);
 
 		//store all available relations in the relations property of the node
 
@@ -287,10 +295,9 @@
 
 		//check form
 		if ($form->isValid()) {
-			$node->update($node->getName(), $node->getDescription());
-			//update the relations
-			//insert newly added relations
-
+			$em->persist($node);
+			$em->flush();
+			// TODO: relations
 			return $app->redirect($app->path('home'));
 		}
 
@@ -298,7 +305,7 @@
 		return $app['twig']->render('update.html', array('form'=> $form->createView(), 'nodeid'=>$id));
 	})->bind('update');
 
-	$app->match('/search', function (Application $app, Request $request) use($DB) {
+	$app->match('/search', function (Application $app, Request $request) {
 		//create form
 		$default = array(
 			'search' =>''
@@ -321,16 +328,17 @@
 			$data = $form->getData();
 			$term = $data['description'];
 
+			$result = $app["orm.em"]->getRepository(':Node')->findByDescription($term);
 			//search in the database
-			$result = Node::findByDescription($term);
+			//$result = Node::findByDescription($term);
 
 			return $app['twig']->render('search.html', array('form'=>$form->createView(),'nodes'=>$result));
 		}
 		return $app['twig']->render('search.html', array('form'=>$form->createView(), 'nodes'=>[]));
 	})->bind('search');
 
-	$app->get('/map', function(Application $app) use ($DB) {
-		$geonodes = Node::getAllGeoNodes();
+	$app->get('/map', function(Application $app) {
+		$geonodes = $app['orm.em']->getRepository(':Node')->getAllGeoNodes();
 
 		return $app['twig']->render('map.html', ['nodes'=>$geonodes]);
 	})->bind('map');
@@ -340,10 +348,12 @@
 		$node = Node::findById($id);
 		$history = $node->findHistory();
 
+		// TODO after user implemented
+
 		return $app['twig']->render('history.html', ['node'=>$node, 'edits'=>$history]);
 	})->bind('history');
 
-	$app->match('/filter', function(Application $app, Request $request) use($DB) {
+	$app->match('/filter', function(Application $app, Request $request) {
 		//create form with default data
 		$default = array(
 			'type'=>'',
@@ -361,7 +371,7 @@
 			$value = $data['value'];
 
 			//get the nodes with this property and value
-			$nodes = Node::findByPropertyValue($id, $value);
+			$app["orm.em"]->getRepository(':Node')->findByPropertyValue($id, $value);
 
 			return $app['twig']->render('filter.html', array('form'=>$form->createView(), 'nodes'=>$nodes));
 		}

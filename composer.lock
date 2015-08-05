@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "44c7c2a7787cb53f16db570231df2af8",
+    "hash": "b1fd549b369fd90fe360c821cc3d826e",
     "packages": [
         {
             "name": "dflydev/doctrine-orm-service-provider",
@@ -709,6 +709,49 @@
                 "silex"
             ],
             "time": "2013-06-13 12:43:39"
+        },
+        {
+            "name": "opsway/doctrine-dbal-postgresql",
+            "version": "v0.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/opsway/doctrine-dbal-postgresql.git",
+                "reference": "6e3f7dfda9727818427b0f7dc2fdf6625976e625"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/opsway/doctrine-dbal-postgresql/zipball/6e3f7dfda9727818427b0f7dc2fdf6625976e625",
+                "reference": "6e3f7dfda9727818427b0f7dc2fdf6625976e625",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/dbal": "~2.4",
+                "doctrine/orm": "~2.4",
+                "php": ">=5.4"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Opsway\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Alexandr Vronskiy",
+                    "email": "alvro@opsway.com"
+                }
+            ],
+            "description": "Extensions for support Postgres in Doctrine DBAL & DQL",
+            "time": "2015-07-29 16:25:48"
         },
         {
             "name": "pimple/pimple",

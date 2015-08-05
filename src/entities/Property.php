@@ -18,7 +18,7 @@ class Property
     private $description;
      /** @Column(type="text") */
     private $datatype;
-     /** @Column(type="text") */
+     /** @Column(type="tsvector") */
     private $descr;
 
     function __construct($name = "", $description ="", $datatype="", $descr=null)
