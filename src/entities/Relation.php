@@ -1,9 +1,11 @@
 <?php
 namespace MyApp\Entities;
+use MyApp\Converters\StringConverter;
 
 /**
  * @Entity
- * @Table(name="statements")
+ * @Table(name="relations")
+ * @HasLifecycleCallbacks
  */
 class Relation
 {
@@ -15,7 +17,7 @@ class Relation
 
     /**
      * @ManyToOne(targetEntity="Property")
-     * @JoinColumn(name="propertyname", referencedColumnName="id")
+     * @JoinColumn(name="property", referencedColumnName="id")
      */
     private $property;
      /** @Column(type="dynamicType") */
@@ -27,9 +29,23 @@ class Relation
 
     /**
      * @ManyToOne(targetEntity="Node", inversedBy="relations")
-     * @JoinColumn(name="startid")
+     * @JoinColumn(name="startnode")
      */
     private $startNode;
+
+    /**
+     * @ManyToOne(targetEntity="Node")
+     * @JoinColumn(name="nodevalue")
+     */
+    private $nodevalue;
+
+    /**
+     * @ManyToOne(targetEntity="Geometry")
+     * @JoinColumn(name="geometryvalue")
+     */
+    private $geometryvalue;
+
+    private $valueObject = null;
 
     function __construct($start_node = null, $property = null, $value = "", $qualifier=null, $rank=null) {
         $this->start_node = $start_node;
@@ -66,11 +82,35 @@ class Relation
     }
 
     function setValue($new_value) {
-        $this->value = (string) $new_value;
+        $this->nodevalue = $this->geometryvalue = $this->value = null;
+        $this->valueObject = $new_value;
+
+        if($new_value instanceof Node)
+            $this->nodevalue = $new_value;
+        elseif ($new_value instanceof Geometry )
+            $this->geometryvalue = $new_value;
+        else {
+            $converter = StringConverter::getConverter($this->property->getDataType());
+            $this->value = $converter->toString($new_value);
+        }
     }
 
     function getValue() {
-        return $this->value;
+        /*
+         * Smelly code is smelly, but embeddings do not support cross-table fields yet
+         */
+        if ($this->valueObject !== null)
+            return $this->valueObject;
+
+        if ($this->nodevalue !== null)
+            $this->valueObject = $this->nodevalue;
+        elseif($this->geometryvalue !== null)
+            $this->valueObject = $this->geometryvalue;
+        else {
+            $converter = StringConverter::getConverter($this->property->getDataType());
+            $this->valueObject = $converter->toObject($this->value);
+        }
+        return $this->geometryvalue;
     }
 
     function setQualifier($new_qualifier) {

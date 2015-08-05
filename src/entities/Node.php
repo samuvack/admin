@@ -8,7 +8,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * @Entity
  * @Table(name="nodes")
- * @HasLifecycleCallbacks
  */
 class Node {
     /**
@@ -100,10 +99,5 @@ class Node {
             unset($this->relations[$key]);
             $oldRelation->setStart(null);
         }
-    }
-
-    /** @PostPersist  */
-    function postPersist(){
-        echo "sterf";die();
     }
 }
