@@ -8,7 +8,10 @@
 
 namespace MyApp\Entities;
 
-
+/**
+ * @Entity
+ * @Table(name="geometries")
+ */
 class Geometry
 {
     /**

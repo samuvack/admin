@@ -65,9 +65,7 @@
                 ),
             ),
         ));
-      /*  $app->register(new \Dbtlr\MigrationProvider\Provider\MigrationServiceProvider(), array(
-            'db.migrations.path' => __DIR__ . '/migrations',
-        ));*/
+
 	$DB = new PDO('pgsql:
 		host=localhost;
 		dbname=Wikidata;
@@ -82,10 +80,6 @@
 	$app->register(new \Silex\Provider\ValidatorServiceProvider());
 	$app->register(new \Silex\Provider\TranslationServiceProvider(), array('translator.domains'=>array(),));
 	//$app->register(new \Silex\Provider\SessionServiceProvider());
-
-
-	Type::addType('dynamicType', '\MyApp\DBConverters\DynamicType');
-	$app['orm.em']->getConnection()->getDatabasePlatform()->registerDoctrineTypeMapping('dynamicType', 'dynamicType');
 
 	$app->before(function($request) use($app) {
             $app['twig']->addGlobal('active',$request->get("_route"));
@@ -272,10 +266,10 @@
 	})->bind('import');
 
 	$app->get('/node/{id}', function(Application $app, $id) {
-                $node = $app['orm.em']->getRepository(':Node')->find($id);
+		$node = $app['orm.em']->getRepository(':Node')->find($id);
 		//get relations from and to this node
 		$relFrom = $node->getRelations();
-                $relTo = $app['orm.em']->getRepository(':Relation')->find($id);
+		$relTo = $app['orm.em']->getRepository(':Relation')->findBy(array("nodevalue"=>$id));
 		//$relTo = $node->findEndRelations();
 
 		return $app['twig']->render('node.html', ['node'=>$node, 'relFrom'=>$relFrom, 'relTo'=>$relTo]);

@@ -14,9 +14,15 @@ abstract class StringConverter {
     }
 
     public static function getConverter($type){
-        if(self::$converterMap !== null)
+        if(self::$converterMap === null)
             self::initConverterMap();
 
+        if (! array_key_exists($type, self::$converterMap)) {
+            $format = "No Converter for type '%s' found.";
+            throw new TypeNotSupportedException(sprintf($format,$type));
+        }
+
+        return self::$converterMap[$type];
     }
 
     public abstract function toString($object);

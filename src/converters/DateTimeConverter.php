@@ -6,7 +6,7 @@
  * Time: 09:28
  */
 
-namespace MyApp\DBConverters;
+namespace MyApp\Converters;
 
 
 class DateTimeConverter extends StringConverter {

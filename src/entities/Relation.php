@@ -1,6 +1,6 @@
 <?php
 namespace MyApp\Entities;
-use MyApp\Converters\StringConverter;
+use \MyApp\Converters\StringConverter;
 
 /**
  * @Entity
@@ -20,7 +20,7 @@ class Relation
      * @JoinColumn(name="property", referencedColumnName="id")
      */
     private $property;
-     /** @Column(type="dynamicType") */
+     /** @Column(type="text") */
     private $value;
      /** @Column(type="integer") */
     private $qualifier;
@@ -35,7 +35,7 @@ class Relation
 
     /**
      * @ManyToOne(targetEntity="Node")
-     * @JoinColumn(name="nodevalue")
+     * @JoinColumn(name="nodevalue", referencedColumnName="id")
      */
     private $nodevalue;
 
@@ -63,14 +63,14 @@ class Relation
      * @param Node the starting node
      */
     function setStart($new_start) {
-        $this->start_node = $new_start;
+        $this->startNode = $new_start;
     }
 
     /*
      * @return Node the starting node
      */
     function getStart() {
-        return $this->start_node;
+        return $this->startNode;
     }
 
     function setProperty($new_prop) {
@@ -102,15 +102,18 @@ class Relation
         if ($this->valueObject !== null)
             return $this->valueObject;
 
-        if ($this->nodevalue !== null)
+        $type = $this->property->getDataType();
+
+        if ($type == 'node')
             $this->valueObject = $this->nodevalue;
-        elseif($this->geometryvalue !== null)
+        elseif($type == 'geometry')
             $this->valueObject = $this->geometryvalue;
         else {
             $converter = StringConverter::getConverter($this->property->getDataType());
             $this->valueObject = $converter->toObject($this->value);
         }
-        return $this->geometryvalue;
+
+        return $this->valueObject;
     }
 
     function setQualifier($new_qualifier) {
