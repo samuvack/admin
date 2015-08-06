@@ -17,25 +17,26 @@ class UserSystem extends AbstractMigration
         // Apparently the SimpleUser service uses integers to store timestamps *puke*
         $users = $this->table("users");
         $users->addColumn("email","string", array("limit" => 100))
-            ->addColumn("password","string", array("limit" => 255))
-            ->addColumn("salt", "string", array("limit" => 255))
-            ->addColumn("roles", "string", array("limit" => 255))
-            ->addColumn("time_created", "integer", array("default" => 0, "signed" => false))
-            ->addColumn("username", "string", array("limit" => 100))
-            ->addColumn("isEnabled", "boolean", array("default" => true))
-            ->addColumn("confirmationToken", "string", array("limit" => 100, "null" => true))
-            ->addColumn("timePasswordResetRequested", "integer", array("null" => true, "signed" => false))
-            ->addIndex("email", array("unique" => true))
-            ->addIndex("username", array("unique" => true))
+            ->addColumn('password',"string", array("limit" => 255))
+            ->addColumn('salt', "string", array("limit" => 255))
+            ->addColumn('roles', "string", array("limit" => 255))
+            ->addColumn('name', "string", array("limit" => 255))
+            ->addColumn('time_created', "integer", array("default" => 0, "signed" => false))
+            ->addColumn('username', "string", array("limit" => 100, "null" => true))
+            ->addColumn('is_enabled', "boolean", array("default" => true))
+            ->addColumn('confirmation_token', "string", array("limit" => 100, "null" => true))
+            ->addColumn('time_password_reset_requested', "integer", array("null" => true, "signed" => false))
+            ->addIndex('email', array("unique" => true))
+            ->addIndex('username', array("unique" => true))
             ->create();
 
         $fields = $this->table("user_custom_fields",
             array('id' => false, 'primary_key' => array('user_id','attribute'))
         );
-        $fields->addColumn("user_id","integer",array("signed" => false))
-            ->addColumn("attribute","string", array("limit" => 50))
-            ->addColumn("value","string", array("limit" => 255, "null" => true))
-            ->addForeignKey("user_id", "users", "id", array("delete" => "CASCADE", "update" => "CASCADE"))
+        $fields->addColumn('user_id',"integer",array("signed" => false))
+            ->addColumn('attribute',"string", array("limit" => 50))
+            ->addColumn('value',"string", array("limit" => 255, "null" => true))
+            ->addForeignKey('user_id', 'users', "id", array("delete" => "CASCADE", "update" => "CASCADE"))
             ->create();
     }
 }
