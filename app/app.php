@@ -37,15 +37,10 @@
 		'console.project_directory' => __DIR__.'/..'
 	));
 
+	$dbconfig = include __DIR__ . "/config/db.include.php";
+	$dbconfig["driver"] = 'pdo_pgsql';
         $app->register(new DoctrineServiceProvider, array(
-            "db.options" =>
-                array( // TODO: Move to config file
-                    'dbname' => 'Wikidata',
-                    'user' => 'postgres',
-                    'password' => 'postgres',
-                    'host' => 'localhost',
-                    'driver' => 'pdo_pgsql'
-                )
+            	"db.options" => $dbconfig
             )
         );
         $app->register(new DoctrineOrmServiceProvider, array(
