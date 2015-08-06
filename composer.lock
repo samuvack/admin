@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/VandorpeDavid/silex-postgres-simpleuser.git",
-                "reference": "60cd5dbd07c5587a821a616878e2a0a9d996ec66"
+                "reference": "aefb990e5859e22d8a39e81b6d0a1b7e07657259"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/VandorpeDavid/silex-postgres-simpleuser/zipball/60cd5dbd07c5587a821a616878e2a0a9d996ec66",
-                "reference": "60cd5dbd07c5587a821a616878e2a0a9d996ec66",
+                "url": "https://api.github.com/repos/VandorpeDavid/silex-postgres-simpleuser/zipball/aefb990e5859e22d8a39e81b6d0a1b7e07657259",
+                "reference": "aefb990e5859e22d8a39e81b6d0a1b7e07657259",
                 "shasum": ""
             },
             "require": {
@@ -67,7 +67,7 @@
             "support": {
                 "source": "https://github.com/VandorpeDavid/silex-postgres-simpleuser/tree/bleeding-edge"
             },
-            "time": "2015-08-06 13:22:34"
+            "time": "2015-08-06 14:31:19"
         },
         {
             "name": "dflydev/doctrine-orm-service-provider",
