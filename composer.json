@@ -6,29 +6,29 @@
         }
     ],
     "require": {
-        "silex/silex": "~1.2",
-        "twig/twig": "~1.18",
-        "symfony/twig-bridge": "~2.6",
-		"symfony/form":"~2.3",
-		"symfony/security-csrf":"~2.4",
-		"symfony/validator":"~2.3",
-		"symfony/config":"~2.3",
-		"symfony/translation":"~2.3",
-        "symfony/finder": "~2.7",
+        "davdorpe/silex-postgres-simpleuser": "dev-bleeding-edge",
         "dflydev/doctrine-orm-service-provider": "1.0.*",
         "knplabs/console-service-provider": "^1.0",
+        "php":  ">=5.5",
         "robmorgan/phinx": "^0.4.4",
-        "davdorpe/silex-postgres-simpleuser": "dev-bleeding-edge",
-        "php":  ">=5.5"
+        "twig/twig": "~1.18",
+        "silex/silex": "~1.2",
+        "symfony/config":"~2.3",
+        "symfony/finder": "~2.7",
+        "symfony/form":"~2.3",
+        "symfony/security-csrf":"~2.4",
+        "symfony/translation":"~2.3",
+        "symfony/twig-bridge": "~2.6",
+		"symfony/validator":"~2.3"
     },
     
     "autoload": {
         "psr-4": {
-            "MyApp\\Entities\\": "src/entities",
             "MyApp\\Converters\\": "src/converters",
-            "MyApp\\Entities\\Repositories\\": "src/entities/repositories",
             "MyApp\\Database\\Functions\\": "src/database/functions",
-            "MyApp\\Database\\Types\\": "src/database/types"
+            "MyApp\\Database\\Types\\": "src/database/types",
+            "MyApp\\Entities\\": "src/entities",
+            "MyApp\\Entities\\Repositories\\": "src/entities/repositories"
         }
     }
 }
