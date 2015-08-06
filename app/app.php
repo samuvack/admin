@@ -97,11 +97,16 @@ $app->register($userServiceProvider, array(
 			'fromEmail' => $config['mail'],
 			'enabled' => ! $app['debug']
 		),
+		'userRoles' => array(
+			'ROLE_EDITOR', 'ROLE_ADMIN', 'ROLE_USER'
+		)
 	)
 ));
 
-$app->mount('/user', $userServiceProvider);
 require_once __DIR__ . "/firewall.php";
+
+$app->mount('/user', $userServiceProvider);
+
 
 Type::addType('tsvector', 'MyApp\Database\Types\Tsvector');
 

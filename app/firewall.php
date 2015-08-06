@@ -1,7 +1,5 @@
 <?php
 
-use Silex\Provider;
-
 $app['security.firewalls'] = array(
 	'secured_area' => array(
 		'pattern' => '^.*$',
