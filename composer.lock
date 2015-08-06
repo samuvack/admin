@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6e6e6ecc3eb09c6f89b0c2238ee1fbb0",
+    "hash": "ad3f9e8a9337532727d59a9760ffb754",
     "packages": [
         {
             "name": "davdorpe/silex-postgres-simpleuser",
-            "version": "v3.0.2",
+            "version": "dev-bleeding-edge",
             "source": {
                 "type": "git",
                 "url": "https://github.com/VandorpeDavid/silex-postgres-simpleuser.git",
-                "reference": "3b9394341afb1df86f95e8c48cbeeb9c110fb580"
+                "reference": "60cd5dbd07c5587a821a616878e2a0a9d996ec66"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/VandorpeDavid/silex-postgres-simpleuser/zipball/3b9394341afb1df86f95e8c48cbeeb9c110fb580",
-                "reference": "3b9394341afb1df86f95e8c48cbeeb9c110fb580",
+                "url": "https://api.github.com/repos/VandorpeDavid/silex-postgres-simpleuser/zipball/60cd5dbd07c5587a821a616878e2a0a9d996ec66",
+                "reference": "60cd5dbd07c5587a821a616878e2a0a9d996ec66",
                 "shasum": ""
             },
             "require": {
@@ -65,9 +65,9 @@
                 "user provider"
             ],
             "support": {
-                "source": "https://github.com/VandorpeDavid/silex-postgres-simpleuser/tree/v3.0.2"
+                "source": "https://github.com/VandorpeDavid/silex-postgres-simpleuser/tree/bleeding-edge"
             },
-            "time": "2015-08-06 09:31:14"
+            "time": "2015-08-06 13:22:34"
         },
         {
             "name": "dflydev/doctrine-orm-service-provider",
@@ -2391,7 +2391,9 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "davdorpe/silex-postgres-simpleuser": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
