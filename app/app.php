@@ -8,9 +8,9 @@
 	use Dflydev\Silex\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
 	use Doctrine\DBAL\Types\Type;
 
+	$config = include __DIR__ . "/config/main.php";
 
-	$DEBUG = true; // TODO: move to config file
-	if($DEBUG) {
+	if($config["debug"]) {
 		// include the php library for the Chrome logger to print variables to the Chrome Console
 		include 'ChromePhp.php';
 	}
@@ -28,12 +28,12 @@
 	}
 
 	$app = new Application();
-	$app['debug'] = $DEBUG;
+	$app['debug'] = $config["debug"];
 
 
 	$app->register(new ConsoleServiceProvider(), array(
-		'console.name'              => 'MyApplication',
-		'console.version'           => '1.0.0',
+		'console.name'              => $config['application']['name'],
+		'console.version'           => $config['application']['version'],
 		'console.project_directory' => __DIR__.'/..'
 	));
 
@@ -57,7 +57,8 @@
 			"orm.custom.functions.string" => array(
 				"plainto_tsquery" => "MyApp\Database\Functions\PlainToTsquery",
 				"TS_MATCH_OP" => "MyApp\Database\Functions\TsMatch"
-			)
+			),
+			'orm.auto_generate_proxies' => $app['debug']
         ));
 
 	$DB = new PDO('pgsql:
@@ -93,11 +94,7 @@
 				'required' => ! $app['debug'],
 			),
 			'mailer' => array(
-				'fromEmail' => array(
-					// TODO: get from config file!
-					'address' => 'you@yourdomain.com',
-					'name' => 'Your Organization',
-				),
+				'fromEmail' => $config['mail']
 			),
 		)
 	));
