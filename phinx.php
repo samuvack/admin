@@ -1,4 +1,12 @@
 <?php
+$dbconfig = include __DIR__ . "/config/db.include.php";
+$realConfig = array(
+    "adapter" => "pgsql",
+    "host" => $dbconfig["host"],
+    "name" => $dbconfig["dbname"],
+    "user" => $dbconfig["user"],
+    "pass" => $dbconfig["password"]
+);
 return array(
     "paths" => array(
         "migrations" => "app/migrations"

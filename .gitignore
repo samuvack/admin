@@ -53,3 +53,4 @@ Temporary Items
 
 # Use the doctrine CLI to generate this
 /cache/
+/app/config/db.include.php

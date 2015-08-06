@@ -11,9 +11,7 @@
 			
 		<ul class="nodes">
 			{% for node in nodes %}
-			<li>
-				<p>NAME: {{node.getName}} <br>DESCRIPTION: {{node.getDescription}}</p>
-			</li>
+				{% include '_node.html' with {'node': node} only %}
 			{% endfor %}
 		</ul>	
 	</div>

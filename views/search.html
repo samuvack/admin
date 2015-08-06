@@ -13,10 +13,7 @@
 		<ul class="nodes">
 			{% for node in nodes %}
 			<li>
-				<P>NAME: {{node.getName}} <br>DESCRIPTION: {{node.getDescription}}
-				<a href="{{path('node', {id:node.getId})}}")>More info</a>
-				</p>
-
+				{% include '_node.html' with {'node': node} only %}
 			</li>
 			{% endfor %}
 		</ul>

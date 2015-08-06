@@ -3,23 +3,23 @@
 
 {% block body %}
 <div class="content">
-	<h1>History of {{node.getName}}</h1>
+	<h1>History of {{node.getName|e}}</h1>
 	<ul class="nodes">
-		<li>NAME: {{node.getName}}</li>
-		<li>DESCRIPTION: {{node.getDescription}}</li>
+		<li>NAME: {{node.getName|e}}</li>
+		<li>DESCRIPTION: {{node.getDescription|e}}</li>
 	</ul>
 	
 	<h3>Edits</h3>
 	<ul class="nodes">
 		{% for edit in edits %}
 			{% if edit.action == 'I'%}
-				<li> INSERTED ON {{edit.action_time|date("j-n-Y g:i")}} BY {{edit.action_by}} : <br> 
-				{{edit.name}}, {{edit.description}} </li><br>
+				<li> INSERTED ON {{edit.action_time|date("j-n-Y g:i")}} BY {{edit.action_by|e}} : <br>
+				{{edit.name|e}}, {{edit.description|e}} </li><br>
 			{% elseif edit.action == 'D'%}
-				<li> DELETED ON {{edit.action_time|date("j-n-Y g:i")}} BY {{edit.action_by}} </li><br>
+				<li> DELETED ON {{edit.action_time|date("j-n-Y g:i")}} BY {{edit.action_by|e}} </li><br>
 			{% elseif edit.action == 'U' %}
-				<li> UPDATED ON {{edit.action_time|date("j-n-Y g:i")}} BY {{edit.action_by}} : <br>
-				{{edit.name}}, {{edit.description}} </li><br>
+				<li> UPDATED ON {{edit.action_time|date("j-n-Y g:i")}} BY {{edit.action_by|e}} : <br>
+				{{edit.name|e}}, {{edit.description|e}} </li><br>
 			{%endif%}	
 		{% endfor %}
 	</ul>

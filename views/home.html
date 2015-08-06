@@ -14,11 +14,7 @@
 	  <ul class="nodes">
 	  {% for node in nodes %}
 		<li>
-		  <h4>{{node.getName}} </h4>
-		  <p>DESCRIPTION: {{node.getDescription}}<p>
-		  <a href="{{path('node', {id:node.getId})}}")>More info</a>
-		  <a href="{{path('update',{id: node.getId})}}">Update</a>
-		  <br><br>
+		  {% include '_node.html' with {'node': node} only %}
 		</li>
 	  {% endfor %}
 	  </ul>
