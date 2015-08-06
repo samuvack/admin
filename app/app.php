@@ -91,11 +91,11 @@ $app->register($userServiceProvider, array(
 		),
 		'emailConfirmation' => array(
 			// Only ask for mails in production mode
-			'required' => $app['debug'],
+			'required' => ! $app['debug'],
 		),
 		'mailer' => array(
 			'fromEmail' => $config['mail'],
-			'enabled' =>  $app['debug']
+			'enabled' => ! $app['debug']
 		),
 	)
 ));
