@@ -18,7 +18,8 @@
         "dflydev/doctrine-orm-service-provider": "1.0.*",
         "knplabs/console-service-provider": "^1.0",
         "robmorgan/phinx": "^0.4.4",
-        "davdorpe/silex-postgres-simpleuser": "dev-bleeding-edge"
+        "davdorpe/silex-postgres-simpleuser": "dev-bleeding-edge",
+        "php":  ">=5.5"
     },
     
     "autoload": {
