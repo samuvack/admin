@@ -4,8 +4,71 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b021257d2af2a98c9371cbbe4fd65bdc",
+    "hash": "6e6e6ecc3eb09c6f89b0c2238ee1fbb0",
     "packages": [
+        {
+            "name": "davdorpe/silex-postgres-simpleuser",
+            "version": "v3.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/VandorpeDavid/silex-postgres-simpleuser.git",
+                "reference": "3b9394341afb1df86f95e8c48cbeeb9c110fb580"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/VandorpeDavid/silex-postgres-simpleuser/zipball/3b9394341afb1df86f95e8c48cbeeb9c110fb580",
+                "reference": "3b9394341afb1df86f95e8c48cbeeb9c110fb580",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/dbal": "~2.4",
+                "jasongrimes/paginator": "~1.0",
+                "php": ">=5.3.0",
+                "silex/silex": "~1.0",
+                "swiftmailer/swiftmailer": "~5.3",
+                "symfony/security": "~2.3",
+                "symfony/twig-bridge": "~2.3"
+            },
+            "require-dev": {
+                "ext-pdo_pgsql": "*",
+                "phpunit/phpunit": "~4.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "SimpleUser": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-0": {
+                    "SimpleUser\\Tests": "tests/"
+                }
+            },
+            "authors": [
+                {
+                    "name": "Jason Grimes",
+                    "email": "jason@grimesit.com"
+                },
+                {
+                    "name": "David Vandorpe",
+                    "email": "david.vandorpe@wina.ugent.be"
+                }
+            ],
+            "description": "A simple postgres database-backed user provider for Silex, with associated services and controllers.",
+            "homepage": "https://github.com/VandorpeDavid/silex-postgres-simpleuser",
+            "keywords": [
+                "postgres",
+                "postgresql",
+                "silex",
+                "simple user provider",
+                "user",
+                "user provider"
+            ],
+            "support": {
+                "source": "https://github.com/VandorpeDavid/silex-postgres-simpleuser/tree/v3.0.2"
+            },
+            "time": "2015-08-06 09:31:14"
+        },
         {
             "name": "dflydev/doctrine-orm-service-provider",
             "version": "v1.0.6",
@@ -712,59 +775,6 @@
                 "paginator"
             ],
             "time": "2014-10-13 01:34:54"
-        },
-        {
-            "name": "jasongrimes/silex-simpleuser",
-            "version": "2.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/jasongrimes/silex-simpleuser.git",
-                "reference": "b44786395e126ec1e7caa8f0c77eef9cebe02f89"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/jasongrimes/silex-simpleuser/zipball/b44786395e126ec1e7caa8f0c77eef9cebe02f89",
-                "reference": "b44786395e126ec1e7caa8f0c77eef9cebe02f89",
-                "shasum": ""
-            },
-            "require": {
-                "doctrine/dbal": "~2.4",
-                "jasongrimes/paginator": "~1.0",
-                "php": ">=5.3.0",
-                "silex/silex": "~1.0",
-                "swiftmailer/swiftmailer": "~5.3",
-                "symfony/security": "~2.3",
-                "symfony/twig-bridge": "~2.3"
-            },
-            "require-dev": {
-                "ext-pdo_sqlite": "*",
-                "phpunit/phpunit": "~4.2"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "SimpleUser": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-2-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "Jason Grimes",
-                    "email": "jason@grimesit.com"
-                }
-            ],
-            "description": "A simple database-backed user provider for Silex, with associated services and controllers.",
-            "homepage": "http://github.com/jasongrimes/silex-simpleuser",
-            "keywords": [
-                "silex",
-                "simple user provider",
-                "user",
-                "user provider"
-            ],
-            "time": "2014-11-01 20:19:08"
         },
         {
             "name": "knplabs/console-service-provider",

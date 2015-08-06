@@ -24,6 +24,8 @@
 	use Symfony\Component\Validator\Constraints as Assert;
 	use Silex\Provider\FormServiceProvider;
 	use Symfony\Component\Console\Question\ConfirmationQuestion;
+	use Knp\Provider\ConsoleServiceProvider;
+	use Silex\Provider;
 
 	Class Application extends Silex\Application {
 		use \Silex\Application\TwigTrait;
@@ -34,7 +36,7 @@
 
 	$app = new Application();
 	$app['debug'] = $DEBUG;
-	use Knp\Provider\ConsoleServiceProvider;
+
 
 	$app->register(new ConsoleServiceProvider(), array(
 		'console.name'              => 'MyApplication',
@@ -83,7 +85,26 @@
 	$app->register(new \Silex\Provider\FormServiceProvider());
 	$app->register(new \Silex\Provider\ValidatorServiceProvider());
 	$app->register(new \Silex\Provider\TranslationServiceProvider(), array('translator.domains'=>array(),));
-	//$app->register(new \Silex\Provider\SessionServiceProvider());
+
+	$app->register(new Provider\SecurityServiceProvider());
+	$app->register(new Provider\RememberMeServiceProvider());
+	$app->register(new Provider\SessionServiceProvider());
+	$app->register(new Provider\ServiceControllerServiceProvider());
+	$app->register(new Provider\SwiftmailerServiceProvider());
+
+	$userServiceProvider = new SimpleUser\UserServiceProvider();
+	$app->register($userServiceProvider, array(
+		"user.options" => array(
+			"userColumns" => array(
+				'isEnabled' => 'is_enabled',
+				'confirmationToken' => 'confirmation_token',
+				'timePasswordResetRequested' => 'time_password_reset_requested'
+			)
+		)
+	));
+
+	$app->mount('/user', $userServiceProvider);
+	require_once __DIR__ ."/firewall.php";
 
 	Type::addType('tsvector', 'MyApp\Database\Types\Tsvector');
 
