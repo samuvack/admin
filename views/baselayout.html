@@ -33,12 +33,14 @@
           <div class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
               <li{% if active == 'home' %} class="active"{% endif %}><a href="{{ path('home') }}">Home</a></li>
-			  <li{% if active == 'insert' %} class="active"{% endif %}><a href="{{ path('insert') }}">Insert</a></li>
 			  <li{% if active == 'search' %} class="active"{% endif %}><a href="{{ path('search') }}">Search</a></li>
 			  <li{% if active == 'map' %} class="active"{% endif %}><a href="{{ path('map') }}">Map</a></li>
 			  <li{% if active == 'filter' %} class="active"{% endif %}><a href="{{ path('filter')}}">Filter</a></li>
-			  <li{% if active == 'import' %} class="active"{% endif %}><a href="{{ path('import')}}">Import</a></li>
-			</ul>
+              {% if is_granted('ROLE_EDITOR') %}
+                <li{% if active == 'insert' %} class="active"{% endif %}><a href="{{ path('insert') }}">Insert</a></li>
+                <li{% if active == 'import' %} class="active"{% endif %}><a href="{{ path('import')}}">Import</a></li>
+              {% endif %}
+            </ul>
           </div><!--/.nav-collapse -->
         </div>
     </div>
