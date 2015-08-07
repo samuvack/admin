@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "7ccf9501b100a8a17372dda106d31b3e",
+    "hash": "2109f66214f639108966935e04b202c2",
     "packages": [
         {
             "name": "dflydev/doctrine-orm-service-provider",
