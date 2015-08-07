@@ -99,6 +99,9 @@ $app->register($userServiceProvider, array(
 		),
 		'userRoles' => array(
 			'ROLE_EDITOR', 'ROLE_ADMIN', 'ROLE_USER'
+		),
+		'templates' => array(
+			'layout' => 'baselayout.html'
 		)
 	)
 ));
