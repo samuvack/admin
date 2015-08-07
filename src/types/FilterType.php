@@ -1,4 +1,5 @@
-<?php 
+<?php
+	namespace MyApp\Types;
 	use Symfony\Component\Form\AbstractType;
 	use Symfony\Component\Form\formBuilderInterface;
 	use Symfony\Component\Validator\Constraints as Assert;
@@ -6,9 +7,17 @@
 	use Symfony\Component\Form\FormEvent;
 	use Symfony\Component\Form\FormEvents;
 	use Symfony\Component\Form\FormInterface;
+	use MyApp\Entities\Property;
+	use Silex\Application;
 
-	class FilterType extends AbstractType
-	{
+	class FilterType extends AbstractType {
+
+		protected $app;
+		public function __construct(Application $app) {
+			parent::__construct();
+			$this->app = $app;
+		}
+
 		public function buildForm(FormBuilderInterface $builder, array $options)
 		{
 			$builder
@@ -17,18 +26,17 @@
 				'attr'=>array('class'=>'form-control'),
 				'placeholder' => '',
 				'label'=>'Filter on'
-				))
-
-			;
+				));
+			$propertyRepo = $this->app["orm.em"]->getRepository(":Property");
 			
 			//callback function for modifying the form
-			$formModifier = function(FormInterface $form, $type) {
+			$formModifier = function(FormInterface $form, $type) use($propertyRepo) {
 				//get the properties for this datatype
 				if($type === null){ //no filter type is selected
 					$properties = array();
 				} elseif ($type == 'other'){ // the filter type 'other' is selected
 					$properties = array();
-					$returned_props = Property::getAll();
+					$returned_props = $propertyRepo->getAll();
 					foreach($returned_props as $p){
 						$datatype = $p->getDataType();
 						if($datatype == 'time' or $datatype == 'geometry'){
@@ -39,7 +47,7 @@
 						
 					}
 				} else { // time or geometry was selected as fitler type
-					$properties = Property::findByType($type);
+					$properties = $propertyRepo->findBy(array('datatype'=>$type));
 				}
 				
 				//create an array with the property id as index and the name as value

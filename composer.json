@@ -28,7 +28,8 @@
             "MyApp\\Database\\Functions\\": "src/database/functions",
             "MyApp\\Database\\Types\\": "src/database/types",
             "MyApp\\Entities\\": "src/entities",
-            "MyApp\\Entities\\Repositories\\": "src/entities/repositories"
+            "MyApp\\Entities\\Repositories\\": "src/entities/repositories",
+            "MyApp\\Types\\": "src/types"
         }
     }
 }
