@@ -6,6 +6,8 @@ require_once __DIR__ . '/../src/RelationType.php';
 use Silex\Provider\DoctrineServiceProvider;
 use Dflydev\Silex\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
 use Doctrine\DBAL\Types\Type;
+use Saxulum\DoctrineOrmManagerRegistry\Silex\Provider\DoctrineOrmManagerRegistryProvider;
+use Silex\Provider\FormServiceProvider;
 
 $config = include __DIR__ . "/config/main.php";
 
@@ -104,6 +106,10 @@ $app->register($userServiceProvider, array(
 		)
 	)
 ));
+
+
+$app->register(new FormServiceProvider());
+$app->register(new DoctrineOrmManagerRegistryProvider());
 
 require_once __DIR__ . "/firewall.php";
 
