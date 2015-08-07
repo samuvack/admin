@@ -6,6 +6,7 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 use MyApp\Entities\Node;
 use MyApp\Entities\Property;
 use MyApp\Entities\Relation;
+use MyApp\Types\FilterType;
 
 $app->match('/', function(Application $app, Request $request) {
 	$nodeRepository = $app['orm.em']->getRepository(':Node');
@@ -277,7 +278,7 @@ $app->match('/filter', function(Application $app, Request $request) {
 		'value' =>''
 	);
 
-	$form = $app['form.factory']->createBuilder(new FilterType(), $default)->getForm();
+	$form = $app['form.factory']->createBuilder(new FilterType($app), $default)->getForm();
 	$form->handleRequest($request);
 
 	if ($form->isValid()) {

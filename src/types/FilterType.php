@@ -14,7 +14,6 @@
 
 		protected $app;
 		public function __construct(Application $app) {
-			parent::__construct();
 			$this->app = $app;
 		}
 
@@ -94,8 +93,7 @@
 				}
 			);
 		}
-		
-		
+
 		public function getName()
 		{
 			return 'filter';

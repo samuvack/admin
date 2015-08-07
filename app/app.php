@@ -3,7 +3,6 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 require_once __DIR__ . '/../src/NodeType.php';
 require_once __DIR__ . '/../src/RelationType.php';
-require_once __DIR__ . '/../src/FilterType.php';
 use Silex\Provider\DoctrineServiceProvider;
 use Dflydev\Silex\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
 use Doctrine\DBAL\Types\Type;
