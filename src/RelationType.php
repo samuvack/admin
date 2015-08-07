@@ -5,42 +5,39 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\formBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Doctrine\ORM\EntityRepository;
+use Silex\Application;
 
 class RelationType extends AbstractType
 {
+    protected $app;
+    public function __construct(Application $app) {
+        $this->app = $app;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options) {
-        $builder->add('property', 'choice', array(
-                //'choices'=> array('1'=>'Is of Type', '2'=>'Pr2', '3'=>'Pr3'),
-                'choices'=>$this->getProperties(),
+        $builder->add('property', 'entity', array(
+                'query_builder' => function(EntityRepository $propertyRepo) {
+                    return $propertyRepo->createQueryBuilder("p");
+                },
+                'required' => true,
+                'class' => ':Property',
+                'em' => $this->app['orm.em'],
+                'choice_label' => 'name',
                 'attr'=>array('class'=>'form-control','placeholder'=>'The property for the item')
-                ))
+            ))
         ->add('value', 'text', array(
                 'constraints'=>array(new Assert\NotBlank()),
                 'attr' => array('class'=>'form-control', 'placeholder'=>'The value for the property or relation')
-                ))
+            ))
         ->add('rank', 'choice', array(
                 'choices'=>array('normal'=>'No special ranking', 'preferred'=>'Preferred value to other similar property', 'deprecated'=>'Not longer valid or true'),
                 'attr' => array('class'=>'form-control', 'placeholder'=>'The rank of this statement')
-                ))
+            ))
         ->add('qualifier', 'integer', array(
                 'attr' => array('class'=>'form-control', 'placeholder'=>'The id for the qualifier statement'),
                 'required'=>false
-                ));
-    }
-
-    function getProperties() {
-        /*//get the available properties (id, name)
-        $properties = Property::getAll();
-
-        //store the properties in an array format id=>name for the choice form field
-        $property_choice = array();
-        foreach($properties as $p){
-                $property_choice[$p->getId()]=$p->getName();
-        }
-
-        return $property_choice;*/
-        return array(0=>'Is of Type', 2=>'Pr2', 3=>'Pr3');
-        // TODO
+            ));
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver) {

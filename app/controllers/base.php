@@ -43,7 +43,7 @@ $app->match('/insert', function(Request $request) use($app) {
 	$node = new Node();
 
 	//generate the form
-	$form = $app['form.factory']->createBuilder(new NodeType(), $node)->getForm();
+	$form = $app['form.factory']->createBuilder(new NodeType($app), $node)->getForm();
 
 	$form->handleRequest($request);
 
@@ -51,7 +51,6 @@ $app->match('/insert', function(Request $request) use($app) {
 		$em = $app['orm.em'];
 		foreach($node->getRelations() as $relation)
 			$em->persist($relation); // Relation is on the owning side
-
 		$em->persist($node);
 		$em->flush();
 
