@@ -206,7 +206,7 @@ $app->match('/update/{id}', function(Application $app, Request $request, $id) {
 	//store all available relations in the relations property of the node
 
 
-	$form = $app['form.factory']->createBuilder(new NodeType(), $node)->getForm();
+	$form = $app['form.factory']->createBuilder(new NodeType($app), $node)->getForm();
 	$form->handleRequest($request);
 
 	//check form
