@@ -1,8 +1,7 @@
 {% extends 'baselayout.html' %}
 {% block title 'Update' %}
 
-{% block body %}
-<div class="content">
+{% block content %}
 	<h1>update</h1>
 	<p>Change the information</p>
 	
@@ -28,10 +27,8 @@
 	
 
 	<a href="{{ path('home') }}">Cancel</a>
-</div>
 {% endblock %}
 {% block script %}
-	<script src="http://code.jquery.com/jquery-2.1.4.min.js" type="text/javascript"></script>
 	<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js" type="text/javascript"></script>
 	<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 	<script src="../scripts/addProperty.js" type="text/javascript"></script>
