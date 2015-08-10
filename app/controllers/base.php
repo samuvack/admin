@@ -287,7 +287,7 @@ $app->match('/filter', function(Application $app, Request $request) {
 		$value = $data['value'];
 
 		//get the nodes with this property and value
-		$app["orm.em"]->getRepository(':Node')->findByPropertyValue($id, $value);
+		$nodes = $app["orm.em"]->getRepository(':Node')->findByPropertyValue($id, $value);
 
 		return $app['twig']->render('filter.html', array('form'=>$form->createView(), 'nodes'=>$nodes));
 	}
