@@ -137,6 +137,7 @@ class Relation
     }
 
     /**
+    * TODO: rewrite to repository
     * Uses getAll() to get all statements with a geometry property
     * The value of statement is text representation
     *
