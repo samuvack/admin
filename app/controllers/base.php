@@ -49,8 +49,10 @@ $app->match('/insert', function(Request $request) use($app) {
 
 	if($form->isValid()) {
 		$em = $app['orm.em'];
-		foreach($node->getRelations() as $relation)
-			$em->persist($relation); // Relation is on the owning side
+		foreach($node->getRelations() as $relation) {
+			$relation->setStart($node); // Relation is on the owning side
+			$em->persist($relation);
+		}
 		$em->persist($node);
 		$em->flush();
 
