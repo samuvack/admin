@@ -7,7 +7,8 @@ use MyApp\Entities\Node;
 
 class NodeRepository extends EntityRepository {
 	/*
-	 * Find Entity based of tsvector searches
+	 * Find nodes based of tsvector searches
+	 * @return Array<Node>
 	 */
 	public function findByDescription($search_term) {
 		$qb = $this->createQueryBuilder('n');
@@ -18,6 +19,7 @@ class NodeRepository extends EntityRepository {
 
 	/*
 	 * Get all nodes which have a direct link to a Geometry
+	 * @return Array<Node>
 	 */
 	public function getAllGeonodes() {
 		$qb = $this->createQueryBuilder('n');
@@ -30,6 +32,7 @@ class NodeRepository extends EntityRepository {
 
 	/*
 	 * Get all nodes based on a property_id and the value of said property
+	 * @return Array<Node>
 	 */
 	function findByPropertyValue($prop_id, $rel_value) {
 		$qb = $this->createQueryBuilder('n');
