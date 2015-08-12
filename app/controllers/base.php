@@ -108,6 +108,8 @@ $app->match('/import', function(Request $request) use($app) {
 			//... Repeat for each node column
 			$nodeType = 'spoor';
 
+			$em = $app['orm.em'];
+
 			//loop the rows
 			for ($i=1; $i<count($contents); $i++){
 				//convert the string into array by separator ;
@@ -128,7 +130,8 @@ $app->match('/import', function(Request $request) use($app) {
 				}
 				//before adding, check if node with this name-description combi does not already exist
 				//...TO BE WRITTEN
-				$node = new Node(null, $nodeName, $nodeDescription, null);
+				$node = new Node($nodeName, $nodeDescription);
+				$em->persist($node);
 
 				//create new relations and add to the node, no qualifier and rank
 				for($j=0; $j<count($relColumns); $j++){
@@ -136,47 +139,50 @@ $app->match('/import', function(Request $request) use($app) {
 					$relValue = $contents[$i][$relColumns[$j]];
 
 					if($relValue) {
-						//check the datatype of the property
-						$relType = Property::findById($relProps[$j])->getDatatype();
+						$prop = $em -> find(':Property',$relProps[$j]);
+                        ChromePhp::log($prop);
+						$relType = $prop->getDatatype();
 
 						//change value based on property datatype
 						if($relType == 'node'){ //if the datatype is node
 							//search if a node with this name exists
-							$nodeValue = Node::findByName($relValue);
+
+							$nodeValue = $em->getRepository(':Node')->findOneBy(array('name'=>$relValue));
 							if($nodeValue){
 								//if exists, store id as value of the relation
 								//...TO BE WRITTEN
 								//...Allow user to confirm that this is the right value based on the node description
 								//...Allow user to select the right value if multiple nodes with this name exist
-								$relValue = $nodeValue->getId();
-								$relation = new Relation(null, null, $relProps[$j], $relValue, null, null);
-								$node->addRelation($relation);
+								$relation = new Relation($node, $prop);
+                                $relation->setValue($nodeValue);
+								//$relation = new Relation($node, $prop, $nodeValue);
+								$em->persist($relation);
 							} else {
 								//if not exists, show a dialog with similar nodes or possiblity to add new
 								//TO BE WRITTEN
 							}
-						} elseif($relType == 'data'){ //if the datatype is date
+						} elseif($relType == 'date'){ //if the datatype is date
 							//change the representation of the node ~ISO8601 or ISO19108
 						} elseif($relType == 'geometry') { //if datatype is geometry
 							//convert to PostGIS geometry
 						} else {
-							$relation = new Relation(null, null, $relProps[$j], $relValue, null, null);
-							$node->addRelation($relation);
+							$relation = new Relation($node, $prop, $relValue);
+							$em->persist($relation);
 						}
-
 
 					}
 
 				}
 
 				//add an obligatory 'is of type attribute for all values
-				$relation = new Relation(null, null, 1, $nodeType, null, null);
-				$node->addRelation($relation);
+				$propOfType = $em -> find(':Property',1);
+				$relation = new Relation($node,$propOfType, $nodeType);
+				$em->persist($relation);
 
 				//save the node to the db
 				//...To BE WRITTEN
 				//...Save all the nodes to the database
-				$node->save();
+				$em->flush();
 			}
 
 		}
