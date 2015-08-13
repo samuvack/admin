@@ -209,9 +209,10 @@ $app->match('/update/{id}', function(Application $app, Request $request, $id) {
 
 	//check form
 	if ($form->isValid()) {
-        foreach($node->getRelations() as $relation)
-            $relation->setStart($node);
-            $em->persist($relation); // Relation is on the owning side
+        foreach($node->getRelations() as $relation) {
+			$relation->setStart($node);
+			$em->persist($relation); // Relation is on the owning side
+		}
         $em->persist($node);
         $em->flush();
 
