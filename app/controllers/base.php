@@ -200,20 +200,21 @@ $app->get('/node/{id}', function(Application $app, $id) {
 $app->match('/update/{id}', function(Application $app, Request $request, $id) {
 	$em = $app['orm.em'];
 	$noderepo = $em->getRepository(':Node');
+
 	//get the node information for the given id
 	$node = $noderepo->find($id);
-
-	//store all available relations in the relations property of the node
-
 
 	$form = $app['form.factory']->createBuilder(new NodeType($app), $node)->getForm();
 	$form->handleRequest($request);
 
 	//check form
 	if ($form->isValid()) {
-		$em->persist($node);
-		$em->flush();
-		// TODO: relations
+        foreach($node->getRelations() as $relation)
+            $relation->setStart($node);
+            $em->persist($relation); // Relation is on the owning side
+        $em->persist($node);
+        $em->flush();
+
 		return $app->redirect($app->path('home'));
 	}
 
