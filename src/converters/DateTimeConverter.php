@@ -12,10 +12,10 @@ namespace MyApp\Converters;
 class DateTimeConverter extends StringConverter {
 
 	public function toString($object) {
-		return $object->format(ISO8601);
+		return $object->format(DateTime::ISO8601);
 	}
 
 	public function toObject($string) {
-		return \DateTime::createFromFormat(ISO8601,$string);
+		return \DateTime::createFromFormat(DateTime::ISO8601,$string);
 	}
 }
