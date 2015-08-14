@@ -197,6 +197,13 @@ $app->get('/node/{id}', function(Application $app, $id) {
 	return $app['twig']->render('node.html', ['node'=>$node, 'relFrom'=>$relFrom, 'relTo'=>$relTo]);
 })->bind('node');
 
+$app->get('nodes/{value}', function(Application $app, $value) {
+	//get all the nodes with $value as value for a property
+	$nodes = $app['orm.em']->getRepository(':Node')->findByValue($value);
+	return $app['twig']->render('nodes.html', ['nodes'=>$nodes, 'value'=>$value]);
+})->bind('nodes');
+
+
 $app->match('/update/{id}', function(Application $app, Request $request, $id) {
 	$em = $app['orm.em'];
 	$noderepo = $em->getRepository(':Node');

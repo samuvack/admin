@@ -43,4 +43,19 @@ class NodeRepository extends EntityRepository {
 		));
 		return $qb->getQuery()->getResult();
 	}
+
+	/*
+	 * Get all nodes based on the value of a property
+	 */
+	function findByValue($rel_value){
+		$qb = $this->createQueryBuilder('n');
+		$qb->innerJoin("n.relations","rel",Join::WITH,
+			$qb->expr()->eq("n.id","rel.startNode")
+		);
+		$qb->where("lower(rel.value) = lower(?1)");
+		$qb->setParameters(array(
+			1 => $rel_value
+		));
+		return $qb->getQuery()->getResult();
+	}
 }
