@@ -16,6 +16,6 @@ class DateTimeConverter extends StringConverter {
 	}
 
 	public function toObject($string) {
-		return \DateTime::createFromFormat(DateTime::ISO8601,$string);
+		return \DateTime::createFromFormat(\DateTime::ISO8601,$string);
 	}
 }
