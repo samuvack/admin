@@ -2,17 +2,17 @@
 {% block title 'Wiki' %}
 
 {% block content %}
-<h1>Relations</h1>
-<p>Search node</p>
-</div>
+    <h1>Relations</h1>
+    <p>Search node</p>
+    </div>
 
-<div class="content">
-    <p>Relations between nodes</p>
-    <div id="graph"></div>
+    <div class="content">
+        <p>Relations between nodes</p>
+        <div id="graph"></div>
 
-    {% endblock %}
+{% endblock %}
 
-    {% block script %}
+{% block script %}
     <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js" type="text/javascript"></script>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
     <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
@@ -22,4 +22,4 @@
         var links = {{links|json_encode|raw}};
         createGraph(nodes,links);
     </script>
-    {% endblock %}
+{% endblock %}
