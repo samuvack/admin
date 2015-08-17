@@ -86,4 +86,12 @@ function createGraph(nodes, links) {
             return "translate(" + d.x + "," + d.y + ")";
         })
     });
+
+    function zoomed() {
+        vis.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+    }
+    var zoom = d3.behavior.zoom()
+        .scaleExtent([0.5, 10])
+        .on("zoom", zoomed);
+    vis.call(zoom);
 }
