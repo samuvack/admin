@@ -3,7 +3,7 @@ namespace MyApp\Entities;
 use \MyApp\Converters\StringConverter;
 
 /**
- * @Entity
+ * @Entity(repositoryClass="MyApp\Entities\Repositories\RelationRepository")
  * @Table(name="relations")
  * @HasLifecycleCallbacks
  */

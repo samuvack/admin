@@ -28,14 +28,14 @@
 
         //define nodes
         var nodeMap = {};
-        var nodes = {{nodesJSON|raw}};
+        var nodes = {{nodes|json_encode|raw}};
         nodes.forEach(function (d) {
         d.id = +d.id;
         nodeMap[d.id] = d;
         });
 
         //add links
-        var links = {{linksJSON|raw}};
+        var links = {{links|json_encode|raw}};
         links.forEach(function (d) {
         d.source = nodeMap[d.source],
         d.target = nodeMap[d.target]

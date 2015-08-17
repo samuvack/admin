@@ -305,10 +305,63 @@ $app->match('/filter', function(Application $app, Request $request) {
 })->bind('filter');
 
 $app->get('/graph', function(Application $app, Request $request) {
-	$nodeRepository = $app['orm.em']->getRepository(':Node');
+	$relations = $app['orm.em']->getRepository(':Relation')->findAllNodeToNode();
 
-	//use the findNodesJSON function of the NodeRepository class to gather all the nodes' id and name in json
-	$nodes = $nodeRepository->findNodesJSON();
-	//TODO replace by same function to search json relations (source, target)
-	return $app['twig']->render('graph.html', array('nodesJSON'=>$nodes, 'linksJSON'=>"[{source:1, target:2}]"));
+	$nodes = [];
+	$idConverter = [];
+	$links = [];
+	/*
+	 * TODO: Functions like these are kindly ugly in PHP, find alternative
+	 * This isn't (node.)js
+	 *
+	 * Also, call $idConverter and $nodes by reference (&)
+	 */
+	$addNode = function($node) use( &$idConverter, &$nodes) {
+		if( ! isset($idConverter[$node->getId()])) {
+			$idConverter[$node->getId()] = sizeof($nodes);
+			$nodes[] = [
+				'name' => $node->getName(),
+				'id' => $node->getId()
+			];
+		}
+	};
+
+	foreach( $relations as $relation ){
+		$addNode($relation->getStart());
+		$addNode($relation->getValue());
+		$links[] = [
+			'source' => $relation->getStart()->getId(),
+			'target' =>$relation->getValue()->getId()
+		];
+	}
+
+	/*$nodeObjects= $app['orm.em']->getRepository(':Node')->findAll();
+	$nodes = [];
+	$idConverter = [];
+
+	//prepare array for passing
+	foreach( $nodeObjects as $node ) {
+		$idConverter[$node->getId()] = sizeof($nodes);
+		$nodes[]= [
+			'name' => $node->getName(),
+			'id' => $node->getId()
+		];
+
+	}*/
+
+	/*
+	 * trust on Doctrine proxies to not load every node again
+	 * http://stackoverflow.com/a/17787070/4701236
+	 */
+	/*$linkObjects = $app['orm.em']->getRepository(':Relation')->findBy();
+	$links = [];
+
+	foreach( $linkObjects as $link) {
+		$links[] = array(
+			'source'=>$idConverter[$link->id1],
+			'target'=>$idConverter[$link->id2]
+		);
+	}*/
+
+	return $app['twig']->render('graph.html', array('nodes'=>$nodes, 'links'=>$links));
 })->bind('graph');
