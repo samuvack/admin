@@ -7,7 +7,7 @@
     <ul class="nodes">
         {% for node in nodes %}
         <li>
-            {% include '_node.html' with {'node': node} only %}
+            {% include '_node.twig' with {'node': node} only %}
         </li>
         {% endfor %}
     </ul>

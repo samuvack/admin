@@ -1,15 +1,14 @@
-{% extends 'baselayout.html' %}
+{% extends 'baselayout.twig' %}
 {% block title 'Wiki' %}
 
 {% block content %}
-    <h1>Relations</h1>
-    <p>Search node</p>
+        <h1>Relations</h1>
+        <p>Search node</p>
     </div>
 
     <div class="content">
         <p>Relations between nodes</p>
         <div id="graph"></div>
-
 {% endblock %}
 
 {% block script %}
@@ -18,8 +17,10 @@
     <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
     <script src="{{ app.request.basepath }}/scripts/visualNodeRelations.js"> </script>
     <script type="text/javascript">
-        var nodes = {{nodes|json_encode|raw}};
-        var links = {{links|json_encode|raw}};
-        createGraph(nodes,links);
+        (function(){
+            var nodes = {{nodes|json_encode|raw}};
+            var links = {{links|json_encode|raw}};
+            createGraph(nodes,links);
+        })();
     </script>
 {% endblock %}

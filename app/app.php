@@ -102,7 +102,7 @@ $app->register($userServiceProvider, array(
 			'ROLE_EDITOR', 'ROLE_ADMIN', 'ROLE_USER'
 		),
 		'templates' => array(
-			'layout' => 'baselayout.html'
+			'layout' => 'baselayout.twig'
 		)
 	)
 ));

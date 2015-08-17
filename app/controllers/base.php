@@ -30,12 +30,12 @@ $app->match('/', function(Application $app, Request $request) {
 		$term = $data['name'];
 		$result = $nodeRepository->findBy(array('name'=>$term));
 
-		return $app['twig']->render('home.html', array('form'=>$form->createView(),'nodes'=>$result));
+		return $app['twig']->render('home.twig', array('form'=>$form->createView(),'nodes'=>$result));
 	}
 
 	//use the getAll function of the Node class to gather all the nodes
 	$nodes = $nodeRepository->findAll();
-	return $app['twig']->render('home.html', array('form'=>$form->createView(), 'nodes'=>$nodes));
+	return $app['twig']->render('home.twig', array('form'=>$form->createView(), 'nodes'=>$nodes));
 })->bind('home');
 
 $app->match('/insert', function(Request $request) use($app) {
@@ -58,7 +58,7 @@ $app->match('/insert', function(Request $request) use($app) {
 		return $app->redirect($app->path('home'));
 	}
 
-	return $app['twig']->render('insert.html', array('form'=>$form->createView()));
+	return $app['twig']->render('insert.twig', array('form'=>$form->createView()));
 })->bind('insert');
 
 $app->match('/import', function(Request $request) use($app) {
@@ -182,10 +182,10 @@ $app->match('/import', function(Request $request) use($app) {
 
 		}
 
-		return $app->render('import.html', array('form'=>$form->createView(), 'text'=>'file successfully imported'));
+		return $app->render('import.twig', array('form'=>$form->createView(), 'text'=>'file successfully imported'));
 	}
 
-	return $app['twig']->render('import.html', array('form'=>$form->createView(), 'text'=>'no file imported'));
+	return $app['twig']->render('import.twig', array('form'=>$form->createView(), 'text'=>'no file imported'));
 })->bind('import');
 
 $app->get('/node/{id}', function(Application $app, $id) {
@@ -195,13 +195,13 @@ $app->get('/node/{id}', function(Application $app, $id) {
 	$relTo = $app['orm.em']->getRepository(':Relation')->findBy(array("nodevalue"=>$id));
 	//$relTo = $node->findEndRelations();
 
-	return $app['twig']->render('node.html', ['node'=>$node, 'relFrom'=>$relFrom, 'relTo'=>$relTo]);
+	return $app['twig']->render('node.twig', ['node'=>$node, 'relFrom'=>$relFrom, 'relTo'=>$relTo]);
 })->bind('node');
 
 $app->get('nodes/{value}', function(Application $app, $value) {
 	//get all the nodes with $value as value for a property
 	$nodes = $app['orm.em']->getRepository(':Node')->findByValue($value);
-	return $app['twig']->render('nodes.html', ['nodes'=>$nodes, 'value'=>$value]);
+	return $app['twig']->render('nodes.twig', ['nodes'=>$nodes, 'value'=>$value]);
 })->bind('nodes');
 
 
@@ -228,7 +228,7 @@ $app->match('/update/{id}', function(Application $app, Request $request, $id) {
 	}
 
 	//display the form
-	return $app['twig']->render('update.html', array('form'=> $form->createView(), 'nodeid'=>$id));
+	return $app['twig']->render('update.twig', array('form'=> $form->createView(), 'nodeid'=>$id));
 })->bind('update');
 
 $app->match('/search', function (Application $app, Request $request) {
@@ -258,15 +258,15 @@ $app->match('/search', function (Application $app, Request $request) {
 		//search in the database
 		//$result = Node::findByDescription($term);
 
-		return $app['twig']->render('search.html', array('form'=>$form->createView(),'nodes'=>$result));
+		return $app['twig']->render('search.twig', array('form'=>$form->createView(),'nodes'=>$result));
 	}
-	return $app['twig']->render('search.html', array('form'=>$form->createView(), 'nodes'=>[]));
+	return $app['twig']->render('search.twig', array('form'=>$form->createView(), 'nodes'=>[]));
 })->bind('search');
 
 $app->get('/map', function(Application $app) {
 	$geonodes = $app['orm.em']->getRepository(':Node')->getAllGeoNodes();
 
-	return $app['twig']->render('map.html', ['nodes'=>$geonodes]);
+	return $app['twig']->render('map.twig', ['nodes'=>$geonodes]);
 })->bind('map');
 
 $app->get('/history/{id}', function(Application $app, $id) use ($DB) {
@@ -276,7 +276,7 @@ $app->get('/history/{id}', function(Application $app, $id) use ($DB) {
 
 	// TODO after user implemented
 
-	return $app['twig']->render('history.html', ['node'=>$node, 'edits'=>$history]);
+	return $app['twig']->render('history.twig', ['node'=>$node, 'edits'=>$history]);
 })->bind('history');
 
 $app->match('/filter', function(Application $app, Request $request) {
@@ -299,9 +299,9 @@ $app->match('/filter', function(Application $app, Request $request) {
 		//get the nodes with this property and value
 		$nodes = $app["orm.em"]->getRepository(':Node')->findByPropertyValue($id, $value);
 
-		return $app['twig']->render('filter.html', array('form'=>$form->createView(), 'nodes'=>$nodes));
+		return $app['twig']->render('filter.twig', array('form'=>$form->createView(), 'nodes'=>$nodes));
 	}
-	return $app['twig']->render('filter.html', array('form'=>$form->createView(), 'nodes'=>array()));
+	return $app['twig']->render('filter.twig', array('form'=>$form->createView(), 'nodes'=>array()));
 })->bind('filter');
 
 $app->get('/graph', function(Application $app, Request $request) {
@@ -363,5 +363,5 @@ $app->get('/graph', function(Application $app, Request $request) {
 		);
 	}*/
 
-	return $app['twig']->render('graph.html', array('nodes'=>$nodes, 'links'=>$links));
+	return $app['twig']->render('graph.twig', array('nodes'=>$nodes, 'links'=>$links));
 })->bind('graph');
