@@ -102,10 +102,6 @@ class Relation
         if ($this->valueObject !== null)
             return $this->valueObject;
 
-        if($this->property == null) {
-            echo print_r(debug_backtrace()[8]);die();
-        }
-
         $type = $this->property->getDataType();
 
         if ($type == 'node')
