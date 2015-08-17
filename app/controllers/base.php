@@ -7,7 +7,7 @@ use MyApp\Entities\Node;
 use MyApp\Entities\Property;
 use MyApp\Entities\Relation;
 use MyApp\Types\FilterType;
-require_once __DIR__.'/../ChromePhP.php';
+require_once __DIR__.'/../ChromePhp.php';
 
 $app->match('/', function(Application $app, Request $request) {
 	$nodeRepository = $app['orm.em']->getRepository(':Node');
