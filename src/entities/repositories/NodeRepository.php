@@ -58,4 +58,16 @@ class NodeRepository extends EntityRepository {
 		));
 		return $qb->getQuery()->getResult();
 	}
+
+	/*
+	 * Get all nodes in jsonformat containing id and name
+	 */
+	function findNodesJSON(){
+		$qb = $this->createQueryBuilder('n');
+		$qb->select('n.id')
+		->addSelect('n.name');
+		$nodes = $qb->getQuery()->getResult();
+		$nodes_json = json_encode($nodes);
+		return $nodes_json;
+	}
 }

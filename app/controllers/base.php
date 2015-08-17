@@ -7,6 +7,7 @@ use MyApp\Entities\Node;
 use MyApp\Entities\Property;
 use MyApp\Entities\Relation;
 use MyApp\Types\FilterType;
+require_once __DIR__.'/../ChromePhP.php';
 
 $app->match('/', function(Application $app, Request $request) {
 	$nodeRepository = $app['orm.em']->getRepository(':Node');
@@ -302,3 +303,12 @@ $app->match('/filter', function(Application $app, Request $request) {
 	}
 	return $app['twig']->render('filter.html', array('form'=>$form->createView(), 'nodes'=>array()));
 })->bind('filter');
+
+$app->get('/graph', function(Application $app, Request $request) {
+	$nodeRepository = $app['orm.em']->getRepository(':Node');
+
+	//use the findNodesJSON function of the NodeRepository class to gather all the nodes' id and name in json
+	$nodes = $nodeRepository->findNodesJSON();
+	//TODO replace by same function to search json relations (source, target)
+	return $app['twig']->render('graph.html', array('nodesJSON'=>$nodes, 'linksJSON'=>"[{source:1, target:2}]"));
+})->bind('graph');
