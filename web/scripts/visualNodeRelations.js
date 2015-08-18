@@ -16,6 +16,12 @@ function createGraph(nodes, links, svgSelector) {
     vis.attr("width", w)
         .attr("height", h);*/
     var vis=svg.append('g');
+
+    var zoom = d3.behavior.zoom()
+        .scaleExtent([0.5, 10])
+        .on("zoom", zoomed);
+    svg.call(zoom);
+
     var $wrapper = $(svg[0][0]);
 
     var width = $wrapper.width(),
@@ -109,11 +115,6 @@ function createGraph(nodes, links, svgSelector) {
     function zoomed() {
         vis.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
     }
-
-    var zoom = d3.behavior.zoom()
-        .scaleExtent([0.5, 10])
-        .on("zoom", zoomed);
-    svg.call(zoom);
 
     // Dragging functionality
     function dragged(d) {
