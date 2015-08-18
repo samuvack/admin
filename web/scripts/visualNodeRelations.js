@@ -5,17 +5,21 @@
  *          - Yes, this is a thing.
  */
 
-function createGraph(nodes, links) {
+function createGraph(nodes, links, svgSelector) {
 
 
     //append an svg canvas to a DOM element
-    var vis = d3.select('#graph')
-        .append("svg");
+    var svg = d3.select(svgSelector);
     //change width and height
-    var w = 900;
+    /*var w = 900;
     var h = 400;
     vis.attr("width", w)
-        .attr("height", h);
+        .attr("height", h);*/
+    var vis=svg.append('g');
+    var $wrapper = $(svg[0][0]);
+
+    var width = $wrapper.width(),
+        height = $wrapper.height();
 
     //define nodes
     var nodeMap = {};
@@ -29,11 +33,12 @@ function createGraph(nodes, links) {
         d.target = nodeMap[d.target]
     });
 
-//use force directed layout algorithm
     var force = d3.layout.force()
-        .size([w - 50, h - 50])
+        .gravity(.05)
         .charge(-100)
+        .distance(150)
         .linkDistance(20)
+        .size([width - 50, height - 50])
         .nodes(nodes)
         .links(links)
         .start();
@@ -86,12 +91,17 @@ function createGraph(nodes, links) {
             return "translate(" + d.x + "," + d.y + ")";
         })
     });
+    function dragstarted(d) {
+        d3.event.sourceEvent.stopPropagation();
+    }
 
+   // Zoom functionality
     function zoomed() {
         vis.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
     }
+
     var zoom = d3.behavior.zoom()
         .scaleExtent([0.5, 10])
         .on("zoom", zoomed);
-    vis.call(zoom);
+    svg.call(zoom);
 }

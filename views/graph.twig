@@ -8,7 +8,9 @@
 
     <div class="content">
         <p>Relations between nodes</p>
-        <div id="graph"></div>
+        <div id="graph">
+            <svg id="nodesGraph"></svg>
+        </div>
 {% endblock %}
 
 {% block script %}
@@ -20,7 +22,7 @@
         (function(){
             var nodes = {{nodes|json_encode|raw}};
             var links = {{links|json_encode|raw}};
-            createGraph(nodes,links);
+            createGraph(nodes,links, '#nodesGraph');
         })();
     </script>
 {% endblock %}
