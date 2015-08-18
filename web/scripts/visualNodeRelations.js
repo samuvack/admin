@@ -98,7 +98,14 @@ function createGraph(nodes, links, svgSelector) {
 
     node.append("circle")
         .attr("r", "5px")
-        .attr("fill", "white");
+        //.attr("fill", "white");
+        .attr("fill", function(d){
+            if(d.nodeid){
+                return 'grey';
+            }else{
+                return 'white';
+            }
+        })
 
     node.append("text")
         .attr("dx", 12)
@@ -108,7 +115,13 @@ function createGraph(nodes, links, svgSelector) {
         })
         .attr("pointer-events", "none")
         .style("font-size", "12px")
-        .style("fill", "white");
+        .style("fill", function(d){
+            if(d.nodeid){
+                return "grey";
+            } else{
+                return 'white';
+            }
+        });
 
     //update the displayed positions of nodes and links on every tick of the simulation
     force.on("tick", function () {
