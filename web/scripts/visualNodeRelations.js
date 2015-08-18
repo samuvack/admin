@@ -111,17 +111,17 @@ function createGraph(nodes, links, svgSelector) {
         })
         .enter().append("g")
         .attr("class", "node")
+        .on("mouseover", function (d) {
+            highlight(d, d3.select(this));
+        })
+        .on("mouseout", function (d) {
+            unhighlight(d3.select(this));
+        })
         .call(drag);
 
     node.append("circle")
         .attr("r", "5px")
-        .attr("fill", "white")
-        .on("mouseover", function (d) {
-            highlight(d, d3.select(this.parentNode));
-        })
-        .on("mouseout", function (d) {
-            unhighlight(d3.select(this.parentNode));
-        });
+        .attr("fill", "white");
 
     node.append("text")
         .attr("dx", 12)
@@ -129,6 +129,7 @@ function createGraph(nodes, links, svgSelector) {
         .text(function (d) {
             return d.name
         })
+        .attr("pointer-events", "none")
         .style("font-size", "12px")
         .style("fill", "white");
 
