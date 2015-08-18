@@ -43,6 +43,15 @@ function createGraph(nodes, links, svgSelector) {
         .links(links)
         .start();
 
+    var drag = force.drag()
+        .origin(function (d) {
+            return d;
+        })
+        .on("dragstart", function () {
+            d3.event.sourceEvent.stopPropagation();
+        })
+        .on("drag", dragged);
+
 //visualize links as line
     var link = vis.selectAll(".link")
         .data(links)
@@ -57,7 +66,8 @@ function createGraph(nodes, links, svgSelector) {
             return d.id
         })
         .enter().append("g")
-        .attr("class", "node");
+        .attr("class", "node")
+        .call(drag);
 
     node.append("circle")
         .attr("r", "5px")
@@ -104,4 +114,11 @@ function createGraph(nodes, links, svgSelector) {
         .scaleExtent([0.5, 10])
         .on("zoom", zoomed);
     svg.call(zoom);
+
+    // Dragging functionality
+    function dragged(d) {
+         d3.select(this).attr(function (d) {
+            return "translate(" + d.x + "," + d.y + ")";
+         });
+    }
 }
