@@ -193,9 +193,67 @@ $app->get('/node/{id}', function(Application $app, $id) {
 	//get relations from and to this node
 	$relFrom = $node->getRelations();
 	$relTo = $app['orm.em']->getRepository(':Relation')->findBy(array("nodevalue"=>$id));
-	//$relTo = $node->findEndRelations();
 
-	return $app['twig']->render('node.twig', ['node'=>$node, 'relFrom'=>$relFrom, 'relTo'=>$relTo]);
+
+    $graphNodes = [];
+    $idConverter = [];
+    $graphLinks = [];
+
+    $addNode = function($node) use( &$idConverter, &$graphNodes) {
+        if( ! isset($idConverter[$node->getId()])) {
+            $idConverter[$node->getId()] = sizeof($graphNodes);
+            $graphNodes[] = [
+                'name' => $node->getName(),
+                'id'=>$idConverter[$node->getId()],
+                'nodeid' => $node->getId()
+            ];
+        }
+        return $idConverter[$node->getId()];
+    };
+
+    $addValue = function($value) use( &$idConverter, &$graphNodes) {
+        if( ! isset($idConverter[$value])) {
+            $idConverter[$value] = sizeof($graphNodes);
+            $graphNodes[] = [
+                'name' => $value,
+                'id'=> $idConverter[$value],
+                'nodeid' => null
+            ];
+        }
+        return $idConverter[$value];
+    };
+
+    $addRelations = function($relations) use(&$idConverter, &$graphNodes, &$graphLinks, &$addNode, &$addValue) {
+        foreach( $relations as $relation ){
+            $nodeId = null;
+            //startnode is always of type node
+            $addNode($relation->getStart());
+            if($relation->getProperty()->getDatatype() == 'node'){
+                $nodeId = $addNode($relation->getValue());
+            } elseif ($relation->getProperty()->getDatatype() == 'geometry') {
+                //not added
+            } else {
+                $nodeId = $addValue($relation->getValue());
+            }
+            ChromePhp::log($nodeId);
+            if($nodeId>=0){
+                ChromePhp::log("t " .$nodeId);
+                ChromePhp::log("s " .$idConverter[$relation->getStart()->getId()]);
+                ChromePhp::log("* " .$relation->getProperty()->getName());
+                $graphLinks[] = [
+                    'source' => $idConverter[$relation->getStart()->getId()],
+                    'target' => $nodeId,
+                    'type' => $relation->getProperty()->getName()
+                ];
+            }
+        }
+    };
+
+    //add relations from as links and values as nodes
+    $addRelations($relFrom);
+    $addRelations($relTo);
+
+	return $app['twig']->render('node.twig', ['node'=>$node, 'relFrom'=>$relFrom, 'relTo'=>$relTo, 'graphNodes'=>$graphNodes, 'graphLinks'=>$graphLinks]);
 })->bind('node');
 
 $app->get('nodes/{value}', function(Application $app, $value) {
