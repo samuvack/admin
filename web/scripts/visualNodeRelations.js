@@ -171,6 +171,6 @@ function createGraph(nodes, links, svgSelector) {
 
         //change opacity of all nodes and links to 1
         node.attr("opacity", 1.0);
-        link.attr("stroke-opacity", .6);
+        link.attr("stroke-opacity", 1);
     }
 }
