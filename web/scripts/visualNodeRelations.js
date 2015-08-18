@@ -110,7 +110,8 @@ function createGraph(nodes, links, svgSelector) {
             return d.id
         })
         .enter().append("g")
-        .attr("class", "node");
+        .attr("class", "node")
+        .call(drag);
 
     node.append("circle")
         .attr("r", "5px")
@@ -120,8 +121,7 @@ function createGraph(nodes, links, svgSelector) {
         })
         .on("mouseout", function (d) {
             unhighlight(d3.select(this.parentNode));
-        })
-        .call(drag);
+        });
 
     node.append("text")
         .attr("dx", 12)
