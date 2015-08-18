@@ -5,6 +5,12 @@
  *          - Yes, this is a thing.
  */
 
+d3.selection.prototype.moveToFront = function () {
+    return this.each(function () {
+        this.parentNode.appendChild(this);
+    });
+};
+
 function createGraph(nodes, links, svgSelector) {
 
 
@@ -66,18 +72,56 @@ function createGraph(nodes, links, svgSelector) {
         .style("stroke", "#00bc8c")
         .style("stroke-width", "5px");
 
+    var linkMap = {};
+    link.each(function (d, i) {
+        linkMap[d.source.id + "," + d.target.id] = this;
+        linkMap[d.target.id + "," + d.source.id] = this;
+    });
+
+    function highlight(data, cur) {
+        cur.classed("selected", true);
+        cur.moveToFront();
+
+        svg.selectAll(".node:not(.selected)").attr("opacity", .2);
+        link.attr("stroke-opacity", .2);
+
+        // Highlight neighbouring nodes
+        node.each(function (d) {
+            var neighbour = d3.select(this);
+
+            neighbour.moveToFront();
+            if (linkMap[data.id + "," + d.id] !== undefined) {
+                d3.select(linkMap[data.id + "," + d.id]).attr("stroke-opacity", 1);
+                neighbour.attr("opacity", 1);
+            }
+        });
+    }
+
+    function unhighlight(cur) {
+        cur.classed("selected", false);
+
+        node.attr("opacity", 1.0);
+        link.attr("stroke-opacity", .6);
+    }
+
 //visualize nodes as circle with label
     var node = vis.selectAll(".node")
         .data(nodes, function (d) {
             return d.id
         })
         .enter().append("g")
-        .attr("class", "node")
-        .call(drag);
+        .attr("class", "node");
 
     node.append("circle")
         .attr("r", "5px")
-        .attr("fill", "white");
+        .attr("fill", "white")
+        .on("mouseover", function (d) {
+            highlight(d, d3.select(this.parentNode));
+        })
+        .on("mouseout", function (d) {
+            unhighlight(d3.select(this.parentNode));
+        })
+        .call(drag);
 
     node.append("text")
         .attr("dx", 12)
