@@ -107,9 +107,6 @@ function createGraph(nodes, links, svgSelector) {
             return "translate(" + d.x + "," + d.y + ")";
         })
     });
-    function dragstarted(d) {
-        d3.event.sourceEvent.stopPropagation();
-    }
 
    // Zoom functionality
     function zoomed() {
