@@ -27,7 +27,7 @@ ul.nodes {
 }
 
 #nodesGraph {
-    height: 400px;
-    width: 900px;
+    height: 500px;
+    width: 100%;
     display: inline-block;
 }
