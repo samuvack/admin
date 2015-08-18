@@ -14,18 +14,17 @@ d3.selection.prototype.moveToFront = function () {
 function createGraph(nodes, links, svgSelector) {
 
 
-    //append an svg canvas to a DOM element
+    //select svg canvas (width and height set in css)
     var svg = d3.select(svgSelector);
-    //change width and height
-    /*var w = 900;
-    var h = 400;
-    vis.attr("width", w)
-        .attr("height", h);*/
+
+    //add a g element as group container
     var vis=svg.append('g');
 
+    //construct new zoom behavior
     var zoom = d3.behavior.zoom()
         .scaleExtent([0.5, 10])
         .on("zoom", zoomed);
+    //apply behavior to svg-element
     svg.call(zoom);
 
     var $wrapper = $(svg[0][0]);
@@ -40,11 +39,13 @@ function createGraph(nodes, links, svgSelector) {
         nodeMap[d.id] = d;
     });
 
+    //ensure linkage between source/target of link and id of nodes
     links.forEach(function (d) {
         d.source = nodeMap[d.source];
         d.target = nodeMap[d.target]
     });
 
+    //use force directed layout algorithm for the graph
     var force = d3.layout.force()
         .gravity(.05)
         .charge(-100)
@@ -55,6 +56,7 @@ function createGraph(nodes, links, svgSelector) {
         .links(links)
         .start();
 
+    //bind behavior to nodes to allow interactive dragging
     var drag = force.drag()
         .origin(function (d) {
             return d;
@@ -64,7 +66,7 @@ function createGraph(nodes, links, svgSelector) {
         })
         .on("drag", dragged);
 
-//visualize links as line
+    //visualize links as line
     var link = vis.selectAll(".link")
         .data(links)
         .enter().append("line")
@@ -78,7 +80,8 @@ function createGraph(nodes, links, svgSelector) {
         linkMap[d.target.id + "," + d.source.id] = this;
     });
 
-//visualize nodes as circle with label
+    //visualize nodes as g eleements consisting of circle and text
+    //add drag functionality to nodes via .call
     var node = vis.selectAll(".node")
         .data(nodes, function (d) {
             return d.id
@@ -107,7 +110,7 @@ function createGraph(nodes, links, svgSelector) {
         .style("font-size", "12px")
         .style("fill", "white");
 
-//update the displayed positions of nodes and links on every tick of the simulation
+    //update the displayed positions of nodes and links on every tick of the simulation
     force.on("tick", function () {
         link.attr("x1", function (d) {
             return d.source.x;
@@ -127,7 +130,7 @@ function createGraph(nodes, links, svgSelector) {
         })
     });
 
-   // Zoom functionality
+    // Zoom functionality
     function zoomed() {
         vis.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
     }
@@ -139,10 +142,13 @@ function createGraph(nodes, links, svgSelector) {
          });
     }
 
+    //highlights the node and its neighbouring nodes and links by changing opacity of others
     function highlight(data, cur) {
+        //change class of selected node
         cur.classed("selected", true);
         cur.moveToFront();
 
+        //change opacity of all links and all nodes which are not of class selected
         svg.selectAll(".node:not(.selected)").attr("opacity", .2);
         link.attr("stroke-opacity", .2);
 
@@ -158,9 +164,12 @@ function createGraph(nodes, links, svgSelector) {
         });
     }
 
+    //unhighlights
     function unhighlight(cur) {
+        //change class of previously selected node
         cur.classed("selected", false);
 
+        //change opacity of all nodes and links to 1
         node.attr("opacity", 1.0);
         link.attr("stroke-opacity", .6);
     }
