@@ -78,32 +78,6 @@ function createGraph(nodes, links, svgSelector) {
         linkMap[d.target.id + "," + d.source.id] = this;
     });
 
-    function highlight(data, cur) {
-        cur.classed("selected", true);
-        cur.moveToFront();
-
-        svg.selectAll(".node:not(.selected)").attr("opacity", .2);
-        link.attr("stroke-opacity", .2);
-
-        // Highlight neighbouring nodes
-        node.each(function (d) {
-            var neighbour = d3.select(this);
-
-            neighbour.moveToFront();
-            if (linkMap[data.id + "," + d.id] !== undefined) {
-                d3.select(linkMap[data.id + "," + d.id]).attr("stroke-opacity", 1);
-                neighbour.attr("opacity", 1);
-            }
-        });
-    }
-
-    function unhighlight(cur) {
-        cur.classed("selected", false);
-
-        node.attr("opacity", 1.0);
-        link.attr("stroke-opacity", .6);
-    }
-
 //visualize nodes as circle with label
     var node = vis.selectAll(".node")
         .data(nodes, function (d) {
@@ -163,5 +137,31 @@ function createGraph(nodes, links, svgSelector) {
          d3.select(this).attr(function (d) {
             return "translate(" + d.x + "," + d.y + ")";
          });
+    }
+
+    function highlight(data, cur) {
+        cur.classed("selected", true);
+        cur.moveToFront();
+
+        svg.selectAll(".node:not(.selected)").attr("opacity", .2);
+        link.attr("stroke-opacity", .2);
+
+        // Highlight neighbouring nodes
+        node.each(function (d) {
+            var neighbour = d3.select(this);
+
+            neighbour.moveToFront();
+            if (linkMap[data.id + "," + d.id] !== undefined) {
+                d3.select(linkMap[data.id + "," + d.id]).attr("stroke-opacity", 1);
+                neighbour.attr("opacity", 1);
+            }
+        });
+    }
+
+    function unhighlight(cur) {
+        cur.classed("selected", false);
+
+        node.attr("opacity", 1.0);
+        link.attr("stroke-opacity", .6);
     }
 }
