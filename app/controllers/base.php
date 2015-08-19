@@ -235,15 +235,12 @@ $app->get('/node/{id}', function(Application $app, $id) {
             } else {
                 $nodeId = $addValue($relation->getValue());
             }
-            ChromePhp::log($nodeId);
+
             if($nodeId>=0){
-                ChromePhp::log("t " .$nodeId);
-                ChromePhp::log("s " .$idConverter[$relation->getStart()->getId()]);
-                ChromePhp::log("* " .$relation->getProperty()->getName());
                 $graphLinks[] = [
                     'source' => $idConverter[$relation->getStart()->getId()],
                     'target' => $nodeId,
-                    'type' => $relation->getProperty()->getName()
+                    'pname' => $relation->getProperty()->getName()
                 ];
             }
         }

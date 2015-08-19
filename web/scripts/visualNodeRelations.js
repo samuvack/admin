@@ -49,8 +49,7 @@ function createGraph(nodes, links, svgSelector) {
     var force = d3.layout.force()
         .gravity(.05)
         .charge(-100)
-        .distance(150)
-        .linkDistance(20)
+        .linkDistance(50)
         .size([width - 50, height - 50])
         .nodes(nodes)
         .links(links)
@@ -66,19 +65,77 @@ function createGraph(nodes, links, svgSelector) {
         })
         .on("drag", dragged);
 
-    //visualize links as line
+    var colorMap = {};
+    //visualize links as line with a color based on pname of links
     var link = vis.selectAll(".link")
         .data(links)
-        .enter().append("line")
+        .enter().append("g")
         .attr("class", "link")
-        .style("stroke", "#00bc8c")
-        .style("stroke-width", "5px");
+        .append("line")
+        .attr("class", "link-line")
+        //.style("stroke", "#00bc8c")
+        .style("stroke", function(d){
+            if(d.pname){
+                if(colorMap[d.pname]){
+                    return colorMap[d.pname];
+                } else {
+                    colorMap[d.pname] = '#'+Math.floor(Math.random()*16777215).toString(16);
+                    return colorMap[d.pname];
+                }
+            }else {
+                return "#00bc8c";
+            }
+        })
+        .style("stroke-width", "5px")
+        .attr("id", function(d, i) {
+            return "link_" + i;
+        });
 
     var linkMap = {};
     link.each(function (d, i) {
         linkMap[d.source.id + "," + d.target.id] = this;
         linkMap[d.target.id + "," + d.source.id] = this;
     });
+
+    //define a path allong the edges
+    var edgepaths = vis.selectAll(".edgepath")
+        .data(links)
+        .enter()
+        .append('path')
+        .attr({'d': function(d) {return 'M '+d.source.x+' '+d.source.y+' L '+ d.target.x +' '+d.target.y},
+            'class':'edgepath',
+            'id':function(d,i) {return 'edgepath'+i}})
+        .style("pointer-events", "none");
+
+    //define a label with same color as link
+    var edgelabels = vis.selectAll(".edgelabel")
+        .data(links)
+        .enter()
+        .append('text')
+        .style("pointer-events", "none")
+        .attr({'class':'edgelabel',
+            'id':function(d,i){return 'edgelabel'+i},
+            'dx':10,
+            'dy':'-0.25em',
+            'font-size':10})
+        .style('fill', function(d) {
+                if (d.pname) {
+                    if (colorMap[d.pname]) {
+                        return colorMap[d.pname];
+                    } else {
+                        colorMap[d.pname] = '#' + Math.floor(Math.random() * 16777215).toString(16);
+                        return colorMap[d.pname];
+                    }
+                } else {
+                    return "#00bc8c";
+                }
+            });
+
+    //define a textPath and append this to the labels, reference to the path of the link
+    edgelabels.append('textPath')
+        .attr('xlink:href',function(d,i) {return '#edgepath'+i})
+        .style("pointer-events", "none")
+        .text(function(d){return d.pname});
 
     //visualize nodes as g elements consisting of circle and text
     //add drag functionality to nodes via .call
@@ -142,6 +199,11 @@ function createGraph(nodes, links, svgSelector) {
             .attr("y2", function (d) {
                 return d.target.y;
             });
+
+        //recalculates the path following the edges
+        edgepaths.attr('d', function(d) {
+            return 'M ' + d.source.x + ' ' + d.source.y + ' L ' + d.target.x + ' ' + d.target.y;
+        });
 
         node.attr("transform", function (d) {
             return "translate(" + d.x + "," + d.y + ")";
