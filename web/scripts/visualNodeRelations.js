@@ -80,7 +80,7 @@ function createGraph(nodes, links, svgSelector) {
         linkMap[d.target.id + "," + d.source.id] = this;
     });
 
-    //visualize nodes as g eleements consisting of circle and text
+    //visualize nodes as g elements consisting of circle and text
     //add drag functionality to nodes via .call
     var node = vis.selectAll(".node")
         .data(nodes, function (d) {
@@ -97,8 +97,13 @@ function createGraph(nodes, links, svgSelector) {
         .call(drag);
 
     node.append("circle")
-        .attr("r", "5px")
-        //.attr("fill", "white");
+        .attr("r", function(d){
+            if(d.weight) {
+                return d.weight+5;
+            } else {
+                return "5px";
+            }
+        })
         .attr("fill", function(d){
             if(d.nodeid){
                 return 'grey';
