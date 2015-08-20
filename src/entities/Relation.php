@@ -131,30 +131,4 @@ class Relation
     function getRank() {
         return $this->rank;
     }
-
-    /**
-    * Uses getAll() to get all statements with a geometry property
-    * The value of statement is text representation
-    *
-    * @return Relation[]
-    */
-    static function getGeometryRelations()
-    {
-            $found_relations = array();
-            $relations = Relation::getAll();
-
-            foreach($relations as $rel) {
-                    $rel_prop = $rel->getProperty();
-                    $prop_datatype = $rel_prop->getDatatype();
-                    $rel_value = $rel->getValue();
-                    if($prop_datatype == 'geometry') {
-                            $geom = $GLOBALS['DB']->query("SELECT st_astext(geom) as geom FROM geometries WHERE id=" .$rel_value .";");
-                            $result = $geom->fetch(PDO::FETCH_ASSOC);
-                            $geom_text = $result['geom'];
-                            $rel->setValue($geom_text);
-                            array_push($found_relations, $rel);
-                    }
-            }
-            return $found_relations;
-    }
 }

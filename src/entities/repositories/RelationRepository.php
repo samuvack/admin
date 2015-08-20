@@ -18,4 +18,16 @@ class RelationRepository extends EntityRepository {
 
 		return $query->getResult();
 	}
+
+	/**
+	 * Find all relations with geometry value
+	 *
+	 * @return Relation[]
+	 */
+	public function findGeometryRelations()
+	{
+		$query = $this->getEntityManager()->createQuery('SELECT r FROM :Relation r WHERE r.geometryvalue IS NOT NULL');
+		$result = $query->getResult();
+		return $result;
+	}
 }
