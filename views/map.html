@@ -3,11 +3,11 @@
 
 {% block content %}
 		<h1>Map view</h1>
-		
+
 		<div id="map" style="width:60%; height:399px;"></div>
-		
+
 		<p>All nodes with geographical information</p>
-			
+
 		<ul class="nodes">
 			{% for node in nodes %}
 				{% include '_node.html' with {'node': node} only %}
@@ -19,46 +19,10 @@
 	{# load the OpenLayers library via cdn #}
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/openlayers/2.13.1/OpenLayers.js"></script>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/openlayers/2.13.1/theme/default/style.css" type="text/css">
-	
+	<script src="{{ app.request.basepath }}/scripts/createMap.js"> </script>
 	<script type="text/javascript">
-		//new OL map element in map div
-		var map = new OpenLayers.Map("map");
-		//new blank baselayer
-		baseLayer = new OpenLayers.Layer("Blank", {isBaseLayer:true});
-		map.addLayer(baseLayer);
-		//proxy
-		OpenLayers.ProxyHost = "/cgi-bin/proxy.cgi?url="
-		
-		//new stylemap with default and select style
-		var defaultStyle = new OpenLayers.Style({
-			'fill': '#A0C9DE',
-			'strokeColor': '#DEB5A0',
-			'strokewidth': 1
-		});
-		var styleMap = new OpenLayers.Style({
-			'default': defaultStyle
-		});
-		
-		//the geometries layer loaded as wfs via geoserver
-		var vector1= new OpenLayers.Layer.Vector(
-			//the name of the layer, e.g. used in the layer switcher
-			"nodes", {
-			strategies: [new OpenLayers.Strategy.BBOX()],
-			projection: "EPSG:4326", //display projection,*/
-			protocol: new OpenLayers.Protocol.WFS({
-				version: "1.1.0",
-				url: "http://localhost:8080/geoserver/archeowiki/wfs",
-				featurePrefix: "archeowiki",
-				featureType: "geometries",
-				featureNS: "http://localhost/archeowiki",
-				//geometryName: "geom",
-				//srsName: "EPSG:31370"
-			}),
-			styleMap:styleMap
-			}
-		);
-			//add layer to the map and zoom to max extent of the layers
-			map.addLayer(vector1);
-			map.zoomToMaxExtent();
+		(function(){
+			createMap('map');
+		})();
 	</script>
 {% endblock %}
