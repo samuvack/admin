@@ -231,7 +231,7 @@ $app->get('/node/{id}', function(Application $app, $id) {
         return $idConverter[$value];
     };
 
-    $addRelations = function($relations) use(&$idConverter, &$graphNodes, &$graphLinks, &$addNode, &$addValue) {
+    $addRelations = function($relations) use(&$idConverter, &$graphNodes, &$graphLinks, $addNode, $addValue) {
         foreach( $relations as $relation ){
             $nodeId = null;
             //startnode is always of type node
