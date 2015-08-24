@@ -6,7 +6,7 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 use MyApp\Entities\Node;
 use MyApp\Entities\Property;
 use MyApp\Entities\Relation;
-use MyApp\Types\FilterType;
+use MyApp\FormTypes\FilterType;
 require_once __DIR__.'/../ChromePhp.php';
 
 $app->match('/', function(Application $app, Request $request) {
