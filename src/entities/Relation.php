@@ -1,6 +1,7 @@
 <?php
 namespace MyApp\Entities;
 use \MyApp\Converters\StringConverter;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @Entity(repositoryClass="MyApp\Entities\Repositories\RelationRepository")
@@ -130,6 +131,14 @@ class Relation
 
     function getRank() {
         return $this->rank;
+    }
+
+    /**
+     * @Assert\IsTrue
+     */
+    public function hasValue() {
+        echo "test";die();
+        return !($this->getValue() === null || sizeof(preg_replace('/\s+/', '', $this->getValue())) <= 1);
     }
 
     /**

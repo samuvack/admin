@@ -126,5 +126,6 @@ $app->before(function ($request) use ($app) {
 });
 
 include __DIR__ . "/controllers/base.php"; //include controllers
+include __DIR__ . "/controllers/ajax.php"; //include controllers
 
 return $app;

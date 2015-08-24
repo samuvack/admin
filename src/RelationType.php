@@ -1,6 +1,7 @@
 <?php
 use MyApp\Entities\Relation;
-use MyApp\Entities\Property;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\formBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -24,20 +25,37 @@ class RelationType extends AbstractType
                 'class' => ':Property',
                 'em' => $this->app['orm.em'],
                 'choice_label' => 'name',
-                'attr'=>array('class'=>'form-control','placeholder'=>'The property for the item')
-            ))
-        ->add('value', 'text', array(
-                'constraints'=>array(new Assert\NotBlank()),
-                'attr' => array('class'=>'form-control', 'placeholder'=>'The value for the property or relation')
-            ))
-        ->add('rank', 'choice', array(
-                'choices'=>array('normal'=>'No special ranking', 'preferred'=>'Preferred value to other similar property', 'deprecated'=>'Not longer valid or true'),
-                'attr' => array('class'=>'form-control', 'placeholder'=>'The rank of this statement')
-            ))
-        ->add('qualifier', 'integer', array(
-                'attr' => array('class'=>'form-control', 'placeholder'=>'The id for the qualifier statement'),
-                'required'=>false
+                'attr'=>array('class'=>'form-control type-selection','placeholder'=>'The property for the item')
             ));
+
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, array($this, 'onPreSetData'));
+        $builder->addEventListener(FormEvents::SUBMIT, array($this, 'onSubmit'));
+    }
+
+    private function renderFormType($form, $type) {
+        $formType = \MyApp\FormTypes\FormTypeProvider::getFormType($type);
+        $form->add('value', $formType);
+        $form->add('rank', 'choice', array(
+            'choices' => array('normal' => 'No special ranking', 'preferred' => 'Preferred value to other similar property', 'deprecated' => 'Not longer valid or true'),
+            'attr' => array('class' => 'form-control', 'placeholder' => 'The rank of this statement')
+        ))
+        ->add('qualifier', 'integer', array(
+            'attr' => array('class' => 'form-control', 'placeholder' => 'The id for the qualifier statement'),
+            'required' => false
+        ));
+    }
+
+    public function onPreSetData(FormEvent $event) {
+        $form = $event->getForm();
+        if(! $form->isSubmitted())
+            $this->renderFormType($form, "text");
+    }
+
+
+    public function onSubmit(FormEvent $event) {
+        $form = $event->getForm();
+        $type = $event->getData()->getProperty()->getDataType();
+        $this->renderFormType($form, $type);
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver) {
@@ -48,6 +66,6 @@ class RelationType extends AbstractType
     }
 
     public function getName() {
-            return 'relation';
+        return 'relation';
     }
 }

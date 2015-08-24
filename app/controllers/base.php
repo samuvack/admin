@@ -4,7 +4,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use MyApp\Entities\Node;
-use MyApp\Entities\Property;
 use MyApp\Entities\Relation;
 use MyApp\FormTypes\FilterType;
 require_once __DIR__.'/../ChromePhp.php';
