@@ -401,33 +401,5 @@ $app->get('/graph', function(Application $app, Request $request) {
 		];
 	}
 
-	/*$nodeObjects= $app['orm.em']->getRepository(':Node')->findAll();
-	$nodes = [];
-	$idConverter = [];
-
-	//prepare array for passing
-	foreach( $nodeObjects as $node ) {
-		$idConverter[$node->getId()] = sizeof($nodes);
-		$nodes[]= [
-			'name' => $node->getName(),
-			'id' => $node->getId()
-		];
-
-	}*/
-
-	/*
-	 * trust on Doctrine proxies to not load every node again
-	 * http://stackoverflow.com/a/17787070/4701236
-	 */
-	/*$linkObjects = $app['orm.em']->getRepository(':Relation')->findBy();
-	$links = [];
-
-	foreach( $linkObjects as $link) {
-		$links[] = array(
-			'source'=>$idConverter[$link->id1],
-			'target'=>$idConverter[$link->id2]
-		);
-	}*/
-
 	return $app['twig']->render('graph.twig', array('nodes'=>$nodes, 'links'=>$links));
 })->bind('graph');
