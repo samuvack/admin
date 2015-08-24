@@ -28,7 +28,7 @@ class TextType extends AbstractType {
 
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		//add an event listener to populate the field property at page loading
-		$builder->add('values', 'text', array(
+		$builder->add('text', 'text', array(
 			'constraints'=>array(new Assert\NotBlank(),new Assert\Length(array('min'=>3))),
 			'attr' => array('class'=>'form-control', 'placeholder'=>'The filter value', 'id'=>'values'),
 			'label'=>'With value:'
@@ -37,7 +37,9 @@ class TextType extends AbstractType {
 
 	public function setDefaultOptions(OptionsResolverInterface $resolver) {
 		$resolver->setDefaults(array(
-			'csrf_protection' => false
+			'csrf_protection' => false,
+			'data_class' => 'MyApp\Values\TextValue',
+			'empty_data' => new \MyApp\Values\TextValue('')
 		));
 	}
 }

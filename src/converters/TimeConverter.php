@@ -12,7 +12,7 @@ namespace MyApp\Converters;
 class TimeConverter extends StringConverter {
 
 	public function toString($object) {
-		return $object;
+		return $object . "testen";
 	}
 
 	public function toObject($string) {

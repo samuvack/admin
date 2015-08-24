@@ -28,11 +28,11 @@ class RelationType extends AbstractType
                 'attr'=>array('class'=>'form-control type-selection','placeholder'=>'The property for the item')
             ));
 
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, array($this, 'onPreSetData'));
-        $builder->addEventListener(FormEvents::SUBMIT, array($this, 'onSubmit'));
+        $builder->addEventListener(FormEvents::POST_SET_DATA, array($this, 'onPreSetData'));
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, array($this, 'onPreSubmit'));
     }
 
-    private function renderFormType($form, $type) {
+    private function renderFormType($form, $type, $bool =false) {
         $formType = \MyApp\FormTypes\FormTypeProvider::getFormType($type);
         $form->add('value', $formType);
         $form->add('rank', 'choice', array(
@@ -47,15 +47,18 @@ class RelationType extends AbstractType
 
     public function onPreSetData(FormEvent $event) {
         $form = $event->getForm();
-        if(! $form->isSubmitted())
-            $this->renderFormType($form, "text");
+        if(sizeof($_POST) == 0) // hacky, plz fix
+            $this->renderFormType($form, "text", $event->getData());
+
     }
 
 
-    public function onSubmit(FormEvent $event) {
+    public function onPreSubmit(FormEvent $event) {
         $form = $event->getForm();
-        $type = $event->getData()->getProperty()->getDataType();
+        $data = $event->getData();
+        $type = $this->app['orm.em']->getRepository(':Property')->find($data['property'])->getDataType();
         $this->renderFormType($form, $type);
+
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver) {
