@@ -1,0 +1,6 @@
+<h4>{{node.getName|e}} </h4>
+<p>DESCRIPTION: {{node.getDescription|e}}<p>
+<a href="{{path('node', {id:node.getId})}}")>More info</a>
+{% if is_granted('EDIT_USER') %}
+    <a href="{{path('update',{id: node.getId})}}">Update</a>
+{% endif %}

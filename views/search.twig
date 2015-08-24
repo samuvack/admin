@@ -1,8 +1,7 @@
-{% extends 'baselayout.html' %}
+{% extends 'baselayout.twig' %}
 {% block title 'Search' %}
 
-{% block body %}
-	<div class="content">
+{% block content %}
 		<h1>Search on description</h1>
 		<p>Give the search term</p>
 		{{form(form, {'action':path('search'), 'method':'POST'})}}
@@ -13,19 +12,14 @@
 		<ul class="nodes">
 			{% for node in nodes %}
 			<li>
-				<P>NAME: {{node.getName}} <br>DESCRIPTION: {{node.getDescription}}
-				<a href="{{path('node', {id:node.getId})}}")>More info</a>
-				</p>
-
+				{% include '_node.twig' with {'node': node} only %}
 			</li>
 			{% endfor %}
 		</ul>
-	</div>
 
 {% endblock %}
 
 {% block script %}
-	<script src="http://code.jquery.com/jquery-2.1.4.min.js" type="text/javascript"></script>
 	<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js" type="text/javascript"></script>
 	<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 	<link rel="stylesheet" href="style/autocomplete.css">

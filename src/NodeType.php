@@ -1,11 +1,18 @@
-<?php 
+<?php
+use MyApp\Entities\Node;
 	use Symfony\Component\Form\AbstractType;
 	use Symfony\Component\Form\FormBuilderInterface;
 	use Symfony\Component\Validator\Constraints as Assert;
 	use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+	use Silex\Application;
 
 	class NodeType extends AbstractType
 	{
+		protected $app;
+		public function __construct(Application $app) {
+			$this->app = $app;
+		}
+
 		public function buildForm(FormBuilderInterface $builder, array $options)
 		{
 			$builder
@@ -18,23 +25,23 @@
 				'attr' => array('class'=>'form-control', 'placeholder'=>'The description of the item')
 				))
 			->add('relations', 'collection', array(
-				'type' => new RelationType(),
+				'type' => new RelationType($this->app),
 				'allow_add' => true,
-				'by_reference'=>false,				
+				//'by_reference'=> true,
 				))
 			->add('send', 'submit', array(
 				'attr' => array('class'=>'btn btn-default')
 				))
 			;
 		}
-		
+
 		public function setDefaultOptions(OptionsResolverInterface $resolver) {
 			$resolver->setDefaults(array(
-				'data_class' => 'Node',
-				'empty_data' => new Node(null, null, null, null),
+				'data_class' => 'MyApp\Entities\Node',
+				'empty_data' => new Node(),
 			));
 		}
-		
+
 		public function getName()
 		{
 			return 'node';
