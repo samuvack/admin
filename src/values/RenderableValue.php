@@ -17,5 +17,5 @@ interface RenderableValue {
 	/**
 	 * Extended view, for detailed representation
 	 */
-	public function render();
+	public function render(\Twig_Environment $env);
 }

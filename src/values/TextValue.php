@@ -37,7 +37,7 @@ class TextValue implements RenderableValue {
 	/**
 	 * Extended view, for detailed representation
 	 */
-	public function render() {
-		echo $this->text;
+	public function render(\Twig_Environment $env) {
+		$env->display("values/textvalue.twig", array("text"=>$this->text));
 	}
 }
