@@ -33,7 +33,7 @@ class RelationType extends AbstractType
     }
 
     private function renderFormType($form, $type) {
-        $formType = \MyApp\FormTypes\FormTypeProvider::getFormType($type);
+        $formType = $this->app['mapping.manager']->getFormType($type);
         $form->add('value', $formType);
         $form->add('rank', 'choice', array(
             'choices' => array('normal' => 'No special ranking', 'preferred' => 'Preferred value to other similar property', 'deprecated' => 'Not longer valid or true'),
