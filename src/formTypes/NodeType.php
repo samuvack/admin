@@ -10,8 +10,10 @@ use MyApp\Entities\Node;
 	class NodeType extends AbstractType
 	{
 		protected $app;
-		public function __construct(Application $app) {
+		private $root;
+		public function __construct(Application $app, $root = true) {
 			$this->app = $app;
+			$this->root = $root;
 		}
 
 		public function buildForm(FormBuilderInterface $builder, array $options)
@@ -29,11 +31,13 @@ use MyApp\Entities\Node;
 				'type' => new RelationType($this->app),
 				'allow_add' => true,
 				//'by_reference'=> true,
-				))
-			->add('send', 'submit', array(
-				'attr' => array('class'=>'btn btn-default')
-				))
-			;
+				));
+			// Dont add another submit, if this is the form for a relationship value
+			if($this->root) {
+				$builder->add('send', 'submit', array(
+					'attr' => array('class' => 'btn btn-default')
+				));
+			}
 		}
 
 		public function setDefaultOptions(OptionsResolverInterface $resolver) {

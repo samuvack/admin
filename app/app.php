@@ -127,7 +127,7 @@ $app['mapping.manager']->register('year_period',
 );
 $app['mapping.manager']->register('node',
 	function($app){
-		return new \MyApp\FormTypes\NodeType($app);
+		return new \MyApp\FormTypes\NodeType($app, false);
 	},
 	new \MyApp\Converters\EntityConverter()
 );
