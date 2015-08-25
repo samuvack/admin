@@ -10,10 +10,10 @@ use MyApp\Entities\Node;
 	class NodeType extends AbstractType
 	{
 		protected $app;
-		private $root;
-		public function __construct(Application $app, $root = true) {
+		private $AJAX;
+		public function __construct(Application $app, $AJAX = true) {
 			$this->app = $app;
-			$this->root = $root;
+			$this->AJAX = $AJAX;
 		}
 
 		public function buildForm(FormBuilderInterface $builder, array $options)
@@ -33,7 +33,7 @@ use MyApp\Entities\Node;
 				//'by_reference'=> true,
 				));
 			// Dont add another submit, if this is the form for a relationship value
-			if($this->root) {
+			if($this->AJAX) {
 				$builder->add('send', 'submit', array(
 					'attr' => array('class' => 'btn btn-default')
 				));
@@ -49,6 +49,6 @@ use MyApp\Entities\Node;
 
 		public function getName()
 		{
-			return $this->root?'node':'DO_REPLACE_';
+			return $this->AJAX?'node':'DO_REPLACE_';
 		}
 	}
