@@ -1,7 +1,7 @@
 <?php
 
 namespace MyApp\Converters;
-use Services\Mapping\TypeNotSupportedException;
+use Utils\Services\Mapping\TypeNotSupportedException;
 
 abstract class StringConverter {
     static $converterMap = null;

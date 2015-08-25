@@ -6,7 +6,7 @@
  * Time: 11:30
  */
 
-namespace Services\Mapping;
+namespace Utils\Services\Mapping;
 
 
 use Symfony\Component\Config\Definition\Exception\Exception;

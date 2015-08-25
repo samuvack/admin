@@ -1,5 +1,5 @@
 <?php
-namespace Services\Mapping;
+namespace Utils\Services\Mapping;
 use Silex\ServiceProviderInterface;
 class MappingServiceProvider implements ServiceProviderInterface {
 
