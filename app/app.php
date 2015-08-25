@@ -138,6 +138,7 @@ require_once __DIR__ . "/firewall.php";
 $app->mount('/user', $userServiceProvider);
 
 Type::addType('tsvector', 'Utils\Database\Types\Tsvector');
+Type::addType('log_action', 'Utils\Database\Types\LogAction');
 
 $app->before(function ($request) use ($app) {
 	$app['twig']->addGlobal('active', $request->get("_route"));
