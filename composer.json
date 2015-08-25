@@ -32,7 +32,8 @@
             "MyApp\\Entities\\": "src/entities",
             "MyApp\\Entities\\Repositories\\": "src/entities/repositories",
             "MyApp\\FormTypes\\": "src/formTypes",
-            "MyApp\\Values\\": "src/values"
+            "MyApp\\Values\\": "src/values",
+            "Services\\Mapping\\": "services/mapping"
         }
     }
 }
