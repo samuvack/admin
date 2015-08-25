@@ -1,4 +1,5 @@
 <?php
+namespace MyApp\FormTypes;
 use MyApp\Entities\Node;
 	use Symfony\Component\Form\AbstractType;
 	use Symfony\Component\Form\FormBuilderInterface;
@@ -47,4 +48,3 @@ use MyApp\Entities\Node;
 			return 'node';
 		}
 	}
-?>

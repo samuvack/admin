@@ -1,4 +1,5 @@
 <?php
+namespace MyApp\FormTypes;
 use MyApp\Entities\Relation;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;

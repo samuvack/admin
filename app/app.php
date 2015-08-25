@@ -1,14 +1,11 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
 
-require_once __DIR__ . '/../src/NodeType.php';
-require_once __DIR__ . '/../src/RelationType.php';
 use Silex\Provider\DoctrineServiceProvider;
 use Dflydev\Silex\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
 use Doctrine\DBAL\Types\Type;
 use Saxulum\DoctrineOrmManagerRegistry\Silex\Provider\DoctrineOrmManagerRegistryProvider;
 use Silex\Provider\FormServiceProvider;
-use Services\MappingService\MappingServiceProvider;
 
 $config = include __DIR__ . "/config/main.php";
 
@@ -127,6 +124,12 @@ $app['mapping.manager']->register('year_period',
 		return new \MyApp\FormTypes\YearPeriodType();
 	},
 	new \MyApp\Converters\YearPeriodConverter()
+);
+$app['mapping.manager']->register('node',
+	function($app){
+		return new \MyApp\FormTypes\NodeType($app);
+	},
+	new \MyApp\Converters\EntityConverter()
 );
 
 require_once __DIR__ . "/firewall.php";
