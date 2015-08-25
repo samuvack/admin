@@ -31,24 +31,6 @@
 	<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 	<script src="scripts/addProperty.js" type="text/javascript"></script>
 	<script type="text/javascript">
-		$('body').on('change', '.type-selection', function(){
-			var $that = $(this);
-			var val = $that.val();
-			$.ajax({
-				type: "GET",
-				url: "{{ app.request.basepath }}/ajax/form/" + val,
-				success: function(data) {
-					var $parent = $that.closest('li > div');
-					var id = $parent.attr('id');
-					var $outer = $("#" + id + "_value");
-					var name = $outer.attr('id').replace(/_/,'[');
-					name = name.replace(/_/g,'][') +']';
-					var html = data.replace(/name="DO_REPLACE_/g, 'name="'+name);
-					html = html.replace(/DO_REPLACE_/g, $outer.attr('id'));
-					var old = $outer.html();
-					$outer.html(html);
-				}
-			});
-		});
+		initAjaxFormvalueHook("{{ app.request.basepath }}/ajax/form/");
 	</script>
 {% endblock %}
