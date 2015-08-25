@@ -27,12 +27,12 @@
     "autoload": {
         "psr-4": {
             "MyApp\\Converters\\": "src/converters",
-            "MyApp\\Database\\Functions\\": "src/database/functions",
-            "MyApp\\Database\\Types\\": "src/database/types",
             "MyApp\\Entities\\": "src/entities",
             "MyApp\\Entities\\Repositories\\": "src/entities/repositories",
             "MyApp\\FormTypes\\": "src/formTypes",
             "MyApp\\Values\\": "src/values",
+            "Utils\\Database\\Functions\\": "src/database/functions",
+            "Utils\\Database\\Types\\": "src/database/types",
             "Utils\\Services\\Mapping\\": "utils/services/mapping"
         }
     }

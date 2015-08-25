@@ -55,8 +55,8 @@ $app->register(new DoctrineOrmServiceProvider, array(
 		),
 	),
 	"orm.custom.functions.string" => array(
-		"plainto_tsquery" => "MyApp\Database\Functions\PlainToTsquery",
-		"TS_MATCH_OP" => "MyApp\Database\Functions\TsMatch"
+		"plainto_tsquery" => "Utils\Database\Functions\PlainToTsquery",
+		"TS_MATCH_OP" => "Utils\Database\Functions\TsMatch"
 	),
 	'orm.auto_generate_proxies' => $app['debug']
 ));
@@ -136,7 +136,7 @@ require_once __DIR__ . "/firewall.php";
 
 $app->mount('/user', $userServiceProvider);
 
-Type::addType('tsvector', 'MyApp\Database\Types\Tsvector');
+Type::addType('tsvector', 'Utils\Database\Types\Tsvector');
 
 $app->before(function ($request) use ($app) {
 	$app['twig']->addGlobal('active', $request->get("_route"));
