@@ -20,7 +20,9 @@ function createMap(container) {
         controls: [
             new ol.control.Zoom(),
             new ol.control.Attribution(),
-            new ol.control.MousePosition()
+            new ol.control.MousePosition(),
+            new ol.control.ZoomToExtent({extent: untiled.getExtent()}),
+            new ol.control.ScaleLine()
         ],
         target: container,
         layers: [untiled],
@@ -32,14 +34,14 @@ function createMap(container) {
         })
     });
 
-    //WMS layer (archeologische zones) from onroerend erfgoed
-    var wms = new ol.layer.Image({
-            //extent: [-13884991, 2870341, -7455066, 6338219],
+
+    //WMS layer (Archeologische zones) from onroerend erfgoed
+    var archZones = new ol.layer.Image({
             source: new ol.source.ImageWMS({
-                //url: 'https://www.mercator.vlaanderen.be/raadpleegdienstenmercatorpubliek/ps/wms',
                 url: 'https://geo.onroerenderfgoed.be/geoserver/wms',
                 params: {
-                    'LAYERS': 'vioe:beschermde_archeologische_zones, vioe:beschermde_dorps_en_stadsgezichten',
+                    'LAYERS': 'vioe:cai_zone',
+                    'STYLES': 'vioe_cai_zones',
                     'TRANSPARENT': 'TRUE',
                     'VERSION':'1.1.1'
                 },
@@ -48,8 +50,25 @@ function createMap(container) {
         })
         ;
 
+    map.addLayer(archZones);
 
-    map.addLayer(wms);
+    //WMS layer (CAI) from onroerend erfgoed
+    var cai = new ol.layer.Image({
+            //extent: [-13884991, 2870341, -7455066, 6338219],
+            source: new ol.source.ImageWMS({
+                url: 'https://geo.onroerenderfgoed.be/geoserver/wms',
+                params: {
+                    'LAYERS': 'vioe_intern:cai',
+                    'TRANSPARENT': 'TRUE',
+                    'VERSION':'1.1.1'
+                },
+                serverType: 'geoserver'
+            })
+        })
+        ;
+
+    map.addLayer(cai);
+
 
     //// format used to parse WFS GetFeature responses
     //var geojsonFormat = new ol.format.GeoJSON();
@@ -99,10 +118,10 @@ function createMap(container) {
     // Add an event handler for the map "singleclick" event
     map.on('singleclick', function(evt) {
 
-        // Hide existing popup and reset it's offset
+        // Clear existing information in nodeInfo div
         var infoDiv = document.getElementById('nodeInfo').innerHTML = '';
 
-        var url = untiled.getSource().getGetFeatureInfoUrl(
+        var url = cai.getSource().getGetFeatureInfoUrl(
             evt.coordinate,
             map.getView().getResolution(),
             map.getView().getProjection(),
@@ -110,16 +129,6 @@ function createMap(container) {
         );
 
         if(url){
-            /*$.ajax(url).then(function(response) {
-                var parser = new ol.Format.WMSGetFeatureInfo();
-                var features = parser.readFeatures(response);
-                var text = '';
-                for (var i = 0; i < features.length; ++i) {
-                    text += features[i].getProperties().props;
-                }
-                document.getElementById('nodeInfo').innerHTML = text;
-            });*/
-
             document.getElementById('nodeInfo').innerHTML = '<iframe seamless src="' + url + '"></iframe>';
         }
 
