@@ -1,6 +1,6 @@
 <?php
 
-namespace Services\Mapping;
+namespace Utils\Services\Mapping;
 
 
 class MappingManager {

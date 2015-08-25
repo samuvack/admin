@@ -1,12 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: david
- * Date: 25/08/15
- * Time: 09:00
- */
 
-namespace Services\Mapping;
+namespace Utils\Services\Mapping;
 
 
 class Mapping {
