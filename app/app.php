@@ -102,7 +102,8 @@ $app->register($userServiceProvider, array(
 		),
 		'templates' => array(
 			'layout' => 'baselayout.twig'
-		)
+		),
+		'userClass' => 'MyApp\Entities\User'
 	)
 ));
 
