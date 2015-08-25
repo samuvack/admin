@@ -109,7 +109,7 @@ $app->register($userServiceProvider, array(
 $app->register(new FormServiceProvider());
 $app->register(new DoctrineOrmManagerRegistryProvider());
 
-$app->register(new Services\Mapping\MappingServiceProvider());
+$app->register(new Utils\Services\Mapping\MappingServiceProvider());
 $app['mapping.manager']->onRegister(function($type, $mapping) {
 	\MyApp\Converters\StringConverter::addConverter($type, $mapping->getDbConverter());
 });
