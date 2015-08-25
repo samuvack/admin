@@ -5,7 +5,7 @@ use Silex\Application;
 $app->get('/form/{property}', function(Application $app, Request $request, $property) {
 	$result = $app["orm.em"]->getRepository(':Property')->find($property);
 	$type = $result->getDataType();
-	$formType = FormTypeProvider::getFormType($type);
+	$formType = $app['mapping.manager']->getFormType($type);
 
 	$form = $app['form.factory']->createBuilder($formType)->getForm();
 	$form->handleRequest($request);
