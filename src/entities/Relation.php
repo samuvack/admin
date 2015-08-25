@@ -134,14 +134,6 @@ class Relation
     }
 
     /**
-     * @Assert\IsTrue
-     */
-    public function hasValue() {
-        echo "test";die();
-        return !($this->getValue() === null || sizeof(preg_replace('/\s+/', '', $this->getValue())) <= 1);
-    }
-
-    /**
     * TODO: rewrite to repository
     * Uses getAll() to get all statements with a geometry property
     * The value of statement is text representation
