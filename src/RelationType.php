@@ -32,7 +32,7 @@ class RelationType extends AbstractType
         $builder->addEventListener(FormEvents::PRE_SUBMIT, array($this, 'onPreSubmit'));
     }
 
-    private function renderFormType($form, $type, $bool =false) {
+    private function renderFormType($form, $type) {
         $formType = \MyApp\FormTypes\FormTypeProvider::getFormType($type);
         $form->add('value', $formType);
         $form->add('rank', 'choice', array(
@@ -47,9 +47,12 @@ class RelationType extends AbstractType
 
     public function onPreSetData(FormEvent $event) {
         $form = $event->getForm();
-        if(sizeof($_POST) == 0) // hacky, plz fix
-            $this->renderFormType($form, "text", $event->getData());
 
+        $type = 'text';
+        if(sizeof($event->getData())>0) {
+            $type = $event->getData()->getProperty()->getDataType();
+        }
+        $this->renderFormType($form,$type);
     }
 
 
@@ -58,7 +61,6 @@ class RelationType extends AbstractType
         $data = $event->getData();
         $type = $this->app['orm.em']->getRepository(':Property')->find($data['property'])->getDataType();
         $this->renderFormType($form, $type);
-
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver) {

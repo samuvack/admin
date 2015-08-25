@@ -9,6 +9,8 @@
 namespace MyApp\Values;
 
 
+use MyApp\FormTypes\TextType;
+
 class TextValue implements RenderableValue {
 	private $text;
 
@@ -31,14 +33,14 @@ class TextValue implements RenderableValue {
 	 * @return String simple string for use in e.g. a graph
 	 */
 	public function __toString() {
-		return $this->text;
+		return $this->getText();
 	}
 
 	/**
 	 * Get FormType
 	 */
 	public function getFormType(\Silex\Application $app) {
-		// TODO: Implement getFormType() method.
+		return new TextType();
 	}
 
 	/**
