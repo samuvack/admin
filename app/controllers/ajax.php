@@ -2,7 +2,7 @@
 use \MyApp\FormTypes\FormTypeProvider;
 use Symfony\Component\HttpFoundation\Request;
 use Silex\Application;
-$app->get('/form/{property}', function(Application $app, Request $request, $property) {
+$app->get('/ajax/form/{property}', function(Application $app, Request $request, $property) {
 	$result = $app["orm.em"]->getRepository(':Property')->find($property);
 	$type = $result->getDataType();
 	$formType = $app['mapping.manager']->getFormType($type);
