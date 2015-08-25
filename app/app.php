@@ -113,7 +113,9 @@ $app->register(new FormServiceProvider());
 $app->register(new DoctrineOrmManagerRegistryProvider());
 
 $app->register(new Services\Mapping\MappingServiceProvider());
-
+$app['mapping.manager']->onRegister(function($type, $mapping) {
+	\MyApp\Converters\StringConverter::addConverter($type, $mapping->getDbConverter());
+});
 $app['mapping.manager']->register('text',
 	function($app){
 		return new \MyApp\FormTypes\TextType();

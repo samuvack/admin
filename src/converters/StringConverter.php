@@ -1,17 +1,22 @@
 <?php
 
 namespace MyApp\Converters;
-
+use Services\Mapping\TypeNotSupportedException;
 
 abstract class StringConverter {
     static $converterMap = null;
 
     private static function initConverterMap(){
         self::$converterMap = array(
-            "text" => new TextConverter,
+           // "text" => new TextConverter,
             "dateTime" => new DateTimeConverter,
             "time" => new TimeConverter
         );
+    }
+
+    public static function addConverter($type, $converter) {
+        self::initConverterMap();
+        self::$converterMap[$type] = $converter;
     }
 
     public static function getConverter($type){
