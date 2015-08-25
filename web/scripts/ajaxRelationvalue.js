@@ -3,7 +3,7 @@ function initAjaxFormvalueHook(formurl) {
         var $that = $(this);
         var val = $that.val();
         $.ajax({
-            type: "POST",
+            type: "GET",
             url: formurl + val,
             success: function(data) {
                 var $parent = $that.closest('li > div');
