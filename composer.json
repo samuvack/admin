@@ -31,8 +31,8 @@
             "MyApp\\Entities\\Repositories\\": "src/entities/repositories",
             "MyApp\\FormTypes\\": "src/formTypes",
             "MyApp\\Values\\": "src/values",
-            "Utils\\Database\\Functions\\": "src/database/functions",
-            "Utils\\Database\\Types\\": "src/database/types",
+            "Utils\\Database\\Functions\\": "utils/database/functions",
+            "Utils\\Database\\Types\\": "utils/database/types",
             "Utils\\Services\\Mapping\\": "utils/services/mapping"
         }
     }
