@@ -122,6 +122,12 @@ $app['mapping.manager']->register('text',
 	},
 	new \MyApp\Converters\TextConverter()
 );
+$app['mapping.manager']->register('year_period',
+	function($app){
+		return new \MyApp\FormTypes\YearPeriodType();
+	},
+	new \MyApp\Converters\YearPeriodConverter()
+);
 
 require_once __DIR__ . "/firewall.php";
 

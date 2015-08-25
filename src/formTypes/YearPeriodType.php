@@ -14,7 +14,12 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 use Silex\Application;
 
 
-class TimeType extends AbstractType {
+class YearPeriodType extends AbstractType {
+	private $yearPeriod;
+
+	public function __construct($yearPeriod = null) {
+		$this->yearPeriod = $yearPeriod;
+	}
 
 	/**
 	 * Returns the name of this type.
@@ -25,26 +30,25 @@ class TimeType extends AbstractType {
 		return 'DO_REPLACE_';
 	}
 
-	/*public function buildForm(FormBuilderInterface $builder, array $options) {
-		//add an event listener to populate the field property at page loading
-		//echo "test";die();
-		$builder->add('time', 'text', array(
-			'attr' => array('class'=>'form-control', 'placeholder'=>'The filter value'),
-			'label'=>'With value:'
-		));
-	}*/
 	public function buildForm(FormBuilderInterface $builder, array $options) {
 		//add an event listener to populate the field property at page loading
-		$builder->add('time', 'text', array(
-			'constraints'=>array(new Assert\NotBlank(),new Assert\Length(array('min'=>3))),
+		$builder->add('startyear', 'integer', array(
+			'constraints'=>array(new Assert\NotBlank()),
 			'attr' => array('class'=>'form-control', 'placeholder'=>'The filter value', 'id'=>'values'),
-			'label'=>'With value:'
+			'label'=>'start year'
+		))
+		->add('endyear', 'integer', array(
+			'constraints'=>array(new Assert\NotBlank()),
+			'attr' => array('class'=>'form-control', 'placeholder'=>'The filter value', 'id'=>'values'),
+			'label' => 'end year'
 		));
 	}
 
 	public function setDefaultOptions(OptionsResolverInterface $resolver) {
 		$resolver->setDefaults(array(
-			'csrf_protection' => false
+			'csrf_protection' => false,
+			'data_class' => 'MyApp\Values\YearPeriodValue',
+			'empty_data' => (isset($this->yearPeriod))? $this->yearPeriod : new \MyApp\Values\YearPeriodValue(0,2015)
 		));
 	}
 

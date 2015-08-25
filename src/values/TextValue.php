@@ -40,7 +40,7 @@ class TextValue implements RenderableValue {
 	 * Get FormType
 	 */
 	public function getFormType(\Silex\Application $app) {
-		return new TextType();
+		return new TextType($this);
 	}
 
 	/**

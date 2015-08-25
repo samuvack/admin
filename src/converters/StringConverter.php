@@ -9,8 +9,7 @@ abstract class StringConverter {
     private static function initConverterMap(){
         self::$converterMap = array(
            // "text" => new TextConverter,
-            "dateTime" => new DateTimeConverter,
-            "time" => new TimeConverter
+            "dateTime" => new DateTimeConverter
         );
     }
 
