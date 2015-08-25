@@ -120,6 +120,6 @@ class Node implements RenderableValue {
      * Extended view, for detailed representation
      */
     public function render(\Twig_Environment $env) {
-        // TODO: Implement render() method.
+        $env->display("values/node.twig", array('node'=> $this));
     }
 }
