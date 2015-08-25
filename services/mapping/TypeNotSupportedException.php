@@ -6,7 +6,7 @@
  * Time: 11:30
  */
 
-namespace MyApp\Converters;
+namespace Services\Mapping;
 
 
 use Symfony\Component\Config\Definition\Exception\Exception;
