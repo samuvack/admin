@@ -7,10 +7,11 @@ abstract class StringConverter {
     static $converterMap = null;
 
     private static function initConverterMap(){
-        self::$converterMap = array(
-           // "text" => new TextConverter,
-            "dateTime" => new DateTimeConverter
-        );
+        if(self::$converterMap === null)
+            self::$converterMap = array(
+               // "text" => new TextConverter,
+                "dateTime" => new DateTimeConverter
+            );
     }
 
     public static function addConverter($type, $converter) {
@@ -19,8 +20,7 @@ abstract class StringConverter {
     }
 
     public static function getConverter($type){
-        if(self::$converterMap === null)
-            self::initConverterMap();
+        self::initConverterMap();
 
         if (! array_key_exists($type, self::$converterMap)) {
             $format = "No Converter for type '%s' found.";
