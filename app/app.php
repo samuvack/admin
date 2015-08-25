@@ -8,6 +8,7 @@ use Dflydev\Silex\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
 use Doctrine\DBAL\Types\Type;
 use Saxulum\DoctrineOrmManagerRegistry\Silex\Provider\DoctrineOrmManagerRegistryProvider;
 use Silex\Provider\FormServiceProvider;
+use Services\MappingService\MappingServiceProvider;
 
 $config = include __DIR__ . "/config/main.php";
 
@@ -108,9 +109,17 @@ $app->register($userServiceProvider, array(
 	)
 ));
 
-
 $app->register(new FormServiceProvider());
 $app->register(new DoctrineOrmManagerRegistryProvider());
+
+$app->register(new Services\Mapping\MappingServiceProvider());
+
+$app['mapping.manager']->register('text',
+	function($app){
+		return new \MyApp\FormTypes\TextType();
+	},
+	new \MyApp\Converters\TextConverter()
+);
 
 require_once __DIR__ . "/firewall.php";
 
