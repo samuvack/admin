@@ -10,9 +10,8 @@ namespace MyApp\Entities;
 
 
 /**
- * A simple User model.
- *
- * @package SimpleUser
+ * @Entity
+ * @Table(name="users")
  */
 class User extends \SimpleUser\User
 {

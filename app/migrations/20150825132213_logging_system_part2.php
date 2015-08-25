@@ -34,6 +34,10 @@ class LoggingSystemPart2 extends AbstractMigration
         $log->renameColumn('hid','id');
         $log->renameColumn('propertyname','property_id');
         $log->addForeignKey('property_id','properties', 'id', array('delete'=> 'RESTRICT', 'update'=> 'CASCADE'));
+        $log->addColumn('nodevalue', 'integer',array('null' => true));
+        $log->addForeignKey('nodevalue','nodes','id',array('delete'=>'NO_ACTION','update'=>'CASCADE'));
+        $log->addColumn('geometryvalue',"integer",array('null' => true));
+        $log->addForeignKey('geometryvalue','geometries','id',array('delete'=>'NO_ACTION','update'=>'CASCADE'));
         $log->update();
     }
 }

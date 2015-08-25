@@ -30,9 +30,17 @@ class LoggingSystemPart1 extends AbstractMigration
         $log->removeColumn('action_by')
             ->addColumn('action_by','integer')
             ->save();
+
+        $this->execute("ALTER SEQUENCE IF EXISTS statements_logging_hid_seq RENAME TO relations_log_id_seq");
+        $this->execute("ALTER SEQUENCE IF EXISTS nodes_logging_hid_seq RENAME TO nodes_log_id_seq");
+        $this->execute("ALTER SEQUENCE IF EXISTS properties_logging_hid_seq RENAME TO properties_log_id_seq");
     }
 
     public function down(){
+        $this->execute("ALTER SEQUENCE IF EXISTS relations_log_id_seq RENAME TO statements_logging_id_seq");
+        $this->execute("ALTER SEQUENCE IF EXISTS nodes_log_id_seq RENAME TO nodes_logging_hid_seq");
+        $this->execute("ALTER SEQUENCE IF EXISTS properties_log_id_seq RENAME TO properties_logging_hid_seq");
+
         $this->execute("TRUNCATE nodes_log");
         $this->execute("TRUNCATE properties_log");
         $this->execute("TRUNCATE relations_log");

@@ -32,7 +32,7 @@ class LogAction extends Type {
 	}
 
 	public function convertToDatabaseValue($value, AbstractPlatform $platform) {
-		return new $this->map[$value];
+		return $this->map[$value];
 	}
 
 	/**

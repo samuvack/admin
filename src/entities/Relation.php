@@ -117,6 +117,10 @@ class Relation
         return $this->valueObject;
     }
 
+    public function _getValue() {
+        return $this->value;
+    }
+
     function setQualifier($new_qualifier) {
         $this->qualifier = (string) $new_qualifier;
     }

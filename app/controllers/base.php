@@ -7,6 +7,8 @@ use MyApp\Entities\Node;
 use MyApp\Entities\Relation;
 use MyApp\FormTypes\FilterType;
 use MyApp\FormTypes\NodeType;
+use \MyApp\Entities\NodeLog;
+use \MyApp\Entities\RelationLog;
 require_once __DIR__.'/../ChromePhp.php';
 
 $app->match('/', function(Application $app, Request $request) {
@@ -53,8 +55,10 @@ $app->match('/insert', function(Request $request) use($app) {
 		foreach($node->getRelations() as $relation) {
 			$relation->setStart($node); // Relation is on the owning side
 			$em->persist($relation);
+			$em->persist(new RelationLog($relation,$app['user'],'insert'));
 		}
 		$em->persist($node);
+		$em->persist(new NodeLog($node,$app['user'],"insert"));
 		$em->flush();
 
 		return $app->redirect($app->path('home'));

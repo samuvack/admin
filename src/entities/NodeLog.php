@@ -30,21 +30,22 @@ class NodeLog {
 
 	/** @Column(type="log_action") */
 	private $action;
-	/** @Column(type="timestamp") */
-	private $actionTime;
+	/** @Column(type="datetime") */
+	private $action_time;
 
 	/**
-	 * @ManyToOne(targetEntity="User")
-	 * @JoinColumn(name="user_id")
+	 * @Column(type="integer",name="action_by")
 	 */
 	private $user;
 
-	public function __construct($node, $user, $action) {
-		$this->user = $user;
+	public function __construct(Node $node, User $user, $action) {
+		$this->user = $user->getId();
 		$this->node = $node;
 		$this->name = $node->getName();
 		$this->description = $node->getDescription();
+		$this->descr = $node->getDescr();
 		$this->action = $action;
+		$this->actionTime = new \DateTime();
 	}
 
 }
