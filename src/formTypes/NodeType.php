@@ -49,6 +49,6 @@ use MyApp\Entities\Node;
 
 		public function getName()
 		{
-			return 'node';
+			return $this->root?'node':'DO_REPLACE_';
 		}
 	}
