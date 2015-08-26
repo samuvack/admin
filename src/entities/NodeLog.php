@@ -30,7 +30,9 @@ class NodeLog {
 
 	/** @Column(type="log_action") */
 	private $action;
-	/** @Column(type="datetime") */
+	/**
+	* @ORM\Column(type="datetime", nullable=false)
+	*/
 	private $action_time;
 
 	/**
@@ -45,7 +47,6 @@ class NodeLog {
 		$this->description = $node->getDescription();
 		$this->descr = $node->getDescr();
 		$this->action = $action;
-		$this->actionTime = new \DateTime();
 	}
 
 }

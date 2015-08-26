@@ -21,14 +21,20 @@ class LoggingSystemPart1 extends AbstractMigration
         $log = $this->table('nodes_log');
         $log->removeColumn('action_by')
             ->addColumn('action_by','integer')
+            ->removeColumn('action_time')
+            ->addColumn('action_time','timestamp', array('default' => 'CURRENT_TIMESTAMP'))
             ->save();
         $log = $this->table('relations_log');
         $log->removeColumn('action_by')
             ->addColumn('action_by','integer')
+            ->removeColumn('action_time')
+            ->addColumn('action_time','timestamp', array('default' => 'CURRENT_TIMESTAMP'))
             ->save();
         $log = $this->table('properties_log');
         $log->removeColumn('action_by')
             ->addColumn('action_by','integer')
+            ->removeColumn('action_time')
+            ->addColumn('action_time','timestamp', array('default' => 'CURRENT_TIMESTAMP'))
             ->save();
 
         $this->execute("ALTER SEQUENCE IF EXISTS statements_logging_hid_seq RENAME TO relations_log_id_seq");
