@@ -32,6 +32,7 @@ class NodeLog {
 	private $action;
 	/**
 	* @ORM\Column(type="datetime", nullable=false)
+ 	* @GeneratedValue
 	*/
 	private $action_time;
 

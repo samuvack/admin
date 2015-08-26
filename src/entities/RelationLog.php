@@ -42,6 +42,7 @@ class RelationLog {
 	private $action_time;
 
 	/**
+	 * @GeneratedValue
 	 * @Column(type="integer",name="action_by")
 	 */
 	private $user;
@@ -54,7 +55,6 @@ class RelationLog {
 		$this->rank = $relation->getRank();
 		$this->action = $action;
 		$this->qualifier = $relation->getQualifier();
-		$this->actionTime = new \DateTime();
 	}
 
 	private function setValue($new_value) {
