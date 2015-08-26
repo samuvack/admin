@@ -6,7 +6,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @Entity(repositoryClass="MyApp\Entities\Repositories\RelationRepository")
  * @Table(name="relations")
- * @HasLifecycleCallbacks
+ * @EntityListeners({"MyApp\Entities\Listeners\RelationLogging"})
  */
 class Relation
 {

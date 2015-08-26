@@ -9,6 +9,7 @@ use MyApp\FormTypes\NodeType;
 /**
  * @Entity(repositoryClass="MyApp\Entities\Repositories\NodeRepository")
  * @Table(name="nodes")
+ * @EntityListeners({"MyApp\Entities\Listeners\NodeLogging"})
  */
 class Node implements RenderableValue {
     /**

@@ -55,10 +55,8 @@ $app->match('/insert', function(Request $request) use($app) {
 		foreach($node->getRelations() as $relation) {
 			$relation->setStart($node); // Relation is on the owning side
 			$em->persist($relation);
-			$em->persist(new RelationLog($relation,$app['user'],'insert'));
 		}
 		$em->persist($node);
-		$em->persist(new NodeLog($node,$app['user'],"insert"));
 		$em->flush();
 
 		return $app->redirect($app->path('home'));

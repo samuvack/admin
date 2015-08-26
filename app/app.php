@@ -140,12 +140,15 @@ $app->mount('/user', $userServiceProvider);
 Type::addType('tsvector', 'Utils\Database\Types\Tsvector');
 Type::addType('log_action', 'Utils\Database\Types\LogAction');
 
+
 $app->before(function ($request) use ($app) {
 	$app['twig']->addGlobal('active', $request->get("_route"));
 	$app['twig']->addFunction(new Twig_SimpleFunction('render', function (Twig_Environment $env, RenderableValue $value) {
 		$value->render($env);
 	}, array('needs_environment' => true)));
 });
+$listener = new \MyApp\Entities\Listeners\NodeLogging($app);
+$app['orm.em']->getConfiguration()->getEntityListenerResolver()->register($listener);
 
 include __DIR__ . "/controllers/base.php"; //include controllers
 include __DIR__ . "/controllers/ajax.php"; //include controllers

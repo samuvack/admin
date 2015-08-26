@@ -16,28 +16,25 @@ class LoggingSystemPart2 extends AbstractMigration
         $log = $this->table('nodes_log');
         $log->addForeignKey('action_by','users','id', array('delete'=> 'RESTRICT', 'update'=> 'CASCADE'));
         $log->renameColumn('id', 'node_id');
-        $log->addForeignKey('node_id', 'nodes', 'id', array('delete'=> 'NO_ACTION', 'update'=> 'CASCADE'));
         $log->renameColumn('hid','id');
         $log->update();
 
         $log = $this->table('properties_log');
         $log->addForeignKey('action_by','users','id', array('delete'=> 'RESTRICT', 'update'=> 'CASCADE'));
         $log->renameColumn('id', 'property_id');
-        $log->addForeignKey('property_id', 'properties', 'id', array('delete'=> 'NO_ACTION', 'update'=> 'CASCADE'));
         $log->renameColumn('hid','id');
         $log->update();
 
         $log = $this->table('relations_log');
         $log->addForeignKey('action_by','users','id', array('delete'=> 'RESTRICT', 'update'=> 'CASCADE'));
         $log->renameColumn('id', 'relation_id');
-        $log->addForeignKey('relation_id', 'relations', 'id', array('delete'=> 'NO_ACTION', 'update'=> 'CASCADE'));
         $log->renameColumn('hid','id');
         $log->renameColumn('propertyname','property_id');
         $log->addForeignKey('property_id','properties', 'id', array('delete'=> 'RESTRICT', 'update'=> 'CASCADE'));
         $log->addColumn('nodevalue', 'integer',array('null' => true));
-        $log->addForeignKey('nodevalue','nodes','id',array('delete'=>'NO_ACTION','update'=>'CASCADE'));
+        $log->addForeignKey('nodevalue','nodes','id',array('delete'=>'SET_NULL','update'=>'CASCADE'));
         $log->addColumn('geometryvalue',"integer",array('null' => true));
-        $log->addForeignKey('geometryvalue','geometries','id',array('delete'=>'NO_ACTION','update'=>'CASCADE'));
+        $log->addForeignKey('geometryvalue','geometries','id',array('delete'=>'SET_NULL','update'=>'CASCADE'));
         $log->update();
     }
 }
