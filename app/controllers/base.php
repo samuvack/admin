@@ -29,8 +29,7 @@ $app->match('/home/{page}', function(Application $app, Request $request, $page) 
 		))
 		->getForm();
 	$form->handleRequest($request);
-	$itemsPerPage = 5;
-	$paginator = new Paginator($nodeRepository->count(), $itemsPerPage, $page,$request->getUriForPath('/home/(:num)'));
+	$itemsPerPage = 15;
 
 	//check form
 	if ($form->isValid()) {
@@ -38,9 +37,10 @@ $app->match('/home/{page}', function(Application $app, Request $request, $page) 
 		$data = $form->getData();
 		$term = $data['name'];
 		$result = $nodeRepository->findBy(array('name'=>$term),null,$itemsPerPage, $itemsPerPage * ($page-1));
-
+	
 		return $app['twig']->render('home.twig', array('form'=>$form->createView(),'nodes'=>$result));
 	}
+	$paginator = new Paginator($nodeRepository->count(), $itemsPerPage, $page,$request->getUriForPath('/home/(:num)'));
 
 	//use the getAll function of the Node class to gather all the nodes
 	$nodes = $nodeRepository->findBy(array(),null,$itemsPerPage, $itemsPerPage * ($page-1));
@@ -346,7 +346,7 @@ $app->get('/map', function(Application $app) {
 	return $app['twig']->render('map.twig', ['nodes'=>$geonodes]);
 })->bind('map');
 
-$app->get('/history/{id}', function(Application $app, $id) use ($DB) {
+$app->get('/history/{id}', function(Application $app, $id) {
 	//get node info
 	$node = Node::findById($id);
 	$history = $node->findHistory();

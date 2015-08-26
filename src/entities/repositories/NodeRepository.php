@@ -74,7 +74,11 @@ class NodeRepository extends EntityRepository {
 		return $nodes_json;
 	}
 
-	function count() {
+	public function countBy(array $attributes) {
+		return sizeof($this->findBy($attributes));
+	}
+
+	public function count() {
 		$qb = $this->createQueryBuilder('n');
 
 		$qb->select($qb->expr()->count('n'));

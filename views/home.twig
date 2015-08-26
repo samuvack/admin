@@ -18,9 +18,11 @@
 	  {% endfor %}
 	  </ul>
 	  <a href="{{ path('insert') }}">Insert new info</a>
-	  <div>
-		{{ paginator|raw }}
-	  </div>
+		{% if paginator is defined %}
+		  <div>
+			{{ paginator|raw }}
+		  </div>
+		{% endif %}
 {% endblock %}
 
 {% block script %}
