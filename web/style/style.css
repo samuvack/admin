@@ -25,3 +25,9 @@ ul.nodes {
     box-sizing: border-box;
 	padding: 15px;
 }
+
+#nodesGraph {
+    height: 500px;
+    width: 100%;
+    display: inline-block;
+}

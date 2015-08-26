@@ -1,4 +1,4 @@
-{% extends 'baselayout.html' %}
+{% extends 'baselayout.twig' %}
 {% block title 'Node info' %}
 {% block content %}
 	<h1>Info on {{node.getName|e}}</h1>
@@ -14,7 +14,7 @@
 			{% if relation.getProperty.getDatatype == 'node' %}
 				<a href="{{ path('node', {id:relation.getValue.getId}) }}">{{relation.getValue.getName}}</a>
 			{% elseif relation.getProperty.getDatatype == 'text' %}
-				<a href="{{ path('nodes', {value:relation.getValue}) }}">{{relation.getValue}}</a>
+				{{ render(relation.getValue) }}
 			{% else %}
 				{{relation.getValue}}
 			{% endif %}
@@ -30,7 +30,26 @@
 			</li>
 		{% endfor %}
 	</ul>
+
+	<div id="graph">
+		<svg id="nodesGraph"></svg>
+	</div>
+
 	<a href="{{path('history', {id:node.id})}}"> Show history </a> <br>
 	<a href="{{path('update',{id: node.id})}}">Update</a> <br>
 	<a href="{{ path('home') }}">Back to overview</a>
+{% endblock %}
+
+{% block script %}
+	<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js" type="text/javascript"></script>
+	<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+	<script src="{{ app.request.basepath }}/scripts/visualNodeRelations.js"> </script>
+	<script type="text/javascript">
+		(function(){
+			var nodes = {{graphNodes|json_encode|raw}};
+			var links = {{graphLinks|json_encode|raw}};
+			createGraph(nodes,links, '#nodesGraph');
+		})();
+	</script>
 {% endblock %}
