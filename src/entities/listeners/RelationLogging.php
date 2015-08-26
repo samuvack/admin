@@ -11,7 +11,7 @@ namespace MyApp\Entities\Listeners;
 
 use MyApp\Entities\RelationLog;
 
-class RelationLogging extends ALogListener {
+class RelationLogging extends LoggingListener {
 
 	protected function createLog($entity, $action) {
 		return new RelationLog($entity, $this->app['user'], $action);
