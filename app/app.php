@@ -30,13 +30,14 @@ Class Application extends Silex\Application {
 $app = new Application();
 $app['debug'] = $config["debug"];
 
-
+// Service for terminal commands
 $app->register(new ConsoleServiceProvider(), array(
 	'console.name' => $config['application']['name'],
 	'console.version' => $config['application']['version'],
 	'console.project_directory' => __DIR__ . '/..'
 ));
 
+// Import Database config, and start Doctrine service
 $dbconfig = include __DIR__ . "/config/db.include.php";
 $dbconfig["driver"] = 'pdo_pgsql';
 $app->register(new DoctrineServiceProvider, array(
@@ -54,12 +55,17 @@ $app->register(new DoctrineOrmServiceProvider, array(
 			)
 		),
 	),
+	// Postgis functions
 	"orm.custom.functions.string" => array(
 		"plainto_tsquery" => "Utils\Database\Functions\PlainToTsquery",
 		"TS_MATCH_OP" => "Utils\Database\Functions\TsMatch"
 	),
 	'orm.auto_generate_proxies' => $app['debug']
 ));
+
+// Postgis and custom types
+Type::addType('tsvector', 'Utils\Database\Types\Tsvector');
+Type::addType('log_action', 'Utils\Database\Types\LogAction');
 
 $DB = new PDO('pgsql:
 	host=localhost;
@@ -69,6 +75,7 @@ $DB = new PDO('pgsql:
 ');
 $DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
+// Register a lot of services
 $app->register(new \Silex\Provider\TwigServiceProvider(), array('twig.path' => __DIR__ . '/../views',));
 $app->register(new \Silex\Provider\UrlGeneratorServiceProvider());
 $app->register(new \Silex\Provider\FormServiceProvider());
@@ -106,10 +113,18 @@ $app->register($userServiceProvider, array(
 		'userClass' => 'MyApp\Entities\User'
 	)
 ));
+// More config for user auth system
+require_once __DIR__ . "/firewall.php";
+
+$app->mount('/user', $userServiceProvider);
 
 $app->register(new FormServiceProvider());
 $app->register(new DoctrineOrmManagerRegistryProvider());
 
+/*
+ * Service for mapping database to custom (relation) values,
+ * and those values to views
+ */
 $app->register(new Utils\Services\Mapping\MappingServiceProvider());
 $app['mapping.manager']->onRegister(function($type, $mapping) {
 	\MyApp\Converters\StringConverter::addConverter($type, $mapping->getDbConverter());
@@ -133,14 +148,6 @@ $app['mapping.manager']->register('node',
 	new \MyApp\Converters\EntityConverter()
 );
 
-require_once __DIR__ . "/firewall.php";
-
-$app->mount('/user', $userServiceProvider);
-
-Type::addType('tsvector', 'Utils\Database\Types\Tsvector');
-Type::addType('log_action', 'Utils\Database\Types\LogAction');
-
-
 $app->before(function ($request) use ($app) {
 	$app['twig']->addGlobal('active', $request->get("_route"));
 	$app['twig']->addFunction(new Twig_SimpleFunction('render', function (Twig_Environment $env, RenderableValue $value) {
@@ -148,6 +155,10 @@ $app->before(function ($request) use ($app) {
 	}, array('needs_environment' => true)));
 });
 $listener = new \MyApp\Entities\Listeners\NodeLogging($app);
+$app['orm.em']->getConfiguration()->getEntityListenerResolver()->register($listener);
+$listener = new \MyApp\Entities\Listeners\RelationLogging($app);
+$app['orm.em']->getConfiguration()->getEntityListenerResolver()->register($listener);
+$listener = new \MyApp\Entities\Listeners\PropertyLogging($app);
 $app['orm.em']->getConfiguration()->getEntityListenerResolver()->register($listener);
 
 include __DIR__ . "/controllers/base.php"; //include controllers
