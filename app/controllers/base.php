@@ -15,9 +15,8 @@ $app->match('/', function(Application $app){
 	return $app->redirect($app->path('home'));
 });
 
-$app->match('/home/{pagesg}', function(Application $app, Request $request) {
-	echo $app['user.options']['userClass'];
-	print_r($app['user']);die();
+$app->match('/home/{page}', function(Application $app, Request $request, $page) {
+
 	$nodeRepository = $app['orm.em']->getRepository(':Node');
 	//create form
 	$form = $app['form.factory']->createBuilder('form', array('name' =>''))
@@ -30,21 +29,24 @@ $app->match('/home/{pagesg}', function(Application $app, Request $request) {
 		))
 		->getForm();
 	$form->handleRequest($request);
+	$itemsPerPage = 5;
+	$paginator = new Paginator($nodeRepository->count(), $itemsPerPage, $page,$request->getUriForPath('/home/(:num)'));
 
 	//check form
 	if ($form->isValid()) {
 		//get the search term
 		$data = $form->getData();
 		$term = $data['name'];
-		$result = $nodeRepository->findBy(array('name'=>$term));
+		$result = $nodeRepository->findBy(array('name'=>$term),null,$itemsPerPage, $itemsPerPage * ($page-1));
 
 		return $app['twig']->render('home.twig', array('form'=>$form->createView(),'nodes'=>$result));
 	}
 
 	//use the getAll function of the Node class to gather all the nodes
-	$nodes = $nodeRepository->findAll();
-	return $app['twig']->render('home.twig', array('form'=>$form->createView(), 'nodes'=>$nodes));
-})//->value('pagesg', 1)
+	$nodes = $nodeRepository->findBy(array(),null,$itemsPerPage, $itemsPerPage * ($page-1));
+	return $app['twig']->render('home.twig', array('form'=>$form->createView(), 'nodes'=>$nodes, 'paginator'=>$paginator));
+})
+->value('page', 1)
 ->bind('home') ;
 
 $app->match('/insert', function(Request $request) use($app) {

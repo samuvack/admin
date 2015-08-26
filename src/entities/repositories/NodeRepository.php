@@ -73,4 +73,14 @@ class NodeRepository extends EntityRepository {
 		$nodes_json = json_encode($nodes);
 		return $nodes_json;
 	}
+
+	function count() {
+		$qb = $this->createQueryBuilder('n');
+
+		$qb->select($qb->expr()->count('n'));
+
+		$query = $qb->getQuery();
+
+		return $query->getSingleScalarResult();
+	}
 }
