@@ -28,6 +28,7 @@
         "psr-4": {
             "MyApp\\Converters\\": "src/converters",
             "MyApp\\Entities\\": "src/entities",
+            "MyApp\\Entities\\Listeners\\": "src/entities/listeners",
             "MyApp\\Entities\\Repositories\\": "src/entities/repositories",
             "MyApp\\FormTypes\\": "src/formTypes",
             "MyApp\\Values\\": "src/values",
