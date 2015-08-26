@@ -6,7 +6,10 @@ function createMap(container) {
 
     //loads the geometries table as a WMS layer
     var untiled = new ol.layer.Image({
-        extent: [3.6058864622394333, 50.7489296238961,3.605999818578636, 50.749070669790605],
+        extent: ol.extent.applyTransform(
+            [3.6058864622394333, 50.7489296238961,3.605999818578636, 50.749070669790605],
+            ol.proj.getTransform('EPSG:4326','EPSG:3857')
+        ),
         source: new ol.source.ImageWMS({
             url:'http://localhost:8080/geoserver/archeowiki/wms',
             params: {'LAYERS': 'archeowiki:geometries'},
@@ -15,25 +18,19 @@ function createMap(container) {
         visible: true
     });
 
-    //new OL map element in container div with specified options
-    var map = new ol.Map({
-        controls: [
-            new ol.control.Zoom(),
-            new ol.control.Attribution(),
-            new ol.control.MousePosition(),
-            new ol.control.ZoomToExtent({extent: untiled.getExtent()}),
-            new ol.control.ScaleLine()
-        ],
-        target: container,
-        layers: [untiled],
-        view: new ol.View({
-            center: [3.60593711681199, 50.748987289315],
-            maxZoom: 25,
-            zoom: 19,
-            projection: "EPSG:4326"
+    //WMS layer (CAI) from onroerend erfgoed
+    var cai = new ol.layer.Image({
+            source: new ol.source.ImageWMS({
+                url: 'https://geo.onroerenderfgoed.be/geoserver/wms',
+                params: {
+                    'LAYERS': 'vioe_intern:cai',
+                    'TRANSPARENT': 'TRUE',
+                    'VERSION':'1.1.1'
+                },
+                serverType: 'geoserver'
+            })
         })
-    });
-
+        ;
 
     //WMS layer (Archeologische zones) from onroerend erfgoed
     var archZones = new ol.layer.Image({
@@ -50,24 +47,38 @@ function createMap(container) {
         })
         ;
 
-    map.addLayer(archZones);
+    var osm = new ol.layer.Tile({
+        source: new ol.source.OSM()
+    });
 
-    //WMS layer (CAI) from onroerend erfgoed
-    var cai = new ol.layer.Image({
-            //extent: [-13884991, 2870341, -7455066, 6338219],
-            source: new ol.source.ImageWMS({
-                url: 'https://geo.onroerenderfgoed.be/geoserver/wms',
-                params: {
-                    'LAYERS': 'vioe_intern:cai',
-                    'TRANSPARENT': 'TRUE',
-                    'VERSION':'1.1.1'
-                },
-                serverType: 'geoserver'
-            })
+    //new OL map element in container div with specified options
+    var map = new ol.Map({
+        controls: [
+            new ol.control.Zoom(),
+            new ol.control.Attribution(),
+            new ol.control.MousePosition({
+                projection: 'EPSG:4326',
+                coordinateFormat: ol.coordinate.createStringXY(4)}),
+            new ol.control.ZoomToExtent({extent: untiled.getExtent()}),
+            new ol.control.ScaleLine()
+        ],
+        target: container,
+        layers: [osm, untiled, cai, archZones],
+        view: new ol.View({
+            center: ol.proj.transform([3.60593711681199, 50.748987289315], 'EPSG:4326', 'EPSG:3857'),
+            maxZoom: 25,
+            zoom: 19
         })
-        ;
+    });
 
-    map.addLayer(cai);
+
+
+    //create 3d globe view
+    var ol3d = new olcs.OLCesium({
+        map: map,
+        target: '3dmap'
+    });
+    ol3d.setEnabled(true);
 
 
     //// format used to parse WFS GetFeature responses
@@ -121,6 +132,7 @@ function createMap(container) {
         // Clear existing information in nodeInfo div
         var infoDiv = document.getElementById('nodeInfo').innerHTML = '';
 
+        //TODO: change to allow multiple layers to be queried
         var url = cai.getSource().getGetFeatureInfoUrl(
             evt.coordinate,
             map.getView().getResolution(),
@@ -128,6 +140,7 @@ function createMap(container) {
             {'INFO_FORMAT': 'text/html'}
         );
 
+        //TODO: change from iframe to display in text
         if(url){
             document.getElementById('nodeInfo').innerHTML = '<iframe seamless src="' + url + '"></iframe>';
         }
