@@ -9,9 +9,15 @@ use MyApp\FormTypes\FilterType;
 use MyApp\FormTypes\NodeType;
 use \MyApp\Entities\NodeLog;
 use \MyApp\Entities\RelationLog;
+use JasonGrimes\Paginator;
 require_once __DIR__.'/../ChromePhp.php';
+$app->match('/', function(Application $app){
+	return $app->redirect($app->path('home'));
+});
 
-$app->match('/', function(Application $app, Request $request) {
+$app->match('/home/{pagesg}', function(Application $app, Request $request) {
+	echo $app['user.options']['userClass'];
+	print_r($app['user']);die();
 	$nodeRepository = $app['orm.em']->getRepository(':Node');
 	//create form
 	$form = $app['form.factory']->createBuilder('form', array('name' =>''))
@@ -38,7 +44,8 @@ $app->match('/', function(Application $app, Request $request) {
 	//use the getAll function of the Node class to gather all the nodes
 	$nodes = $nodeRepository->findAll();
 	return $app['twig']->render('home.twig', array('form'=>$form->createView(), 'nodes'=>$nodes));
-})->bind('home');
+})//->value('pagesg', 1)
+->bind('home') ;
 
 $app->match('/insert', function(Request $request) use($app) {
 

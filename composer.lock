@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0249057e46dce80c5625fdcddbeb936c",
+    "hash": "622837f2f8af8aafce99c0f61347c0a7",
     "packages": [
         {
             "name": "davdorpe/silex-postgres-simpleuser",
