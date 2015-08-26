@@ -23,7 +23,7 @@ class PropertyLog {
 	 * @ManyToOne(targetEntity="Property")
 	 * @JoinColumn(name="property_id")
 	 */
-	private $node;
+	private $property;
 	/** @Column(type="text") */
 	private $name;
 	/** @Column(type="text") */
@@ -37,7 +37,18 @@ class PropertyLog {
 	/** @Column(type="datetime") */
 	private $action_time;
 	/**
+	 * @GeneratedValue
 	 * @Column(type="integer",name="action_by")
 	 */
 	private $user;
+
+	public function __construct(Property $property, User $user, $action) {
+		$this->user = $user->getId();
+		$this->property = $property;
+		$this->name = $property->getName();
+		$this->datatype = $property->getDatatype();
+		$this->description = $property->getDescription();
+		$this->descr = $property->getDescr();
+		$this->action = $action;
+	}
 }
