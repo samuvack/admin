@@ -12,7 +12,7 @@
 		<ul class="nodes">
 			{% for node in nodes %}
 			<li>
-				{{ render(node) }}
+				{{ render(node, {link:false}) }}
 			</li>
 			{% endfor %}
 		</ul>
