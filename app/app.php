@@ -149,9 +149,14 @@ $app['mapping.manager']->register('geometry',
 
 $app->before(function ($request) use ($app) {
 	$app['twig']->addGlobal('active', $request->get("_route"));
-	$app['twig']->addFunction(new Twig_SimpleFunction('render', function (Twig_Environment $env, RenderableValue $value) {
-		$value->render($env);
-	}, array('needs_environment' => true)));
+	$app['twig']->addFunction(
+		new Twig_SimpleFunction('render',
+			function (Twig_Environment $env, RenderableValue $value, array $params = array()) {
+				$value->render($env, $params);
+			},
+			array('needs_environment' => true)
+		)
+	);
 });
 $listener = new \MyApp\Entities\Listeners\NodeLogging($app);
 $app['orm.em']->getConfiguration()->getEntityListenerResolver()->register($listener);

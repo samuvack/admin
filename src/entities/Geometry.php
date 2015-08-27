@@ -73,9 +73,9 @@ class Geometry implements RenderableValue
     /**
      * Extended view, for detailed representation
      */
-    public function render(\Twig_Environment $env) {
-        //TODO: render functon
-        $env->display("values/geo.twig", array('value'=> $this));
+    public function render(\Twig_Environment $env, array $params) {
+        $params = array_merge($params, array('value'=> $this));
+        $env->display("values/geo.twig", $params);
     }
 
 }

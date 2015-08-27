@@ -52,7 +52,7 @@ class YearPeriodValue implements RenderableValue {
 	/**
 	 * Extended view, for detailed representation
 	 */
-	public function render(\Twig_Environment $env) {
+	public function render(\Twig_Environment $env, array $params) {
 		// TODO: Implement render() method.
 	}
 }
