@@ -32,7 +32,7 @@ $app->match('/home/{page}/{term}', function(Application $app, Request $request, 
 	if ($form->isValid()) {
 		$term =  $form->getData()['name'];
 	}
-	$itemsPerPage = 10;
+	$itemsPerPage = $app['config']['pagination']['nodes_per_page'];
 
 	//check form
 	if ($term !== null) {

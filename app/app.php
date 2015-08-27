@@ -29,6 +29,7 @@ Class Application extends Silex\Application {
 
 $app = new Application();
 $app['debug'] = $config["debug"];
+$app['config'] = $config;
 
 // Service for terminal commands
 $app->register(new ConsoleServiceProvider(), array(
