@@ -7,12 +7,16 @@
  */
 
 namespace MyApp\Entities;
+//use Doctrine\Common\Collections\ArrayCollection;
+use MyApp\Values\RenderableValue;
+use MyApp\FormTypes\GeometryType;
+
 
 /**
  * @Entity
  * @Table(name="geometries")
  */
-class Geometry
+class Geometry implements RenderableValue
 {
     /**
      * @Id @Column(type="integer")
@@ -25,8 +29,16 @@ class Geometry
     /** @Column(type="text") */
     private $geom;
 
+    function getGeom()
+    {
+        return $this->geom;
+    }
 
-    public function __toString()
+    function setGeom($new_geom)
+    {
+        $this->name = (string) $new_geom;
+    }
+    /*public function __toString()
     {
         //TODO register class as service to access doctrine
         $em = $this->em;
@@ -37,6 +49,33 @@ class Geometry
             ->setParameter(1,$object->id);
 
         return $qb->getQuery()->getResult();
+    }*/
+
+
+
+
+
+    /**
+     * @return String simple string for use in e.g. the graph
+     */
+    public function __toString() {
+        //TODO adapt function to represent geometery in readable format usign postgis function st_astext, ~similar to above
+        return $this->geom;
+    }
+
+    /**
+     * Get FormType
+     */
+    public function getFormType(\Silex\Application $app) {
+        return new GeometryType($app);
+    }
+
+    /**
+     * Extended view, for detailed representation
+     */
+    public function render(\Twig_Environment $env) {
+        //TODO: render functon
+        $env->display("values/geo.twig", array('value'=> $this));
     }
 
 }

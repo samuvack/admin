@@ -140,6 +140,12 @@ $app['mapping.manager']->register('node',
 	},
 	new \MyApp\Converters\EntityConverter()
 );
+$app['mapping.manager']->register('geometry',
+	function($app){
+		return new \MyApp\FormTypes\GeometryType($app, false);
+	},
+	new \MyApp\Converters\EntityConverter()
+);
 
 $app->before(function ($request) use ($app) {
 	$app['twig']->addGlobal('active', $request->get("_route"));
