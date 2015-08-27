@@ -235,7 +235,7 @@ $app->get('/node/{id}', function(Application $app, $id) {
     $addValue = function($value) use( &$idConverter, &$graphNodes) {
 		$id= sizeof($graphNodes);
 		$graphNodes[] = [
-			'name' => $value,
+			'name' => $value->getText(),
 			'id'=> $id,
 			'nodeid' => null
 		];
@@ -252,7 +252,7 @@ $app->get('/node/{id}', function(Application $app, $id) {
             } elseif ($relation->getProperty()->getDatatype() == 'geometry') {
                 //not added
             } else {
-                $nodeId = $addValue($relation->getValue()->getText());
+                $nodeId = $addValue($relation->getValue());
             }
 
             if($nodeId>=0){
