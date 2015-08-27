@@ -241,7 +241,6 @@ $app->get('/node/{id}', function(Application $app, $id) {
 		];
 		return $id;
     };
-
     $addRelations = function($relations) use(&$idConverter, &$graphNodes, &$graphLinks, $addNode, $addValue) {
         foreach( $relations as $relation ){
             $nodeId = null;
@@ -254,8 +253,7 @@ $app->get('/node/{id}', function(Application $app, $id) {
             } else {
                 $nodeId = $addValue($relation->getValue());
             }
-
-            if($nodeId>=0){
+            if(isset($nodeId)){
                 $graphLinks[] = [
                     'source' => $idConverter[$relation->getStart()->getId()],
                     'target' => $nodeId,
