@@ -29,6 +29,7 @@ Class Application extends Silex\Application {
 
 $app = new Application();
 $app['debug'] = $config["debug"];
+$app['config'] = $config;
 
 // Service for terminal commands
 $app->register(new ConsoleServiceProvider(), array(
@@ -67,15 +68,7 @@ $app->register(new DoctrineOrmServiceProvider, array(
 Type::addType('tsvector', 'Utils\Database\Types\Tsvector');
 Type::addType('log_action', 'Utils\Database\Types\LogAction');
 
-$DB = new PDO('pgsql:
-	host=localhost;
-	dbname=Wikidata;
-	user=postgres;
-	password=postgres
-');
-$DB->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-// Register a lot of services
 $app->register(new \Silex\Provider\TwigServiceProvider(), array('twig.path' => __DIR__ . '/../views',));
 $app->register(new \Silex\Provider\UrlGeneratorServiceProvider());
 $app->register(new \Silex\Provider\FormServiceProvider());
