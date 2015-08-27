@@ -15,7 +15,7 @@ $app->match('/', function(Application $app){
 	return $app->redirect($app->path('home'));
 });
 
-$app->match('/home/{page}', function(Application $app, Request $request, $page) {
+$app->match('/home/{page}/{term}', function(Application $app, Request $request, $page, $term) {
 
 	$nodeRepository = $app['orm.em']->getRepository(':Node');
 	//create form
@@ -29,16 +29,17 @@ $app->match('/home/{page}', function(Application $app, Request $request, $page) 
 		))
 		->getForm();
 	$form->handleRequest($request);
-	$itemsPerPage = 15;
+	if ($form->isValid()) {
+		$term =  $form->getData()['name'];
+	}
+	$itemsPerPage = 10;
 
 	//check form
-	if ($form->isValid()) {
-		//get the search term
-		$data = $form->getData();
-		$term = $data['name'];
+	if ($term !== null) {
 		$result = $nodeRepository->findBy(array('name'=>$term),null,$itemsPerPage, $itemsPerPage * ($page-1));
+		$paginator = new Paginator($nodeRepository->countBy(array('name'=>$term)), $itemsPerPage, $page,$request->getUriForPath('/home/(:num)/'.$term));
 	
-		return $app['twig']->render('home.twig', array('form'=>$form->createView(),'nodes'=>$result));
+		return $app['twig']->render('home.twig', array('form'=>$form->createView(),'nodes'=>$result, 'paginator' => $paginator));
 	}
 	$paginator = new Paginator($nodeRepository->count(), $itemsPerPage, $page,$request->getUriForPath('/home/(:num)'));
 
@@ -47,6 +48,7 @@ $app->match('/home/{page}', function(Application $app, Request $request, $page) 
 	return $app['twig']->render('home.twig', array('form'=>$form->createView(), 'nodes'=>$nodes, 'paginator'=>$paginator));
 })
 ->value('page', 1)
+->value('term', null)
 ->bind('home') ;
 
 $app->match('/insert', function(Request $request) use($app) {
