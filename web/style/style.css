@@ -21,7 +21,7 @@ ul.nodes {
 .content > h1 {
     height: 250px;
     background-image: url('../images/Header.png');
-    color: yellow;
+    color: white;
     box-sizing: border-box;
 	padding: 15px;
 }

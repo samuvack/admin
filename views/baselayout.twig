@@ -39,6 +39,7 @@
         <li{% if active == 'search' %} class="active"{% endif %}><a href="{{ path('search') }}">Search</a></li>
         <li{% if active == 'map' %} class="active"{% endif %}><a href="{{ path('map') }}">Map</a></li>
         <li{% if active == 'filter' %} class="active"{% endif %}><a href="{{ path('filter')}}">Filter</a></li>
+        <li{% if active == 'graph' %} class="active"{% endif %}><a href="{{ path('graph')}}">Graph</a></li>
         {% if is_granted('ROLE_EDITOR') %}
         <li{% if active == 'insert' %} class="active"{% endif %}><a href="{{ path('insert') }}">Insert</a></li>
         <li{% if active == 'import' %} class="active"{% endif %}><a href="{{ path('import')}}">Import</a></li>
