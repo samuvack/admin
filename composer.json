@@ -23,7 +23,8 @@
         "symfony/twig-bridge": "~2.6",
 		"symfony/validator":"~2.3",
         "jasongrimes/paginator": "^1.0",
-        "nuovo/spreadsheet-reader": "^0.5.11"
+        "nuovo/spreadsheet-reader": "^0.5.11",
+        "jsor/doctrine-postgis": "^1.0"
     },
     
     "autoload": {

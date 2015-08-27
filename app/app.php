@@ -67,6 +67,7 @@ $app->register(new DoctrineOrmServiceProvider, array(
 // Postgis and custom types
 Type::addType('tsvector', 'Utils\Database\Types\Tsvector');
 Type::addType('log_action', 'Utils\Database\Types\LogAction');
+Type::addType('geometry', 'Utils\Database\Types\Geometry');
 
 
 $app->register(new \Silex\Provider\TwigServiceProvider(), array('twig.path' => __DIR__ . '/../views',));
@@ -140,12 +141,23 @@ $app['mapping.manager']->register('node',
 	},
 	new \MyApp\Converters\EntityConverter()
 );
+$app['mapping.manager']->register('geometry',
+	function($app){
+		return new \MyApp\FormTypes\GeometryType($app, false);
+	},
+	new \MyApp\Converters\EntityConverter()
+);
 
 $app->before(function ($request) use ($app) {
 	$app['twig']->addGlobal('active', $request->get("_route"));
-	$app['twig']->addFunction(new Twig_SimpleFunction('render', function (Twig_Environment $env, RenderableValue $value) {
-		$value->render($env);
-	}, array('needs_environment' => true)));
+	$app['twig']->addFunction(
+		new Twig_SimpleFunction('render',
+			function (Twig_Environment $env, RenderableValue $value, array $params = array()) {
+				$value->render($env, $params);
+			},
+			array('needs_environment' => true)
+		)
+	);
 });
 $listener = new \MyApp\Entities\Listeners\NodeLogging($app);
 $app['orm.em']->getConfiguration()->getEntityListenerResolver()->register($listener);
