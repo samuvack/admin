@@ -1,8 +1,6 @@
 <?php
 require_once __DIR__ . '/../vendor/autoload.php';
 
-require_once __DIR__ . '/../src/NodeType.php';
-require_once __DIR__ . '/../src/RelationType.php';
 use Silex\Provider\DoctrineServiceProvider;
 use Dflydev\Silex\Provider\DoctrineOrm\DoctrineOrmServiceProvider;
 use Doctrine\DBAL\Types\Type;
@@ -108,9 +106,31 @@ $app->register($userServiceProvider, array(
 	)
 ));
 
-
 $app->register(new FormServiceProvider());
 $app->register(new DoctrineOrmManagerRegistryProvider());
+
+$app->register(new Utils\Services\Mapping\MappingServiceProvider());
+$app['mapping.manager']->onRegister(function($type, $mapping) {
+	\MyApp\Converters\StringConverter::addConverter($type, $mapping->getDbConverter());
+});
+$app['mapping.manager']->register('text',
+	function($app){
+		return new \MyApp\FormTypes\TextType();
+	},
+	new \MyApp\Converters\TextConverter()
+);
+$app['mapping.manager']->register('year_period',
+	function($app){
+		return new \MyApp\FormTypes\YearPeriodType();
+	},
+	new \MyApp\Converters\YearPeriodConverter()
+);
+$app['mapping.manager']->register('node',
+	function($app){
+		return new \MyApp\FormTypes\NodeType($app, false);
+	},
+	new \MyApp\Converters\EntityConverter()
+);
 
 require_once __DIR__ . "/firewall.php";
 
@@ -126,5 +146,6 @@ $app->before(function ($request) use ($app) {
 });
 
 include __DIR__ . "/controllers/base.php"; //include controllers
+include __DIR__ . "/controllers/ajax.php"; //include controllers
 
 return $app;

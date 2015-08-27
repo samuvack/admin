@@ -9,6 +9,9 @@ class TextConverter extends StringConverter {
 
 
     public function toString($object) {
+        if($object == null) {
+            return "";
+        }
         return $object->getText();
     }
 

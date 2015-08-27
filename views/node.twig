@@ -12,7 +12,8 @@
 		{% for relation in relFrom %}
 		<li>{{relation.getProperty.getName}} 
 			{% if relation.getProperty.getDatatype == 'node' %}
-				<a href="{{ path('node', {id:relation.getValue.getId}) }}">{{relation.getValue.getName}}</a>
+				{#<a href="{{ path('node', {id:relation.getValue.getId}) }}">{{relation.getValue.getName}}</a>#}
+				{{ render(relation.getValue) }}
 			{% elseif relation.getProperty.getDatatype == 'text' %}
 				{{ render(relation.getValue) }}
 			{% else %}

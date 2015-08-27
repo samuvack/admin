@@ -1,6 +1,7 @@
 <?php
 namespace MyApp\Entities;
 use \MyApp\Converters\StringConverter;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @Entity(repositoryClass="MyApp\Entities\Repositories\RelationRepository")

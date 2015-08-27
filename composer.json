@@ -14,14 +14,14 @@
         "twig/twig": "~1.18",
         "saxulum/saxulum-doctrine-orm-manager-registry-provider": "2.2.0",
         "silex/silex": "~1.2",
-        "symfony/config":"~2.3",
+        "symfony/config":"^2.7",
         "symfony/doctrine-bridge": "~2.2",
         "symfony/finder": "~2.7",
         "symfony/form":"~2.3",
         "symfony/security-csrf":"~2.4",
-        "symfony/translation":"~2.3",
+        "symfony/translation":"^2.7",
         "symfony/twig-bridge": "~2.6",
-		"symfony/validator":"~2.3"
+		"symfony/validator":"^2.7"
     },
     
     "autoload": {
@@ -32,7 +32,8 @@
             "MyApp\\Entities\\": "src/entities",
             "MyApp\\Entities\\Repositories\\": "src/entities/repositories",
             "MyApp\\FormTypes\\": "src/formTypes",
-            "MyApp\\Values\\": "src/values"
+            "MyApp\\Values\\": "src/values",
+            "Utils\\Services\\Mapping\\": "utils/services/mapping"
         }
     }
 }

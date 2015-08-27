@@ -1,4 +1,5 @@
 <?php
+namespace MyApp\FormTypes;
 use MyApp\Entities\Node;
 	use Symfony\Component\Form\AbstractType;
 	use Symfony\Component\Form\FormBuilderInterface;
@@ -9,8 +10,10 @@ use MyApp\Entities\Node;
 	class NodeType extends AbstractType
 	{
 		protected $app;
-		public function __construct(Application $app) {
+		private $AJAX;
+		public function __construct(Application $app, $AJAX = true) {
 			$this->app = $app;
+			$this->AJAX = $AJAX;
 		}
 
 		public function buildForm(FormBuilderInterface $builder, array $options)
@@ -28,11 +31,13 @@ use MyApp\Entities\Node;
 				'type' => new RelationType($this->app),
 				'allow_add' => true,
 				//'by_reference'=> true,
-				))
-			->add('send', 'submit', array(
-				'attr' => array('class'=>'btn btn-default')
-				))
-			;
+				));
+			// Dont add another submit, if this is the form for a relationship value
+			if($this->AJAX) {
+				$builder->add('send', 'submit', array(
+					'attr' => array('class' => 'btn btn-default')
+				));
+			}
 		}
 
 		public function setDefaultOptions(OptionsResolverInterface $resolver) {
@@ -44,7 +49,6 @@ use MyApp\Entities\Node;
 
 		public function getName()
 		{
-			return 'node';
+			return $this->AJAX?'node':'DO_REPLACE_';
 		}
 	}
-?>

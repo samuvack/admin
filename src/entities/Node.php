@@ -2,14 +2,15 @@
 
 namespace MyApp\Entities;
 use Doctrine\Common\Collections\ArrayCollection;
-
+use MyApp\Values\RenderableValue;
+use MyApp\FormTypes\NodeType;
 
 
 /**
  * @Entity(repositoryClass="MyApp\Entities\Repositories\NodeRepository")
  * @Table(name="nodes")
  */
-class Node {
+class Node implements RenderableValue {
     /**
      * @Id @Column(type="integer")
      * @GeneratedValue
@@ -99,5 +100,26 @@ class Node {
             unset($this->relations[$key]);
             $oldRelation->setStart(null);
         }
+    }
+
+    /**
+     * @return String simple string for use in e.g. the graph
+     */
+    public function __toString() {
+        return $this->getName();
+    }
+
+    /**
+     * Get FormType
+     */
+    public function getFormType(\Silex\Application $app) {
+        return new NodeType($app);
+    }
+
+    /**
+     * Extended view, for detailed representation
+     */
+    public function render(\Twig_Environment $env) {
+        $env->display("values/node.twig", array('node'=> $this));
     }
 }
