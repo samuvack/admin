@@ -252,7 +252,7 @@ $app->get('/node/{id}', function(Application $app, $id) {
             } elseif ($relation->getProperty()->getDatatype() == 'geometry') {
                 //not added
             } else {
-                $nodeId = $addValue($relation->getValue());
+                $nodeId = $addValue($relation->getValue()->getText());
             }
 
             if($nodeId>=0){
