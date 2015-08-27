@@ -26,7 +26,7 @@ class Geometry implements RenderableValue
 
     // TODO: make geometry Type
 
-    /** @Column(type="text") */
+    /** @Column(type="geometry") */
     private $geom;
 
     function getGeom()
@@ -74,7 +74,7 @@ class Geometry implements RenderableValue
      * Extended view, for detailed representation
      */
     public function render(\Twig_Environment $env, array $params) {
-        $params = array_merge($params, array('value'=> $this));
+        $params = array_merge(array('value'=> $this), $params);
         $env->display("values/geo.twig", $params);
     }
 

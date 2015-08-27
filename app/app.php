@@ -67,6 +67,7 @@ $app->register(new DoctrineOrmServiceProvider, array(
 // Postgis and custom types
 Type::addType('tsvector', 'Utils\Database\Types\Tsvector');
 Type::addType('log_action', 'Utils\Database\Types\LogAction');
+Type::addType('geometry', 'Utils\Database\Types\Geometry');
 
 
 $app->register(new \Silex\Provider\TwigServiceProvider(), array('twig.path' => __DIR__ . '/../views',));
