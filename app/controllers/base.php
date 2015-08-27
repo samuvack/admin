@@ -7,6 +7,8 @@ use MyApp\Entities\Node;
 use MyApp\Entities\Relation;
 use MyApp\FormTypes\FilterType;
 use MyApp\FormTypes\NodeType;
+use \MyApp\Entities\NodeLog;
+use \MyApp\Entities\RelationLog;
 require_once __DIR__.'/../ChromePhp.php';
 
 $app->match('/', function(Application $app, Request $request) {

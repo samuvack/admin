@@ -3,6 +3,11 @@
 defined('APP_DEBUG') or define('APP_DEBUG', false);
 
 return array(
+	/* DEBUG mode:
+	 * 	No mails are sent.
+	 * 	Verbose exceptions
+	 * 	Doctrine proxies are auto-generated
+	 */
 	"debug" => APP_DEBUG,
 	"application" => array(
 		"name" => 'MyApplication',

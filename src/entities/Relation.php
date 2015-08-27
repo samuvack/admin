@@ -6,7 +6,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @Entity(repositoryClass="MyApp\Entities\Repositories\RelationRepository")
  * @Table(name="relations")
- * @HasLifecycleCallbacks
+ * @EntityListeners({"MyApp\Entities\Listeners\RelationLogging"})
  */
 class Relation
 {
@@ -115,6 +115,10 @@ class Relation
         }
 
         return $this->valueObject;
+    }
+
+    public function _getValue() {
+        return $this->value;
     }
 
     function setQualifier($new_qualifier) {
