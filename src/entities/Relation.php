@@ -1,11 +1,12 @@
 <?php
 namespace MyApp\Entities;
 use \MyApp\Converters\StringConverter;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @Entity(repositoryClass="MyApp\Entities\Repositories\RelationRepository")
  * @Table(name="relations")
- * @HasLifecycleCallbacks
+ * @EntityListeners({"MyApp\Entities\Listeners\RelationLogging"})
  */
 class Relation
 {
@@ -47,8 +48,8 @@ class Relation
 
     private $valueObject = null;
 
-    function __construct($start_node = null, $property = null, $value = "", $qualifier=null, $rank=null) {
-        $this->start_node = $start_node;
+    function __construct($startNode = null, $property = null, $value = "", $qualifier=null, $rank=null) {
+        $this->startNode = $startNode;
         $this->property = $property;
         $this->value = $value;
         $this->qualifier = $qualifier;
@@ -114,6 +115,10 @@ class Relation
         }
 
         return $this->valueObject;
+    }
+
+    public function _getValue() {
+        return $this->value;
     }
 
     function setQualifier($new_qualifier) {

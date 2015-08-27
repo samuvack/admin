@@ -1,18 +1,15 @@
 <?php
-/**
- * Taken from opsway/doctrine-dbal-postgresql but the composer refused to autoconfigure namespaces
- */
-namespace MyApp\Database\Functions;
+
+namespace Utils\Database\Functions;
 
 use Doctrine\ORM\Query\AST\Functions\FunctionNode;
 use Doctrine\ORM\Query\Lexer;
 use Doctrine\ORM\Query\Parser;
 use Doctrine\ORM\Query\SqlWalker;
 
-class TsMatch extends FunctionNode
+class PlainToTsquery extends FunctionNode
 {
 	private $expr1;
-	private $expr2;
 
 	public function parse(Parser $parser)
 	{
@@ -27,7 +24,7 @@ class TsMatch extends FunctionNode
 	public function getSql(SqlWalker $sqlWalker)
 	{
 		return sprintf(
-			"(%s @@ %s)",
+			"plainto_tsquery(%s, %s)",
 			$this->expr1->dispatch($sqlWalker),
 			$this->expr2->dispatch($sqlWalker)
 		);

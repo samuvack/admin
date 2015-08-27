@@ -1,4 +1,10 @@
 {
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/VandorpeDavid/silex-postgres-simpleuser"
+        }
+    ],
     "require": {
         "davdorpe/silex-postgres-simpleuser": "dev-bleeding-edge",
         "dflydev/doctrine-orm-service-provider": "1.0.*",
@@ -8,24 +14,27 @@
         "twig/twig": "~1.18",
         "saxulum/saxulum-doctrine-orm-manager-registry-provider": "2.2.0",
         "silex/silex": "~1.2",
-        "symfony/config":"~2.3",
+        "symfony/config":"^2.7",
         "symfony/doctrine-bridge": "~2.2",
         "symfony/finder": "~2.7",
         "symfony/form":"~2.3",
         "symfony/security-csrf":"~2.4",
-        "symfony/translation":"~2.3",
+        "symfony/translation":"^2.7",
         "symfony/twig-bridge": "~2.6",
-		"symfony/validator":"~2.3"
+		"symfony/validator":"^2.7"
     },
     
     "autoload": {
         "psr-4": {
             "MyApp\\Converters\\": "src/converters",
-            "MyApp\\Database\\Functions\\": "src/database/functions",
-            "MyApp\\Database\\Types\\": "src/database/types",
             "MyApp\\Entities\\": "src/entities",
+            "MyApp\\Entities\\Listeners\\": "src/entities/listeners",
             "MyApp\\Entities\\Repositories\\": "src/entities/repositories",
-            "MyApp\\Types\\": "src/types"
+            "MyApp\\FormTypes\\": "src/formTypes",
+            "MyApp\\Values\\": "src/values",
+            "Utils\\Database\\Functions\\": "utils/database/functions",
+            "Utils\\Database\\Types\\": "utils/database/types",
+            "Utils\\Services\\Mapping\\": "utils/services/mapping"
         }
     }
 }
