@@ -26,7 +26,7 @@ class Geometry implements RenderableValue
 
     // TODO: make geometry Type
 
-    /** @Column(type="text") */
+    /** @Column(type="geometry") */
     private $geom;
 
     function getGeom()

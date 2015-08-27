@@ -22,7 +22,8 @@
         "symfony/translation":"^2.7",
         "symfony/twig-bridge": "~2.6",
 		"symfony/validator":"~2.3",
-        "jasongrimes/paginator": "^1.0"
+        "jasongrimes/paginator": "^1.0",
+        "jsor/doctrine-postgis": "^1.0"
     },
     
     "autoload": {
