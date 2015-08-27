@@ -121,7 +121,7 @@ class Node implements RenderableValue {
      * Extended view, for detailed representation
      */
     public function render(\Twig_Environment $env, array $params) {
-        $params = array_merge($params, array('node'=> $this));
+        $params = array_merge(array('node'=> $this, 'link'=>false), $params);
         $env->display("values/node.twig", $params);
     }
 }
