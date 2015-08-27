@@ -233,15 +233,13 @@ $app->get('/node/{id}', function(Application $app, $id) {
     };
 
     $addValue = function($value) use( &$idConverter, &$graphNodes) {
-        if( ! isset($idConverter[$value])) {
-            $idConverter[$value] = sizeof($graphNodes);
-            $graphNodes[] = [
-                'name' => $value,
-                'id'=> $idConverter[$value],
-                'nodeid' => null
-            ];
-        }
-        return $idConverter[$value];
+		$id= sizeof($graphNodes);
+		$graphNodes[] = [
+			'name' => $value,
+			'id'=> $id,
+			'nodeid' => null
+		];
+		return $id;
     };
 
     $addRelations = function($relations) use(&$idConverter, &$graphNodes, &$graphLinks, $addNode, $addValue) {
