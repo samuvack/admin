@@ -81,14 +81,13 @@ class DAO {
 	}
 
 	/*
-	 * Limit the entities in the entitymanager to avoid OOM-errors
+	 * Limit the nodes in the entitymanager to avoid OOM-errors
 	 */
 	public function limitCache() {
-		if($this->em->getUnitOfWork()->size() > 500) {
+		if(sizeof($this->nodes) >= 200) {
 			$this->em->flush();
 			$this->em->clear();
 			$this->nodes = array();
-			$this->relations = array();
 			foreach($this->properties as $key=>$property) {
 				$merged = $this->em->merge($property);
 				$this->properties[$key] = $merged;
@@ -101,6 +100,8 @@ class DAO {
 		if($relation->getProperty()->getDataType() == 'node') {
 			if(! isset($this->nodeRelations[$relation->getStart()->getId()])) {
 				$this->nodeRelations[$relation->getStart()->getId()] = array();
+			} else if(isset($this->nodeRelations[$relation->getStart()->getId()][$relation->getValue()->getId()])) {
+				return; //relation already exists
 			}
 			$this->nodeRelations[$relation->getStart()->getId()][$relation->getValue()->getId()] = $relation;
 		}
