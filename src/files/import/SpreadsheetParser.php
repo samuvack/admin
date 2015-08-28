@@ -7,7 +7,6 @@ require(__DIR__.'/../../../vendor/phpoffice/phpexcel/Classes/PHPExcel/IOFactory.
 class SpreadsheetParser extends FileParser {
 	protected function run() {
 		$inputFileName = $this->filename;
-		//$inputFileType = \PHPExcel_IOFactory::identify($inputFileName);
 		$objReader = \PHPExcel_IOFactory::createReader('Excel5');
 		$objPHPExcel = $objReader->load($inputFileName);
 

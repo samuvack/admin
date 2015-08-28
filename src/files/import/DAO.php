@@ -74,6 +74,9 @@ class DAO {
 		return $prop;
 	}
 
+	/*
+	 * Add link between two nodes
+	 */
 	public function addLink(Node $parentNode, Node $childNode) {
 		$prop = $this->getPropertyById(5); // 'is_part_of' property
 		$relation = new Relation($parentNode, $prop, null, $childNode);
@@ -96,6 +99,10 @@ class DAO {
 		}
 	}
 
+	/*
+	 * Add a relation
+	 * If the relation has datatype node, check if this relation isn't a duplicate
+	 */
 	public function addRelation(Relation $relation) {
 		if($relation->getProperty()->getDataType() == 'node') {
 			if(! isset($this->nodeRelations[$relation->getStart()->getId()])) {
