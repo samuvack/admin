@@ -35,7 +35,7 @@ class Relation
     private $startNode;
 
     /**
-     * @ManyToOne(targetEntity="Node")
+     * @ManyToOne(targetEntity="Node", cascade={"persist"})
      * @JoinColumn(name="nodevalue", referencedColumnName="id")
      */
     private $nodevalue;

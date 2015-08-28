@@ -34,10 +34,12 @@ class PropertyLog {
 	private $descr;
 	/** @Column(type="log_action") */
 	private $action;
-	/** @Column(type="datetime") */
-	private $action_time;
 	/**
 	 * @GeneratedValue
+	 * @Column(type="datetime")
+	 */
+	private $action_time;
+	/**
 	 * @Column(type="integer",name="action_by")
 	 */
 	private $user;
@@ -50,5 +52,6 @@ class PropertyLog {
 		$this->description = $property->getDescription();
 		$this->descr = $property->getDescr();
 		$this->action = $action;
+		$this->action_time = new \DateTime();
 	}
 }
