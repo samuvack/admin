@@ -27,9 +27,15 @@ class RelationLog {
 
 	/** @Column(type="text") */
 	private $value;
-	/** @Column(type="text") */
+	/**
+	 * @ManyToOne(targetEntity="Node")
+	 * @JoinColumn(name="nodevalue")
+	 */
 	private $nodevalue;
-	/** @Column(type="text") */
+	/**
+	 * @ManyToOne(targetEntity="Geometry")
+	 * @JoinColumn(name="geometryvalue")
+	 */
 	private $geometryvalue;
 	/** @Column(type="integer") */
 	private $qualifier;
@@ -38,11 +44,13 @@ class RelationLog {
 	private $rank;
 	/** @Column(type="log_action") */
 	private $action;
-	/** @Column(type="datetime") */
+	/**
+	 * @GeneratedValue
+	 * @Column(type="datetime", nullable=false)
+	 */
 	private $action_time;
 
 	/**
-	 * @GeneratedValue
 	 * @Column(type="integer",name="action_by")
 	 */
 	private $user;
@@ -55,6 +63,7 @@ class RelationLog {
 		$this->rank = $relation->getRank();
 		$this->action = $action;
 		$this->qualifier = $relation->getQualifier();
+		$this->action_time = new \DateTime();
 	}
 
 	private function setValue($new_value) {

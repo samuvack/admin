@@ -37,7 +37,7 @@ class LoggingSystemPart1 extends AbstractMigration
             ->addColumn('action_time','timestamp', array('default' => 'CURRENT_TIMESTAMP'))
             ->save();
 
-        $this->execute("ALTER SEQUENCE IF EXISTS statements_logging_hid_seq RENAME TO relations_log_id_seq");
+        $this->execute("ALTER SEQUENCE IF EXISTS statements_logging_id_seq RENAME TO relations_log_id_seq");
         $this->execute("ALTER SEQUENCE IF EXISTS nodes_logging_hid_seq RENAME TO nodes_log_id_seq");
         $this->execute("ALTER SEQUENCE IF EXISTS properties_logging_hid_seq RENAME TO properties_log_id_seq");
     }
