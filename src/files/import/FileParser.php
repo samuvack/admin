@@ -9,15 +9,17 @@ namespace MyApp\Files\Import;
 abstract class FileParser {
 	protected $filename;
 	private $traceManager;
-	public function __construct($filename) {
-		$this->filename =$filename;
-	}
-
-	public function _setTraceManager(TraceManager $traceManager) {
+	public function __construct($filename, $traceManager) {
+		$this->filename = $filename;
 		$this->traceManager = $traceManager;
 	}
 
-	public abstract function start();
+	public function parse() {
+		$this->run();
+		$this->endOfStream();
+	}
+
+	protected abstract function run();
 	protected function streamLine(array $line) {
 		$this->traceManager->handle($line);
 	}

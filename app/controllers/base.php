@@ -89,9 +89,10 @@ $app->match('/import', function(Silex\Application $app, Request $request) {
 	if($form->isValid()) {
 		$file = $form['file']->getData();
 		//echo $file; die();
-		$parser = new SpreadsheetParser($file);
-		$manager = new TraceManager($app['orm.em'],array(),$parser);
-		$parser->start();
+
+		$manager = new TraceManager($app['orm.em'],array());
+		$parser = new SpreadsheetParser($file, $manager);
+		$parser->parse();
 	}
 /**
 	//handle the form

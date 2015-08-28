@@ -1,11 +1,15 @@
 <?php
+
+/*
+ * Class for providing and caching entities while parsing a file to import data
+ */
 namespace MyApp\Files\Import;
 use \MyApp\Entities\Node;
 use \MyApp\Entities\Relation;
 use \MyApp\Entities\Property;
 class DAO {
 	private $nodes = array();
-	private $relations = array();
+	private $nodeRelations = array();
 	private $nodeRepo;
 	private $propRepo;
 	private $properties = array();
@@ -17,14 +21,14 @@ class DAO {
 		$this->em = $em;
 	}
 
-	public function getNode($name) {
+	public function getNode($name, $description) {
 		if(isset($this->nodes[$name])) {
 			return $this->nodes[$name];
 		}
 
 		$node = $this->nodeRepo->findOneBy(array('name' => $name));
 		if($node === null) {
-			$node = new Node($name);
+			$node = new Node($name, $description);
 			$this->em->persist($node);
 		}
 
@@ -33,7 +37,7 @@ class DAO {
 	}
 
 	/*
-	 * @param id (integer) or name (string) of property
+	 * @param name of the wanted property
 	 */
 	public function getProperty($name) {
 		if(isset($this->properties[$name])) {
@@ -49,6 +53,9 @@ class DAO {
 		return $prop;
 	}
 
+	/*
+	 * Add a property object to the maps
+	 */
 	protected function addProperty(Property $prop) {
 		$this->properties[$prop->getName()] = $prop;
 		$this->propertiesById[$prop->getId()] = $prop;
@@ -70,19 +77,33 @@ class DAO {
 	public function addLink(Node $parentNode, Node $childNode) {
 		$prop = $this->getPropertyById(5); // 'is_part_of' property
 		$relation = new Relation($parentNode, $prop, null, $childNode);
-		$this->em->persist($relation);
-		$this->relations[] = $relation;
+		$this->addRelation($relation);
 	}
 
+	/*
+	 * Limit the entities in the entitymanager to avoid OOM-errors
+	 */
 	public function limitCache() {
-		if($this->em->getUnitOfWork()->size() > 100) {
+		if($this->em->getUnitOfWork()->size() > 500) {
 			$this->em->flush();
 			$this->em->clear();
 			$this->nodes = array();
 			$this->relations = array();
-			$this->properties = array();
-			$this->propertiesById = array();
-
+			foreach($this->properties as $key=>$property) {
+				$merged = $this->em->merge($property);
+				$this->properties[$key] = $merged;
+				$this->propertiesById[$merged->getId()] = $merged;
+			}
 		}
+	}
+
+	public function addRelation(Relation $relation) {
+		if($relation->getProperty()->getDataType() == 'node') {
+			if(! isset($this->nodeRelations[$relation->getStart()->getId()])) {
+				$this->nodeRelations[$relation->getStart()->getId()] = array();
+			}
+			$this->nodeRelations[$relation->getStart()->getId()][$relation->getValue()->getId()] = $relation;
+		}
+		$this->em->persist($relation);
 	}
 }
