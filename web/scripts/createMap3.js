@@ -4,8 +4,29 @@
 
 function createMap(container) {
 
+    var geojsonFormat = new ol.format.GeoJSON();
+    var vectorSource = new ol.source.Vector({
+        loader: function (extent, resolution, projection) {
+
+            var url = '/../cgi-bin/proxy.cgi?url=' + encodeURIComponent("http://localhost:8080/geoserver/archeowiki/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=archeowiki:geometries&maxFeatures=50&outputFormat=application%2Fjson");
+
+            $.ajax(url).then(function (response) {
+                var features = geojsonFormat.readFeatures(response, {
+                    featureProjection: projection
+                });
+                vectorSource.addFeatures(features);
+            });
+        }
+    });
+
+    var untiled = new ol.layer.Vector({
+        source : vectorSource
+    });
+
+    vectorSource.clear(true);
+
     //loads the geometries table as a WMS layer
-    var untiled = new ol.layer.Image({
+    /*var untiled = new ol.layer.Image({
         extent: ol.extent.applyTransform(
             [3.6058864622394333, 50.7489296238961,3.605999818578636, 50.749070669790605],
             ol.proj.getTransform('EPSG:4326','EPSG:3857')
@@ -16,10 +37,10 @@ function createMap(container) {
             serverType: 'geoserver'
         }),
         visible: true
-    });
+    });*/
 
-    //WMS layer (CAI) from onroerend erfgoed
-    var cai = new ol.layer.Image({
+    //WMS layer (CAI) from onroerend erfgoed (enkel voor geregistreerde cai gebruikers)
+    /*var cai = new ol.layer.Image({
             source: new ol.source.ImageWMS({
                 url: 'https://geo.onroerenderfgoed.be/geoserver/wms',
                 params: {
@@ -30,7 +51,7 @@ function createMap(container) {
                 serverType: 'geoserver'
             })
         })
-        ;
+        ;*/
 
     //WMS layer (Archeologische zones) from onroerend erfgoed
     var archZones = new ol.layer.Image({
@@ -63,7 +84,7 @@ function createMap(container) {
             new ol.control.ScaleLine()
         ],
         target: container,
-        layers: [osm, untiled, cai, archZones],
+        layers: [osm, untiled, archZones],
         view: new ol.View({
             center: ol.proj.transform([3.60593711681199, 50.748987289315], 'EPSG:4326', 'EPSG:3857'),
             maxZoom: 25,
@@ -78,6 +99,11 @@ function createMap(container) {
         map: map,
         target: '3dmap'
     });
+    var scene = ol3d.getCesiumScene();
+    var terrainProvider = new Cesium.CesiumTerrainProvider({
+        url: '//cesiumjs.org/stk-terrain/tilesets/world/tiles'
+    });
+    scene.terrainProvider = terrainProvider;
     ol3d.setEnabled(true);
 
 
@@ -133,7 +159,7 @@ function createMap(container) {
         var infoDiv = document.getElementById('nodeInfo').innerHTML = '';
 
         //TODO: change to allow multiple layers to be queried
-        var url = cai.getSource().getGetFeatureInfoUrl(
+        var url = archZones.getSource().getGetFeatureInfoUrl(
             evt.coordinate,
             map.getView().getResolution(),
             map.getView().getProjection(),
