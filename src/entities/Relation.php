@@ -3,7 +3,7 @@ namespace MyApp\Entities;
 use \MyApp\Converters\StringConverter;
 
 /**
- * @Entity
+ * @Entity(repositoryClass="MyApp\Entities\Repositories\RelationRepository")
  * @Table(name="relations")
  * @HasLifecycleCallbacks
  */
@@ -47,8 +47,8 @@ class Relation
 
     private $valueObject = null;
 
-    function __construct($start_node = null, $property = null, $value = "", $qualifier=null, $rank=null) {
-        $this->start_node = $start_node;
+    function __construct($startNode = null, $property = null, $value = "", $qualifier=null, $rank=null) {
+        $this->startNode = $startNode;
         $this->property = $property;
         $this->value = $value;
         $this->qualifier = $qualifier;
@@ -102,10 +102,6 @@ class Relation
         if ($this->valueObject !== null)
             return $this->valueObject;
 
-        if($this->property == null) {
-            echo print_r(debug_backtrace()[8]);die();
-        }
-
         $type = $this->property->getDataType();
 
         if ($type == 'node')
@@ -137,6 +133,7 @@ class Relation
     }
 
     /**
+    * TODO: rewrite to repository
     * Uses getAll() to get all statements with a geometry property
     * The value of statement is text representation
     *

@@ -1,4 +1,4 @@
-{% extends 'baselayout.html' %}
+{% extends 'baselayout.twig' %}
 {% block title 'Map overview' %}
 
 {% block content %}
@@ -12,7 +12,7 @@
 
 		<ul class="nodes">
 			{% for node in nodes %}
-				{% include '_node.html' with {'node': node} only %}
+				{% include '_node.twig' with {'node': node} only %}
 			{% endfor %}
 		</ul>
 {% endblock %}
