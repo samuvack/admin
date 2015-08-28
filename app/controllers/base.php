@@ -4,12 +4,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use MyApp\Entities\Node;
-use MyApp\Entities\Relation;
 use MyApp\FormTypes\FilterType;
 use MyApp\FormTypes\NodeType;
-use \MyApp\Entities\NodeLog;
-use \MyApp\Entities\RelationLog;
 use JasonGrimes\Paginator;
+use MyApp\Files\Import\SpreadsheetParser;
+use MyApp\Files\Import\TraceManager;
+
 require_once __DIR__.'/../ChromePhp.php';
 $app->match('/', function(Application $app){
 	return $app->redirect($app->path('home'));
@@ -76,14 +76,24 @@ $app->match('/insert', function(Request $request) use($app) {
 	return $app['twig']->render('insert.twig', array('form'=>$form->createView()));
 })->bind('insert');
 
-$app->match('/import', function(Request $request) use($app) {
+$app->match('/import', function(Silex\Application $app, Request $request) {
 
 	//generate the form
 	$form = $app['form.factory']->createBuilder('form')
 		->add('file', 'file')
 		->add('Import', 'submit', array('label'=>'Start import'))
 		->getForm();
+	print_r($_FILES);
 
+	$form->handleRequest($request);
+	if($form->isValid()) {
+		$file = $form['file']->getData();
+		//echo $file; die();
+		$parser = new SpreadsheetParser($file);
+		$manager = new TraceManager($app['orm.em'],array(),$parser);
+		$parser->start();
+	}
+/**
 	//handle the form
 	$form->handleRequest($request);
 	if($form->isValid()){
@@ -204,7 +214,7 @@ $app->match('/import', function(Request $request) use($app) {
 		}
 
 		return $app->render('import.twig', array('form'=>$form->createView(), 'text'=>'file successfully imported'));
-	}
+	}*/
 
 	return $app['twig']->render('import.twig', array('form'=>$form->createView(), 'text'=>'no file imported'));
 })->bind('import');

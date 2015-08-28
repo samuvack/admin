@@ -1,5 +1,5 @@
 <?php
-
+namespace MyApp\Files\Import;
 /**
  * Created by PhpStorm.
  * User: david
@@ -7,7 +7,7 @@
  * Time: 10:17
  */
 abstract class FileParser {
-	private $filename;
+	protected $filename;
 	private $traceManager;
 	public function __construct($filename) {
 		$this->filename =$filename;
@@ -17,7 +17,12 @@ abstract class FileParser {
 		$this->traceManager = $traceManager;
 	}
 
+	public abstract function start();
 	protected function streamLine(array $line) {
 		$this->traceManager->handle($line);
+	}
+
+	protected function endOfStream() {
+		$this->traceManager->endofStream();
 	}
 }

@@ -23,8 +23,8 @@
         "symfony/twig-bridge": "~2.6",
 		"symfony/validator":"~2.3",
         "jasongrimes/paginator": "^1.0",
-        "nuovo/spreadsheet-reader": "^0.5.11",
-        "jsor/doctrine-postgis": "^1.0"
+        "jsor/doctrine-postgis": "^1.0",
+        "PHPOffice/PHPExcel": "^1.8"
     },
     
     "autoload": {
@@ -37,7 +37,8 @@
             "MyApp\\Values\\": "src/values",
             "Utils\\Database\\Functions\\": "utils/database/functions",
             "Utils\\Database\\Types\\": "utils/database/types",
-            "Utils\\Services\\Mapping\\": "utils/services/mapping"
+            "Utils\\Services\\Mapping\\": "utils/services/mapping",
+            "MyApp\\Files\\Import\\": "src/files/import/"
         }
     }
 }

@@ -48,9 +48,11 @@ class Relation
 
     private $valueObject = null;
 
-    function __construct($startNode = null, $property = null, $value = "", $qualifier=null, $rank=null) {
+    function __construct($startNode = null, $property = null, $value = "", $nodevalue = null, $geometryvalue = null, $qualifier=null, $rank=null) {
         $this->startNode = $startNode;
         $this->property = $property;
+        $this->nodevalue = $nodevalue;
+        $this->geometryvalue = $geometryvalue;
         $this->value = $value;
         $this->qualifier = $qualifier;
         $this->rank = $rank;
