@@ -14,10 +14,16 @@ abstract class FileParser {
 
 	/*
 	 * Call to parse the file
+	 * @return boolean True if the parsing didn't throw exceptions
 	 */
 	public function parse() {
-		$this->run();
-		$this->endOfStream();
+		try {
+			$this->run();
+			$this->endOfStream();
+		} catch (Exception $e) {
+			return false;
+		}
+		return true;
 	}
 
 	protected $filename;
