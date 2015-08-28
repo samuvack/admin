@@ -42,7 +42,7 @@ function createGraph(nodes, links, svgSelector) {
     //ensure linkage between source/target of link and id of nodes
     links.forEach(function (d) {
         d.source = nodeMap[d.source];
-        d.target = nodeMap[d.target]
+        d.target = nodeMap[d.target];
     });
 
     //use force directed layout algorithm for the graph
