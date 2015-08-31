@@ -38,7 +38,8 @@
             "Utils\\Database\\Functions\\": "utils/database/functions",
             "Utils\\Database\\Types\\": "utils/database/types",
             "Utils\\Services\\Mapping\\": "utils/services/mapping",
-            "MyApp\\Files\\Import\\": "src/files/import/"
+            "MyApp\\Files\\Import\\": "src/files/import/",
+            "MyApp\\FormTypes\\Import\\": "src/formTypes/import/"
         }
     }
 }

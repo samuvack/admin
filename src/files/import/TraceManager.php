@@ -7,50 +7,72 @@ use MyApp\Converters\StringConverter;
 use \MyApp\Entities\Node;
 use \MyApp\Entities\Relation;
 use \MyApp\Entities\Property;
+
 class TraceManager {
 	private $em;
 	private $columnConfig;
 	private $dao;
+
 	/*
 	 * @param columnConfig:
 	 * pass an array mapping the column indexes. Example:
 	 *
 	 * $columnConfig = array(
-	 *		'trace' => array(
-	 *			'name' => 2,
-	 *			'description' => 4,
-	 *			'has date' => 5
-	 *		),
-	 * 		'context' => array(
-     *			'name' => 6,
-	 *			'description' => 7,
-	 *			'is of type' => array(11, 12, 13)
-	 *		),
-	 *		'structure' => array(
-	 *			'name' => 9,
-	 *			'description' => 10
-	 *		)
-	 *	);
 	 *
-	 * Only 'name' is required.
+	 * 	[trace] => Array
+     *   (
+     *     [name_column] => 2
+     *      [description_column] => 4
+            [relations] => Array
+                (
+                    [0] => Array
+                        (
+                            [property] => MyApp\Entities\Property Object
+                                (
+                                    [id:MyApp\Entities\Property:private] => 6
+                                    [name:MyApp\Entities\Property:private] => has date
+                                    [description:MyApp\Entities\Property:private] =>
+                                    [datatype:MyApp\Entities\Property:private] => year_period
+                                    [descr:MyApp\Entities\Property:private] => Array
+                                        (
+                                            [0] => date
+                                        )
+
+                                )
+
+                            [column] => 5
+                        )
+
+                )
+
+        )
+
+		[context] => Array
+			(
+				[name_column] => 6
+				[description_column] => 7
+				[relations] => Array
+					(
+					)
+
+			)
+
+		[structure] => Array
+			(
+				[name_column] => 9
+				[description_column] => 10
+				[relations] => Array
+					(
+					)
+
+        )
+		);
+	 *
+	 * Only 'name_column' is required.
 	 */
 	public function __construct(EntityManager $em, array $columnConfig) {
 		$this->em = $em;
-		$this->columnConfig = array(
-			'trace' => array(
-				'name' => 2,
-				'description' => 4,
-				'has date' => 5
-			),
-			'context' => array(
-				'name' => 6,
-				'description' => 7
-			),
-			'structure' => array(
-				'name' => 9,
-				'description' => 10
-			)
-		);
+		$this->columnConfig = $columnConfig;
 		$this->dao = new DAO($em);
 	}
 
@@ -59,24 +81,24 @@ class TraceManager {
 	 * @param $configName Name of the part of config array (in example above: 'trace'|'context'|'structure'
 	 */
 	protected function makeNode(array $row, $configName) {
-		if(! isset($this->columnConfig[$configName]))
+		if (!isset($this->columnConfig[$configName]))
 			return null;
 		$config = $this->columnConfig[$configName];
-		$name = $row[$config['name']];
-		if($name === null) { // No name in file means we can't instantiate the node
+		$name = $row[$config['name_column']];
+		if ($name === null) { // No name in file means we can't instantiate the node
 			return null;
 		}
-		unset($config['name']);
+		unset($config['name_column']);
 
 		$description = null;
-		if(isset($config['description'])) {
+		if (isset($config['description_column'])) {
 			// If there is a column for description, fetch it.
-			$description = $row[$config['description']];
-			unset($config['description']);
+			$description = $row[$config['description_column']];
+			unset($config['description_column']);
 		}
 		$node = $this->dao->getNode($name, $description);
 		// Create relations in the config for this node
-		$this->makeNodeRelations($node, $row, $config);
+		$this->makeNodeRelations($node, $row, $config['relations']);
 
 		return $node;
 	}
@@ -85,24 +107,20 @@ class TraceManager {
 	 * Get relations from the config for a node
 	 */
 	protected function makeNodeRelations(Node $node, array $row, $config) {
-		foreach($config as $propertyName => $values) {
-			$prop = $this->dao->getProperty($propertyName);
-			if(is_array($values)) {
-				foreach($values as $valueColumn) {
-					$this->makeRelation($node, $prop, $row[$valueColumn]);
-				}
-			} else {
-				$this->makeRelation($node, $prop, $row[$values]);
-			}
+		foreach ($config as $rel) {
+			$prop = $rel['property'];
+			$column = $rel['column'];
+			$this->makeRelation($node, $prop, $row[$column]);
 		}
 	}
 
 	/*
 	 * Create a relation with a value for a node
 	 */
-	protected function makeRelation(Node $node,Property $prop, $value) {
-		if($value === null)
+	protected function makeRelation(Node $node, Property $prop, $value) {
+		if ($value === null)
 			return;
+		$prop = $this->dao->getPersistedProperty($prop);
 		$value = StringConverter::getConverter($prop->getDatatype())->toObject($value);
 		$rel = new Relation($node, $prop, $value);
 		$this->dao->addRelation($rel);
@@ -115,9 +133,9 @@ class TraceManager {
 		$trace = $this->makeNode($row, 'trace');
 		$context = $this->makeNode($row, 'context');
 		$structure = $this->makeNode($row, 'structure');
-		if($structure !== null && $context !== null)
+		if ($structure !== null && $context !== null)
 			$this->dao->addLink($structure, $context);
-		if($trace !== null && $context !== null)
+		if ($trace !== null && $context !== null)
 			$this->dao->addLink($context, $trace);
 		$this->dao->limitCache();
 	}

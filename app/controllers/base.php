@@ -6,6 +6,7 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 use MyApp\Entities\Node;
 use MyApp\FormTypes\FilterType;
 use MyApp\FormTypes\NodeType;
+use MyApp\FormTypes\Import\NodeType as NodeImportType;
 use JasonGrimes\Paginator;
 use MyApp\Files\Import\SpreadsheetParser;
 use MyApp\Files\Import\TraceManager;
@@ -81,16 +82,17 @@ $app->match('/import', function(Silex\Application $app, Request $request) {
 	//generate the form
 	$form = $app['form.factory']->createBuilder('form')
 		->add('file', 'file')
+		->add('trace', new NodeImportType($app))
+		->add('context', new NodeImportType($app))
+		->add('structure', new NodeImportType($app))
 		->add('Import', 'submit', array('label'=>'Start import'))
 		->getForm();
-	print_r($_FILES);
 
 	$form->handleRequest($request);
 	if($form->isValid()) {
 		$file = $form['file']->getData();
-		//echo $file; die();
 
-		$manager = new TraceManager($app['orm.em'],array());
+		$manager = new TraceManager($app['orm.em'],$form->getData());
 		$parser = new SpreadsheetParser($file, $manager);
 		if($parser->parse())
 			return $app->render('import.twig', array('form'=>$form->createView(), 'text'=>'file successfully imported'));

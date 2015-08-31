@@ -1,23 +1,22 @@
-var collectionHolder;
-
-// setup an "add a tag" link
-var $addRelationLink = $('<a href="#" class="add_relation_link">Add another relation</a>');
-var $newLinkLi = $('<li></li>').append($addRelationLink);
+var newLinkLi = '<li></li>';
+var addRelationLink = '<a href="#" class="add_relation_link">Add another relation</a>';
 
 jQuery(document).ready(function() {
 	//get the ul that holds the collection of relations
-	$collectionHolder = $('ul.relations');
+	var $collectionHolder = $('ul.relations');
 	//add the 'add relation link' to the relations ul
-	$collectionHolder.append($newLinkLi);
-
-	//count the current list items, but decrease one as link is also list item, use that as the new inserting a new item
-	$collectionHolder.data('index', $collectionHolder.find($('li')).length - 1);
-
-	$addRelationLink.on('click', function(e){
-		//prevent the link from creating a # on the url
-		e.preventDefault();
-		//add a new relations form
-		addRelationForm($collectionHolder, $newLinkLi);
+	$collectionHolder.each(function() {
+		var $this = $(this);
+		$this.data('index', $this.find($('li')).length);
+		var $addRelLink = $(addRelationLink);
+		var $newLink = $(newLinkLi).append($addRelLink);
+		$addRelLink.on('click', function(e){
+			//prevent the link from creating a # on the url
+			e.preventDefault();
+			//add a new relations form
+			addRelationForm($this, $newLink);
+		});
+		$this.append($newLink);
 	});
 });
 
