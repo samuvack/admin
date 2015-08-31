@@ -7,6 +7,10 @@
 		<div id="map" style="width:100%; height:399px; margin-bottom: 5px;"></div>
 		<div id="3dmap" class='content' style="width:100%; height:399px; float:left; position:relative;"></div>
 
+		<div>
+			<input type="button" value="Enable/disable 3D synchronization" onclick="javascript:ol3d.setEnabled(!ol3d.getEnabled())" />
+		</div>
+
 		<div id="nodeInfo"></div>
 		<p>All nodes with geographical information</p>
 
@@ -21,7 +25,6 @@
 	{# load the OpenLayers library via cdn #}
 	<!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/openlayers/2.13.1/OpenLayers.js"></script>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/openlayers/2.13.1/theme/default/style.css" type="text/css">
-	<script src="{{app.request.basepath}}/scripts/createMap.js"></script>-->
 
 	<!--OL3-->
 	<link rel="stylesheet" href="http://openlayers.org/en/v3.8.2/css/ol.css" type="text/css">
@@ -35,9 +38,4 @@
 
 
 	<script src="{{ app.request.basepath }}/scripts/createMap3.js"> </script>
-	<script type="text/javascript">
-		(function(){
-			createMap('map');
-		})();
-	</script>
 {% endblock %}

@@ -2,8 +2,7 @@
  * Created by Berdien De Roo on 21/08/2015.
  */
 
-function createMap(container) {
-
+    container = 'map';
     var geojsonFormat = new ol.format.GeoJSON();
     var vectorSource = new ol.source.Vector({
         loader: function (extent, resolution, projection) {
@@ -84,6 +83,7 @@ function createMap(container) {
     // Add an click event handler for the map which displays the id/info and styles the feature
     var selectedFeature;
     map.on('click', function(evt){
+        document.getElementById('nodeInfo').innerHTML='';
         if(selectedFeature){
             selectedFeature.setStyle(null);
         }
@@ -102,7 +102,7 @@ function createMap(container) {
                     fill: new ol.style.Fill({color: '#00bc8c'}),
                     stroke: new ol.style.Stroke({color: 'black', width:2})
                 })
-            }))
+            }));
             document.getElementById('nodeInfo').innerHTML = 'Selected: ' + selectedFeature.getId();
         } else {
             //If no feature is selected, try to get wms info
@@ -125,6 +125,7 @@ function createMap(container) {
     var giveInfoHandler = new Cesium.ScreenSpaceEventHandler(ol3d.getCesiumScene().canvas);
     giveInfoHandler.setInputAction(
         function (movement) {
+            document.getElementById('nodeInfo').innerHTML='';
             if(selectedFeature){
                 selectedFeature.setStyle(null);
             }
@@ -132,7 +133,7 @@ function createMap(container) {
             var pickedObject = ol3d.getCesiumScene().pick(posit);
             if (Cesium.defined(pickedObject)) {
                 var x = pickedObject.primitive.olFeature.getId();
-                selectedFeature = vectorSource.getFeatureById(x)
+                selectedFeature = vectorSource.getFeatureById(x);
                 selectedFeature.setStyle(new ol.style.Style({
                     image: new ol.style.Circle({
                         radius: 7,
@@ -145,4 +146,4 @@ function createMap(container) {
         },
         Cesium.ScreenSpaceEventType.LEFT_CLICK
     );
-}
+
