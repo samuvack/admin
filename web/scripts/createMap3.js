@@ -23,35 +23,8 @@ function createMap(container) {
         source : vectorSource
     });
 
+    //allows the loader function to be called
     vectorSource.clear(true);
-
-    //loads the geometries table as a WMS layer
-    /*var untiled = new ol.layer.Image({
-        extent: ol.extent.applyTransform(
-            [3.6058864622394333, 50.7489296238961,3.605999818578636, 50.749070669790605],
-            ol.proj.getTransform('EPSG:4326','EPSG:3857')
-        ),
-        source: new ol.source.ImageWMS({
-            url:'http://localhost:8080/geoserver/archeowiki/wms',
-            params: {'LAYERS': 'archeowiki:geometries'},
-            serverType: 'geoserver'
-        }),
-        visible: true
-    });*/
-
-    //WMS layer (CAI) from onroerend erfgoed (enkel voor geregistreerde cai gebruikers)
-    /*var cai = new ol.layer.Image({
-            source: new ol.source.ImageWMS({
-                url: 'https://geo.onroerenderfgoed.be/geoserver/wms',
-                params: {
-                    'LAYERS': 'vioe_intern:cai',
-                    'TRANSPARENT': 'TRUE',
-                    'VERSION':'1.1.1'
-                },
-                serverType: 'geoserver'
-            })
-        })
-        ;*/
 
     //WMS layer (Archeologische zones) from onroerend erfgoed
     var archZones = new ol.layer.Image({
@@ -99,77 +72,77 @@ function createMap(container) {
         map: map,
         target: '3dmap'
     });
+    /*commented terrainprovider since problem with displaying features
     var scene = ol3d.getCesiumScene();
     var terrainProvider = new Cesium.CesiumTerrainProvider({
         url: '//cesiumjs.org/stk-terrain/tilesets/world/tiles'
     });
-    scene.terrainProvider = terrainProvider;
+    scene.terrainProvider = terrainProvider;*/
     ol3d.setEnabled(true);
 
 
-    //// format used to parse WFS GetFeature responses
-    //var geojsonFormat = new ol.format.GeoJSON();
-    //
-    //var vsStrategyBbox = new ol.source.Vector({
-    //    loader: function(extent, resolution, projection) {
-    //        var url = 'http://localhost:8080/geoserver/archeowiki/ows?service=WFS&' +
-    //            'version=1.1.0&request=GetFeature&typename=archeowiki:geometries&' +
-    //            'outputFormat=text/javascript&format_options=callback:loadFeatures' +
-    //           // '&srsname=EPSG:4326&bbox=' + extent.join(',') + ',EPSG:4326';
-    //        // use jsonp: false to prevent jQuery from adding the "callback"
-    //        // parameter to the URL
-    //        $.ajax({url: url, dataType: 'jsonp', jsonp: false});
-    //    },
-    //    //strategy: ol.LoadingStrategy.bbox(),
-    //    projection: 'EPSG:4326'
-    //});
-    //
-    //
-    ///**
-    // * JSONP WFS callback function.
-    // * @param {Object} response The response object.
-    // */
-    //var loadFeatures = function(response) {
-    //    vector1.addFeatures(geojsonFormat.readFeatures(response));
-    //};
-    //
-    //
-    //// Vector layer
-    //var vector1 = new ol.layer.Vector({
-    //    source: vsStrategyBbox,
-    //    style: new ol.style.Style({
-    //        stroke: new ol.style.Stroke({
-    //            color: 'green',
-    //            width: 2
-    //        }),
-    //        radius: 5,
-    //        fill: new ol.style.Fill({
-    //            color:'white'
-    //        })
-    //    })
-    //});
-
-    //map.addLayer(vector1);
-
-
-    // Add an event handler for the map "singleclick" event
-    map.on('singleclick', function(evt) {
-
-        // Clear existing information in nodeInfo div
-        var infoDiv = document.getElementById('nodeInfo').innerHTML = '';
-
-        //TODO: change to allow multiple layers to be queried
-        var url = archZones.getSource().getGetFeatureInfoUrl(
-            evt.coordinate,
-            map.getView().getResolution(),
-            map.getView().getProjection(),
-            {'INFO_FORMAT': 'text/html'}
-        );
-
-        //TODO: change from iframe to display in text
-        if(url){
-            document.getElementById('nodeInfo').innerHTML = '<iframe seamless src="' + url + '"></iframe>';
+    // Add an click event handler for the map which displays the id/info and styles the feature
+    var selectedFeature;
+    map.on('click', function(evt){
+        if(selectedFeature){
+            selectedFeature.setStyle(null);
         }
 
+        selectedFeature = map.forEachFeatureAtPixel(
+            evt.pixel,
+            function(feature, layer) {
+                return feature;
+            }
+        );
+
+        if(selectedFeature) {
+            selectedFeature.setStyle(new ol.style.Style({
+                image: new ol.style.Circle({
+                    radius: 7,
+                    fill: new ol.style.Fill({color: '#00bc8c'}),
+                    stroke: new ol.style.Stroke({color: 'black', width:2})
+                })
+            }))
+            document.getElementById('nodeInfo').innerHTML = 'Selected: ' + selectedFeature.getId();
+        } else {
+            //If no feature is selected, try to get wms info
+            //TODO: change to allow querying multi layers
+            var url = archZones.getSource().getGetFeatureInfoUrl(
+                evt.coordinate,
+                map.getView().getResolution(),
+                map.getView().getProjection(),
+                {'INFO_FORMAT': 'text/html'}
+            );
+
+            //TODO: change from iframe to display in text
+            if(url){
+                document.getElementById('nodeInfo').innerHTML = '<iframe seamless src="' + url + '"></iframe>';
+            }
+        }
     });
+
+    //Add event handler to the cesium map to allow selecting features, style and show id
+    var giveInfoHandler = new Cesium.ScreenSpaceEventHandler(ol3d.getCesiumScene().canvas);
+    giveInfoHandler.setInputAction(
+        function (movement) {
+            if(selectedFeature){
+                selectedFeature.setStyle(null);
+            }
+            var posit = movement.position;
+            var pickedObject = ol3d.getCesiumScene().pick(posit);
+            if (Cesium.defined(pickedObject)) {
+                var x = pickedObject.primitive.olFeature.getId();
+                selectedFeature = vectorSource.getFeatureById(x)
+                selectedFeature.setStyle(new ol.style.Style({
+                    image: new ol.style.Circle({
+                        radius: 7,
+                        fill: new ol.style.Fill({color: '#00bc8c'}),
+                        stroke: new ol.style.Stroke({color: 'black', width:2})
+                    })
+                }));
+                document.getElementById('nodeInfo').innerHTML = 'Selected: ' + x;
+            }
+        },
+        Cesium.ScreenSpaceEventType.LEFT_CLICK
+    );
 }
