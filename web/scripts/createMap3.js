@@ -2,7 +2,7 @@
  * Created by Berdien De Roo on 21/08/2015.
  */
 (function() {
-    container = 'map';
+    var container = 'map';
     var geojsonFormat = new ol.format.GeoJSON();
     var vectorSource = new ol.source.Vector({
         loader: function (extent, resolution, projection) {
