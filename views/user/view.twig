@@ -1,0 +1,58 @@
+{% extends 'baselayout.twig' %}
+
+{% block title %}{{ user.displayName }}{% endblock %}
+
+{% block content %}
+    <div class="media">
+        <img class="media-object pull-left" src="{{ imageUrl }}" width="80" height="80">
+
+        <div class="media-body">
+
+            <h1 class="media-heading">
+                {{ user.displayName }}
+            </h1>
+
+            {% if not user.isEnabled %}
+                <div style="margin-bottom: 5px;">
+                    <span class="label label-danger">Pending email confirmation</span>
+                    <span class="text-muted">(visible to admins only)</span>
+                </div>
+            {% endif %}
+
+
+            {% if is_granted('EDIT_USER', user) %}
+                <div class="text-muted">
+                    {{ user.email }}
+                </div>
+            {% endif %}
+
+            <div class="text-muted">
+                Registered {{ user.timeCreated|date('F j, Y') }}
+            </div>
+
+            {% if is_granted('EDIT_USER', user) %}
+                <div>
+                    <a href="{{ path('user.edit', {'id': user.id}) }}"><span class="glyphicon glyphicon-edit" style="margin-right: 5px;"></span>Edit</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <div>
+        <h3>
+            Log:
+        </h3>
+        <ul class="nodes">
+            {% for log in user.nodelogs %}
+                {% if log.action == 'insert'%}
+                    <li> INSERTED ON {{log.time|date("j-n-Y g:i")}}</li><br>
+                {% elseif log.action == 'delete'%}
+                    <li> DELETED ON {{log.time|date("j-n-Y g:i")}}</li><br>
+                {% else %}
+                    <li> UPDATED ON {{log.time|date("j-n-Y g:i")}}</li><br>
+                {%endif%}
+            {% endfor %}
+        </ul>
+    </div>
+
+
+{% endblock %}

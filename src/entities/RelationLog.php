@@ -51,12 +51,13 @@ class RelationLog {
 	private $action_time;
 
 	/**
-	 * @Column(type="integer",name="action_by")
-	 */
+	 * @ManyToOne(targetEntity="User")
+	 * @JoinColumn(name="action_by", referencedColumnName="id")
+	 **/
 	private $user;
 
 	public function __construct(Relation $relation, User $user, $action) {
-		$this->user = $user->getId();
+		$this->user = $user;
 		$this->relation = $relation;
 		$this->startnode = $relation->getStart();
 		$this->setValue($relation->getValue());
@@ -77,6 +78,10 @@ class RelationLog {
 		else {
 			$this->value = $new_value;
 		}
+	}
+
+	public function getTime() {
+		return $this->action_time;
 	}
 
 }
