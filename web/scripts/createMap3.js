@@ -1,7 +1,7 @@
 /**
  * Created by Berdien De Roo on 21/08/2015.
  */
-
+(function() {
     container = 'map';
     var geojsonFormat = new ol.format.GeoJSON();
     var vectorSource = new ol.source.Vector({
@@ -19,7 +19,7 @@
     });
 
     var untiled = new ol.layer.Vector({
-        source : vectorSource
+        source: vectorSource
     });
 
     //allows the loader function to be called
@@ -33,7 +33,7 @@
                     'LAYERS': 'vioe:cai_zone',
                     'STYLES': 'vioe_cai_zones',
                     'TRANSPARENT': 'TRUE',
-                    'VERSION':'1.1.1'
+                    'VERSION': '1.1.1'
                 },
                 serverType: 'geoserver'
             })
@@ -51,7 +51,8 @@
             new ol.control.Attribution(),
             new ol.control.MousePosition({
                 projection: 'EPSG:4326',
-                coordinateFormat: ol.coordinate.createStringXY(4)}),
+                coordinateFormat: ol.coordinate.createStringXY(4)
+            }),
             new ol.control.ZoomToExtent({extent: untiled.getExtent()}),
             new ol.control.ScaleLine()
         ],
@@ -65,42 +66,41 @@
     });
 
 
-
     //create 3d globe view
     var ol3d = new olcs.OLCesium({
         map: map,
         target: '3dmap'
     });
     /*commented terrainprovider since problem with displaying features
-    var scene = ol3d.getCesiumScene();
-    var terrainProvider = new Cesium.CesiumTerrainProvider({
-        url: '//cesiumjs.org/stk-terrain/tilesets/world/tiles'
-    });
-    scene.terrainProvider = terrainProvider;*/
+     var scene = ol3d.getCesiumScene();
+     var terrainProvider = new Cesium.CesiumTerrainProvider({
+     url: '//cesiumjs.org/stk-terrain/tilesets/world/tiles'
+     });
+     scene.terrainProvider = terrainProvider;*/
     ol3d.setEnabled(true);
 
 
     // Add an click event handler for the map which displays the id/info and styles the feature
     var selectedFeature;
-    map.on('click', function(evt){
-        document.getElementById('nodeInfo').innerHTML='';
-        if(selectedFeature){
+    map.on('click', function (evt) {
+        document.getElementById('nodeInfo').innerHTML = '';
+        if (selectedFeature) {
             selectedFeature.setStyle(null);
         }
 
         selectedFeature = map.forEachFeatureAtPixel(
             evt.pixel,
-            function(feature, layer) {
+            function (feature, layer) {
                 return feature;
             }
         );
 
-        if(selectedFeature) {
+        if (selectedFeature) {
             selectedFeature.setStyle(new ol.style.Style({
                 image: new ol.style.Circle({
                     radius: 7,
                     fill: new ol.style.Fill({color: '#00bc8c'}),
-                    stroke: new ol.style.Stroke({color: 'black', width:2})
+                    stroke: new ol.style.Stroke({color: 'black', width: 2})
                 })
             }));
             document.getElementById('nodeInfo').innerHTML = 'Selected: ' + selectedFeature.getId();
@@ -115,7 +115,7 @@
             );
 
             //TODO: change from iframe to display in text
-            if(url){
+            if (url) {
                 document.getElementById('nodeInfo').innerHTML = '<iframe seamless src="' + url + '"></iframe>';
             }
         }
@@ -125,8 +125,8 @@
     var giveInfoHandler = new Cesium.ScreenSpaceEventHandler(ol3d.getCesiumScene().canvas);
     giveInfoHandler.setInputAction(
         function (movement) {
-            document.getElementById('nodeInfo').innerHTML='';
-            if(selectedFeature){
+            document.getElementById('nodeInfo').innerHTML = '';
+            if (selectedFeature) {
                 selectedFeature.setStyle(null);
             }
             var posit = movement.position;
@@ -138,7 +138,7 @@
                     image: new ol.style.Circle({
                         radius: 7,
                         fill: new ol.style.Fill({color: '#00bc8c'}),
-                        stroke: new ol.style.Stroke({color: 'black', width:2})
+                        stroke: new ol.style.Stroke({color: 'black', width: 2})
                     })
                 }));
                 document.getElementById('nodeInfo').innerHTML = 'Selected: ' + x;
@@ -146,4 +146,4 @@
         },
         Cesium.ScreenSpaceEventType.LEFT_CLICK
     );
-
+})();
