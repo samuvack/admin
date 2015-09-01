@@ -10,7 +10,7 @@ namespace MyApp\Entities;
 
 
 /**
- * @Entity
+ * @Entity(repositoryClass="MyApp\Entities\Repositories\MyRepository")
  * @Table(name="users")
  */
 class User extends \MyApp\User\AUser

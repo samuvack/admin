@@ -322,12 +322,7 @@ class UserManager implements UserProviderInterface
 	 */
 	public function findCount(array $criteria = array())
 	{
-		$criteria = $this->transformCriteria($criteria);
-		list ($common_sql, $params) = $this->createCommonFindSql($criteria);
-
-		$sql = 'SELECT COUNT(*) ' . $common_sql;
-
-		return $this->conn->fetchColumn($sql, $params) ?: 0;
+		$this->repo->countBy($criteria);
 	}
 
 	/**
