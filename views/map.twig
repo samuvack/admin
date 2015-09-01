@@ -2,23 +2,21 @@
 {% block title 'Map overview' %}
 
 {% block content %}
-		<h1>Map view</h1>
+{% endblock %}
 
-		<div id="map" style="width:100%; height:399px; margin-bottom: 5px;"></div>
-		<div id="3dmap" class='content' style="width:100%; height:399px; float:left; position:relative;"></div>
+{% block map %}
+		<div id="map" class="map"></div>
+		<div id="3dmap" class="map"></div>
 
-		<div>
-			<input type="button" value="Enable/disable 3D synchronization" onclick="javascript:ol3d.setEnabled(!ol3d.getEnabled())" />
+		<div id="nodeInfo" class="info">
+			<p>All nodes with geographical information</p>
+
+			<ul class="nodes">
+				{% for node in nodes %}
+					{% include '_node.twig' with {'node': node} only %}
+				{% endfor %}
+			</ul>
 		</div>
-
-		<div id="nodeInfo"></div>
-		<p>All nodes with geographical information</p>
-
-		<ul class="nodes">
-			{% for node in nodes %}
-				{% include '_node.twig' with {'node': node} only %}
-			{% endfor %}
-		</ul>
 {% endblock %}
 
 {% block script %}
