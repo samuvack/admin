@@ -8,14 +8,22 @@
 		<div id="map" class="map"></div>
 		<div id="3dmap" class="map"></div>
 
-		<div id="nodeInfo" class="info">
-			<p>All nodes with geographical information</p>
 
-			<ul class="nodes">
-				{% for node in nodes %}
-					{{ render(node) }}
-				{% endfor %}
-			</ul>
+        <div id="infoPanel" class="info">
+
+            <button id="2dbutton" class="btn btn-default btn-sm">Full 2D view</button>
+            <button id="3dbutton" class="btn btn-default btn-sm">Full 3D view</button>
+            <button id="2d3dbutton" class="btn btn-default btn-sm">Splitted 2D/3D view</button>
+            <h3 class="">Node info</h3>
+            <div id="nodeInfo">
+                <p>All nodes with geographical information</p>
+
+                <ul class="nodes">
+                    {% for node in nodes %}
+                        {{ render(node) }}
+                    {% endfor %}
+                </ul>
+            </div>
 		</div>
 {% endblock %}
 

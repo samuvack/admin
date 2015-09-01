@@ -53,7 +53,7 @@
                 projection: 'EPSG:4326',
                 coordinateFormat: ol.coordinate.createStringXY(4)
             }),
-            new ol.control.ZoomToExtent({extent: untiled.getExtent()}),
+            new ol.control.Rotate(),
             new ol.control.ScaleLine()
         ],
         target: container,
@@ -146,4 +146,36 @@
         },
         Cesium.ScreenSpaceEventType.LEFT_CLICK
     );
+
+    $("#2dbutton").click(function() {
+        ol3d.setEnabled(false);
+        $("#map").css({
+            "width": "80%",
+            "display": 'block'
+        });
+        map.updateSize();
+        $("#3dmap").css("display","none");
+    });
+
+    $("#3dbutton").click(function() {
+       ol3d.setEnabled(true);
+        $("#map").css("display","none");
+        $("#3dmap").css({
+            "width":"80%",
+            "display":"block"
+        });
+    });
+
+    $("#2d3dbutton").click(function() {
+        ol3d.setEnabled(true);
+        $("#map").css({
+            "width":"40%",
+            "display":"block"
+        });
+        map.updateSize();
+        $("#3dmap").css({
+            "width":"40%",
+            "display":"block"
+        });
+    });
 })();
