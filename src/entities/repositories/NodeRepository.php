@@ -5,7 +5,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Query\Expr\Join;
 use MyApp\Entities\Node;
 
-class NodeRepository extends EntityRepository {
+class NodeRepository extends MyRepository {
 	/*
 	 * Find nodes based of tsvector searches
 	 * @return Array<Node>
@@ -74,17 +74,4 @@ class NodeRepository extends EntityRepository {
 		return $nodes_json;
 	}
 
-	public function countBy(array $attributes) {
-		return sizeof($this->findBy($attributes));
-	}
-
-	public function count() {
-		$qb = $this->createQueryBuilder('n');
-
-		$qb->select($qb->expr()->count('n'));
-
-		$query = $qb->getQuery();
-
-		return $query->getSingleScalarResult();
-	}
 }
