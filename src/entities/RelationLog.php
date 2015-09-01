@@ -84,4 +84,11 @@ class RelationLog {
 		return $this->action_time;
 	}
 
+	public function getEntity() {
+		return $this->relation;
+	}
+
+	public function getName() {
+		return $this->id;
+	}
 }

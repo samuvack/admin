@@ -63,5 +63,11 @@ class NodeLog {
 	public function getUser() {
 		return $this->user;
 	}
+	public function getEntity() {
+		return $this->node;
+	}
 
+	public function getName() {
+		return $this->name;
+	}
 }

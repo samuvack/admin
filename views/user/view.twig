@@ -36,22 +36,23 @@
             {% endif %}
         </div>
     </div>
-    <div>
-        <h3>
-            Log:
-        </h3>
-        <ul class="nodes">
-            {% for log in user.nodelogs %}
-                {% if log.action == 'insert'%}
-                    <li> INSERTED ON {{log.time|date("j-n-Y g:i")}}</li><br>
-                {% elseif log.action == 'delete'%}
-                    <li> DELETED ON {{log.time|date("j-n-Y g:i")}}</li><br>
-                {% else %}
-                    <li> UPDATED ON {{log.time|date("j-n-Y g:i")}}</li><br>
-                {%endif%}
-            {% endfor %}
-        </ul>
-    </div>
+
+    {% if user.nodelogs.valid %}
+        <div>
+            <h3>
+                Log:
+            </h3>
+            <ul class="nodes">
+                {% for log in user.nodelogs %}
+                    {% if log.entity %}
+                        <li> {{ log.action|capitalize }}ed {{ render(log.entity, {link:true}) }} on {{log.time|date("j-n-Y g:i")}}</li><br>
+                    {% else %}
+                        <li> {{ log.action|capitalize }}ed log.name ON {{log.time|date("j-n-Y g:i")}}</li><br>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
 
 
 {% endblock %}
