@@ -89,15 +89,15 @@ class EditUserVoter implements VoterInterface
 
     protected function hasUserId($user, $id)
     {
-        return $user instanceof User
+        return $user instanceof AUser
             && $id > 0
             && $user->getId() == $id;
     }
 
     protected function usersHaveSameId($user1, $user2)
     {
-        return $user1 instanceof User
-            && $user2 instanceof User
+        return $user1 instanceof AUser
+            && $user2 instanceof AUser
             && $user1->getId() > 0
             && $user1->getId() == $user2->getId();
     }
