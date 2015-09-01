@@ -37,12 +37,13 @@ class NodeLog {
 	private $action_time;
 
 	/**
-	 * @Column(type="integer",name="action_by")
-	 */
+	 * @ManyToOne(targetEntity="User")
+	 * @JoinColumn(name="action_by", referencedColumnName="id")
+	 **/
 	private $user;
 
 	public function __construct(Node $node, User $user, $action) {
-		$this->user = $user->getId();
+		$this->user = $user;
 		$this->node = $node;
 		$this->name = $node->getName();
 		$this->description = $node->getDescription();
@@ -51,4 +52,22 @@ class NodeLog {
 		$this->action_time = new \DateTime();
 	}
 
+	public function getAction() {
+		return $this->action;
+	}
+
+	public function getTime() {
+		return $this->action_time;
+	}
+
+	public function getUser() {
+		return $this->user;
+	}
+	public function getEntity() {
+		return $this->node;
+	}
+
+	public function getName() {
+		return $this->name;
+	}
 }

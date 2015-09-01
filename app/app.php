@@ -82,7 +82,7 @@ $app->register(new Provider\SessionServiceProvider());
 $app->register(new Provider\ServiceControllerServiceProvider());
 $app->register(new Provider\SwiftmailerServiceProvider());
 
-$userServiceProvider = new SimpleUser\UserServiceProvider();
+$userServiceProvider = new MyApp\User\UserServiceProvider();
 $app->register($userServiceProvider, array(
 	"user.options" => array(
 		"userColumns" => array(
@@ -102,15 +102,16 @@ $app->register($userServiceProvider, array(
 			'ROLE_EDITOR', 'ROLE_ADMIN', 'ROLE_USER'
 		),
 		'templates' => array(
-			'layout' => 'baselayout.twig'
+			'layout' => 'baselayout.twig',
+			'view' => 'user/profile.twig'
 		),
 		'userClass' => 'MyApp\Entities\User'
 	)
 ));
-// More config for user auth system
-require_once __DIR__ . "/firewall.php";
 
 $app->mount('/user', $userServiceProvider);
+// More config for user auth system
+require_once __DIR__ . "/firewall.php";
 
 $app->register(new FormServiceProvider());
 $app->register(new DoctrineOrmManagerRegistryProvider());
