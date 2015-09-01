@@ -14,12 +14,23 @@ use MyApp\Entities\Node;
 
 class MyRepository extends EntityRepository {
 	public function countBy(array $criteria) {
+		$first = true;
 		$qb = $this->createQueryBuilder('n');
+
 		$qb->select($qb->expr()->count('n'));
+		$sql = $qb->getQuery()->getSQL();
+		$params = array();
 		foreach($criteria as $key => $value) {
-			$qb->andWhere($qb->expr()->eq($qb->getRootAliases( )[0].'.'.$key, $qb->expr()->literal($value)));
+			$keyword = $first?'WHERE':'AND';
+			$first = false;
+			$sql .= ' '.$keyword.' ? = ?';
+			$params[] = $key;
+			$params[] = $value;
 		}
-		return $qb->getQuery()->getSingleScalarResult();
+		$ps = $this->_em->getConnection()->prepare($sql);
+		foreach($ps->fetch() as $result) {
+			return $result;
+		}
 	}
 
 	public function count() {
