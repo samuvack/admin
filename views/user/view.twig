@@ -43,7 +43,7 @@
                 Log:
             </h3>
             <ul class="nodes">
-                {% for log in user.nodelogs %}
+                {% for log in user.logs %}
                     {% if log.entity %}
                         <li> {{ log.action|capitalize }}ed {{ render(log.entity, {link:true}) }} on {{log.time|date("j-n-Y g:i")}}</li><br>
                     {% else %}

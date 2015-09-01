@@ -50,7 +50,7 @@ class User extends \MyApp\User\AUser
 	 **/
 	private $relationLogs;
 
-	public function getNodeLogs() {
+	public function getLogs() {
 		return new LogIterator($this->nodeLogs, $this->relationLogs);
 	}
 }
