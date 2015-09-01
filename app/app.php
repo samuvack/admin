@@ -20,6 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Knp\Provider\ConsoleServiceProvider;
 use Silex\Provider;
+use MyApp\Values\RenderableValue;
 
 Class Application extends Silex\Application {
 	use \Silex\Application\TwigTrait;
@@ -115,11 +116,13 @@ require_once __DIR__ . "/firewall.php";
 
 $app->mount('/user', $userServiceProvider);
 
-
 Type::addType('tsvector', 'MyApp\Database\Types\Tsvector');
 
 $app->before(function ($request) use ($app) {
 	$app['twig']->addGlobal('active', $request->get("_route"));
+	$app['twig']->addFunction(new Twig_SimpleFunction('render', function (Twig_Environment $env, RenderableValue $value) {
+		$value->render($env);
+	}, array('needs_environment' => true)));
 });
 
 include __DIR__ . "/controllers/base.php"; //include controllers

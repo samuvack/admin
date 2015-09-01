@@ -6,7 +6,7 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 use MyApp\Entities\Node;
 use MyApp\Entities\Property;
 use MyApp\Entities\Relation;
-use MyApp\Types\FilterType;
+use MyApp\FormTypes\FilterType;
 require_once __DIR__.'/../ChromePhp.php';
 
 $app->match('/', function(Application $app, Request $request) {
@@ -50,8 +50,10 @@ $app->match('/insert', function(Request $request) use($app) {
 
 	if($form->isValid()) {
 		$em = $app['orm.em'];
-		foreach($node->getRelations() as $relation)
-			$em->persist($relation); // Relation is on the owning side
+		foreach($node->getRelations() as $relation) {
+			$relation->setStart($node); // Relation is on the owning side
+			$em->persist($relation);
+		}
 		$em->persist($node);
 		$em->flush();
 
@@ -109,6 +111,8 @@ $app->match('/import', function(Request $request) use($app) {
 			//... Repeat for each node column
 			$nodeType = 'spoor';
 
+			$em = $app['orm.em'];
+
 			//loop the rows
 			for ($i=1; $i<count($contents); $i++){
 				//convert the string into array by separator ;
@@ -129,7 +133,8 @@ $app->match('/import', function(Request $request) use($app) {
 				}
 				//before adding, check if node with this name-description combi does not already exist
 				//...TO BE WRITTEN
-				$node = new Node(null, $nodeName, $nodeDescription, null);
+				$node = new Node($nodeName, $nodeDescription);
+				$em->persist($node);
 
 				//create new relations and add to the node, no qualifier and rank
 				for($j=0; $j<count($relColumns); $j++){
@@ -137,47 +142,50 @@ $app->match('/import', function(Request $request) use($app) {
 					$relValue = $contents[$i][$relColumns[$j]];
 
 					if($relValue) {
-						//check the datatype of the property
-						$relType = Property::findById($relProps[$j])->getDatatype();
+						$prop = $em -> find(':Property',$relProps[$j]);
+                        ChromePhp::log($prop);
+						$relType = $prop->getDatatype();
 
 						//change value based on property datatype
 						if($relType == 'node'){ //if the datatype is node
 							//search if a node with this name exists
-							$nodeValue = Node::findByName($relValue);
+
+							$nodeValue = $em->getRepository(':Node')->findOneBy(array('name'=>$relValue));
 							if($nodeValue){
 								//if exists, store id as value of the relation
 								//...TO BE WRITTEN
 								//...Allow user to confirm that this is the right value based on the node description
 								//...Allow user to select the right value if multiple nodes with this name exist
-								$relValue = $nodeValue->getId();
-								$relation = new Relation(null, null, $relProps[$j], $relValue, null, null);
-								$node->addRelation($relation);
+								$relation = new Relation($node, $prop);
+                                $relation->setValue($nodeValue);
+								//$relation = new Relation($node, $prop, $nodeValue);
+								$em->persist($relation);
 							} else {
 								//if not exists, show a dialog with similar nodes or possiblity to add new
 								//TO BE WRITTEN
 							}
-						} elseif($relType == 'data'){ //if the datatype is date
+						} elseif($relType == 'date'){ //if the datatype is date
 							//change the representation of the node ~ISO8601 or ISO19108
 						} elseif($relType == 'geometry') { //if datatype is geometry
 							//convert to PostGIS geometry
 						} else {
-							$relation = new Relation(null, null, $relProps[$j], $relValue, null, null);
-							$node->addRelation($relation);
+							$relation = new Relation($node, $prop, $relValue);
+							$em->persist($relation);
 						}
-
 
 					}
 
 				}
 
 				//add an obligatory 'is of type attribute for all values
-				$relation = new Relation(null, null, 1, $nodeType, null, null);
-				$node->addRelation($relation);
+				$propOfType = $em -> find(':Property',1);
+				$relation = new Relation($node,$propOfType, $nodeType);
+				$em->persist($relation);
 
 				//save the node to the db
 				//...To BE WRITTEN
 				//...Save all the nodes to the database
-				$node->save();
+				$em->flush();
 			}
 
 		}
@@ -223,7 +231,7 @@ $app->get('/node/{id}', function(Application $app, $id) {
         return $idConverter[$value];
     };
 
-    $addRelations = function($relations) use(&$idConverter, &$graphNodes, &$graphLinks, &$addNode, &$addValue) {
+    $addRelations = function($relations) use(&$idConverter, &$graphNodes, &$graphLinks, $addNode, $addValue) {
         foreach( $relations as $relation ){
             $nodeId = null;
             //startnode is always of type node
@@ -392,34 +400,6 @@ $app->get('/graph', function(Application $app, Request $request) {
 			'target' =>$relation->getValue()->getId()
 		];
 	}
-
-	/*$nodeObjects= $app['orm.em']->getRepository(':Node')->findAll();
-	$nodes = [];
-	$idConverter = [];
-
-	//prepare array for passing
-	foreach( $nodeObjects as $node ) {
-		$idConverter[$node->getId()] = sizeof($nodes);
-		$nodes[]= [
-			'name' => $node->getName(),
-			'id' => $node->getId()
-		];
-
-	}*/
-
-	/*
-	 * trust on Doctrine proxies to not load every node again
-	 * http://stackoverflow.com/a/17787070/4701236
-	 */
-	/*$linkObjects = $app['orm.em']->getRepository(':Relation')->findBy();
-	$links = [];
-
-	foreach( $linkObjects as $link) {
-		$links[] = array(
-			'source'=>$idConverter[$link->id1],
-			'target'=>$idConverter[$link->id2]
-		);
-	}*/
 
 	return $app['twig']->render('graph.twig', array('nodes'=>$nodes, 'links'=>$links));
 })->bind('graph');

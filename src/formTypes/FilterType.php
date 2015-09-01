@@ -1,5 +1,5 @@
 <?php
-	namespace MyApp\Types;
+	namespace MyApp\FormTypes;
 	use Symfony\Component\Form\AbstractType;
 	use Symfony\Component\Form\formBuilderInterface;
 	use Symfony\Component\Validator\Constraints as Assert;
