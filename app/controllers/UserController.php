@@ -453,6 +453,7 @@ class UserController
 				}
 			}
 			if ($app['security']->isGranted('ROLE_ADMIN') && $request->request->has('roles')) {
+
 				$user->setRoles($request->request->get('roles'));
 			}
 

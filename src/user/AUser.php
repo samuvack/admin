@@ -45,8 +45,9 @@ class AUser implements AdvancedUserInterface, \Serializable
 		$roles = $this->roles;
 
 		// Every user must have at least one role, per Silex security docs.
-		if(sizeof($this->roles) < 1)
+		if(sizeof($this->roles) < 1) {
 			$roles[] = 'ROLE_USER';
+		}
 
 		return $roles;
 	}
@@ -66,6 +67,7 @@ class AUser implements AdvancedUserInterface, \Serializable
 		$this->roles = array();
 
 		foreach ($roles as $role) {
+			echo $role;
 			$this->addRole($role);
 		}
 	}
@@ -81,6 +83,9 @@ class AUser implements AdvancedUserInterface, \Serializable
 		return in_array(strtoupper($role), $this->getRoles(), true);
 	}
 
+	protected function _hasRealRole($role) {
+		return in_array(strtoupper($role), $this->roles, true);
+	}
 	/**
 	 * Add the given role to the user.
 	 *
@@ -90,7 +95,7 @@ class AUser implements AdvancedUserInterface, \Serializable
 	{
 		$role = strtoupper($role);
 
-		if (!$this->hasRole($role)) {
+		if (!$this->_hasRealRole($role)) {
 			$this->roles[] = $role;
 		}
 	}

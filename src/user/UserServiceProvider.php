@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
 use MyApp\Controllers\UserController;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Security\Core\SecurityContextInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\RoleHierarchyVoter;
+
 
 class UserServiceProvider implements ServiceProviderInterface, ControllerProviderInterface
 {
@@ -186,6 +188,18 @@ class UserServiceProvider implements ServiceProviderInterface, ControllerProvide
 			}
 
 			return $mailer;
+		});
+
+		// Add a custom security voter to support testing user attributes.
+		$app['security.voters'] = $app->extend('security.voters', function($voters) use ($app) {
+			foreach ($voters as $voter) {
+				if ($voter instanceof RoleHierarchyVoter) {
+					$roleHierarchyVoter = $voter;
+					break;
+				}
+			}
+			$voters[] = new EditUserVoter($roleHierarchyVoter);
+			return $voters;
 		});
 
 		// Helper function to get the last authentication exception thrown for the given request.

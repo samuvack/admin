@@ -201,7 +201,7 @@ class UserManager implements UserProviderInterface
 	public function getPasswordStrengthValidator()
 	{
 		if (!is_callable($this->passwordStrengthValidator)) {
-			return function(User $user, $password) {
+			return function(AUser $user, $password) {
 				if (empty($password)) {
 					return 'Password cannot be empty.';
 				}

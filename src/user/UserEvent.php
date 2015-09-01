@@ -8,7 +8,7 @@ class UserEvent extends Event
 {
 	protected $user;
 
-	public function __construct(User $user)
+	public function __construct(AUser $user)
 	{
 		$this->user = $user;
 	}
