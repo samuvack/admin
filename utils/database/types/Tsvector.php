@@ -2,7 +2,7 @@
 /**
  * Taken from opsway/doctrine-dbal-postgresql but the composer refused to autoconfigure namespaces
  */
-namespace MyApp\Database\Types;
+namespace Utils\Database\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;

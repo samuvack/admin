@@ -4,6 +4,7 @@ namespace MyApp\Entities;
 /**
  * @Entity
  * @Table(name="properties")
+ * @EntityListeners({"MyApp\Entities\Listeners\PropertyLogging"})
  */
 class Property
 {

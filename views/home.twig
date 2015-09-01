@@ -13,11 +13,16 @@
 	  <ul class="nodes">
 	  {% for node in nodes %}
 		<li>
-		  {% include '_node.twig' with {'node': node} only %}
+		  {{ render(node) }}
 		</li>
 	  {% endfor %}
 	  </ul>
 	  <a href="{{ path('insert') }}">Insert new info</a>
+		{% if paginator is defined %}
+		  <div>
+			{{ paginator|raw }}
+		  </div>
+		{% endif %}
 {% endblock %}
 
 {% block script %}

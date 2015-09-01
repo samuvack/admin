@@ -7,16 +7,10 @@
     <ul class="nodes">
         {% for node in nodes %}
         <li>
-            {% include '_node.twig' with {'node': node} only %}
+            {{ render(node) }}
+            {# include 'node.twig' with {'node': node} only #}
         </li>
         {% endfor %}
     </ul>
     <a href="{{ path('insert') }}">Insert new info</a>
-    {% endblock %}
-
-    {% block script %}
-    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js" type="text/javascript"></script>
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-    <link rel="stylesheet" href="style/autocomplete.css">
-    <script src="scripts/autosuggest_name.js" type="text/javascript"></script>
     {% endblock %}

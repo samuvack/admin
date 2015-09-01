@@ -12,11 +12,13 @@
 		{% for relation in relFrom %}
 		<li>{{relation.getProperty.getName}} 
 			{% if relation.getProperty.getDatatype == 'node' %}
-				<a href="{{ path('node', {id:relation.getValue.getId}) }}">{{relation.getValue.getName}}</a>
+				{#<a href="{{ path('node', {id:relation.getValue.getId}) }}">{{relation.getValue.getName}}</a>#}
+				{{ render(relation.getValue, {link:true}) }}
 			{% elseif relation.getProperty.getDatatype == 'text' %}
 				{{ render(relation.getValue) }}
 			{% else %}
-				{{relation.getValue}}
+				{#{{relation.getValue}}#}
+				{{ render(relation.getValue) }}
 			{% endif %}
 			</li>	
 		{% endfor %}

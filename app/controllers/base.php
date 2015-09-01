@@ -4,12 +4,19 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use MyApp\Entities\Node;
-use MyApp\Entities\Property;
 use MyApp\Entities\Relation;
 use MyApp\FormTypes\FilterType;
+use MyApp\FormTypes\NodeType;
+use \MyApp\Entities\NodeLog;
+use \MyApp\Entities\RelationLog;
+use JasonGrimes\Paginator;
 require_once __DIR__.'/../ChromePhp.php';
+$app->match('/', function(Application $app){
+	return $app->redirect($app->path('home'));
+});
 
-$app->match('/', function(Application $app, Request $request) {
+$app->match('/home/{page}/{term}', function(Application $app, Request $request, $page, $term) {
+
 	$nodeRepository = $app['orm.em']->getRepository(':Node');
 	//create form
 	$form = $app['form.factory']->createBuilder('form', array('name' =>''))
@@ -22,21 +29,27 @@ $app->match('/', function(Application $app, Request $request) {
 		))
 		->getForm();
 	$form->handleRequest($request);
+	if ($form->isValid()) {
+		$term =  $form->getData()['name'];
+	}
+	$itemsPerPage = $app['config']['pagination']['nodes_per_page'];
 
 	//check form
-	if ($form->isValid()) {
-		//get the search term
-		$data = $form->getData();
-		$term = $data['name'];
-		$result = $nodeRepository->findBy(array('name'=>$term));
-
-		return $app['twig']->render('home.twig', array('form'=>$form->createView(),'nodes'=>$result));
+	if ($term !== null) {
+		$result = $nodeRepository->findBy(array('name'=>$term),null,$itemsPerPage, $itemsPerPage * ($page-1));
+		$paginator = new Paginator($nodeRepository->countBy(array('name'=>$term)), $itemsPerPage, $page,$request->getUriForPath('/home/(:num)/'.$term));
+	
+		return $app['twig']->render('home.twig', array('form'=>$form->createView(),'nodes'=>$result, 'paginator' => $paginator));
 	}
+	$paginator = new Paginator($nodeRepository->count(), $itemsPerPage, $page,$request->getUriForPath('/home/(:num)'));
 
 	//use the getAll function of the Node class to gather all the nodes
-	$nodes = $nodeRepository->findAll();
-	return $app['twig']->render('home.twig', array('form'=>$form->createView(), 'nodes'=>$nodes));
-})->bind('home');
+	$nodes = $nodeRepository->findBy(array(),null,$itemsPerPage, $itemsPerPage * ($page-1));
+	return $app['twig']->render('home.twig', array('form'=>$form->createView(), 'nodes'=>$nodes, 'paginator'=>$paginator));
+})
+->value('page', 1)
+->value('term', null)
+->bind('home') ;
 
 $app->match('/insert', function(Request $request) use($app) {
 
@@ -220,17 +233,14 @@ $app->get('/node/{id}', function(Application $app, $id) {
     };
 
     $addValue = function($value) use( &$idConverter, &$graphNodes) {
-        if( ! isset($idConverter[$value])) {
-            $idConverter[$value] = sizeof($graphNodes);
-            $graphNodes[] = [
-                'name' => $value,
-                'id'=> $idConverter[$value],
-                'nodeid' => null
-            ];
-        }
-        return $idConverter[$value];
+		$id= sizeof($graphNodes);
+		$graphNodes[] = [
+			'name' => $value->getText(),
+			'id'=> $id,
+			'nodeid' => null
+		];
+		return $id;
     };
-
     $addRelations = function($relations) use(&$idConverter, &$graphNodes, &$graphLinks, $addNode, $addValue) {
         foreach( $relations as $relation ){
             $nodeId = null;
@@ -243,15 +253,11 @@ $app->get('/node/{id}', function(Application $app, $id) {
             } else {
                 $nodeId = $addValue($relation->getValue());
             }
-            ChromePhp::log($nodeId);
-            if($nodeId>=0){
-                ChromePhp::log("t " .$nodeId);
-                ChromePhp::log("s " .$idConverter[$relation->getStart()->getId()]);
-                ChromePhp::log("* " .$relation->getProperty()->getName());
+            if(isset($nodeId)){
                 $graphLinks[] = [
                     'source' => $idConverter[$relation->getStart()->getId()],
                     'target' => $nodeId,
-                    'type' => $relation->getProperty()->getName()
+                    'pname' => $relation->getProperty()->getName()
                 ];
             }
         }
@@ -335,7 +341,7 @@ $app->get('/map', function(Application $app) {
 	return $app['twig']->render('map.twig', ['nodes'=>$geonodes]);
 })->bind('map');
 
-$app->get('/history/{id}', function(Application $app, $id) use ($DB) {
+$app->get('/history/{id}', function(Application $app, $id) {
 	//get node info
 	$node = Node::findById($id);
 	$history = $node->findHistory();
