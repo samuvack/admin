@@ -27,7 +27,6 @@ ul.nodes {
 }
 
 #nodesGraph {
-    height: 500px;
     width: 100%;
     display: inline-block;
 }
@@ -38,7 +37,7 @@ ul.nodes {
     padding:0;
     float: left;
     position: relative;
-    border: black;
+    border: #222222;
     border-width: 2px;
     border-style: solid;
 }
@@ -50,7 +49,7 @@ ul.nodes {
     position: relative;
     float: left;
     overflow: auto;
-    border: black;
+    border: #222222;
     border-width: 2px;
     border-style: solid;
     background-color: #00bc8c;
