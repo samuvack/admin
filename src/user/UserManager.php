@@ -322,7 +322,7 @@ class UserManager implements UserProviderInterface
 	 */
 	public function findCount(array $criteria = array())
 	{
-		$this->repo->countBy($criteria);
+		return $this->repo->countBy($criteria);
 	}
 
 	/**

@@ -524,15 +524,7 @@ class UserController
 		return $app['twig']->render($this->getTemplate('list'), array(
 			'layout_template' => $this->getTemplate('layout'),
 			'users' => $users,
-			'paginator' => $paginator,
-
-			// The following variables are no longer used in the default template,
-			// but are retained for backward compatibility.
-			'numResults' => $paginator->getTotalItems(),
-			'nextUrl' => $paginator->getNextUrl(),
-			'prevUrl' => $paginator->getPrevUrl(),
-			'firstResult' => $paginator->getCurrentPageFirstItem(),
-			'lastResult' => $paginator->getCurrentPageLastItem(),
+			'paginator' => $paginator
 		));
 	}
 
