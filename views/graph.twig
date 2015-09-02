@@ -1,11 +1,18 @@
 {% extends 'baselayout.twig' %}
 {% block title 'Wiki' %}
 
-{% block content %}
-        <h1>Node relations</h1>
-        <div id="graph">
-            <svg id="nodesGraph"></svg>
-        </div>
+{% block content %}{% endblock %}
+
+
+{% block map %}
+    <div id="graph" class="map" style="width:80%;">
+        <svg id="nodesGraph" class="map"></svg>
+    </div>
+
+    <div id="infoPanel" class="info">
+        <h3 class="">Node info</h3>
+        <div id="nodeInfo"></div>
+    </div>
 {% endblock %}
 
 {% block script %}

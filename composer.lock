@@ -4,71 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "77f863372625bd8986bfaac474a8cb54",
+    "hash": "43d2985e90ff10e48bf1cf39abc87837",
     "packages": [
-        {
-            "name": "davdorpe/silex-postgres-simpleuser",
-            "version": "dev-bleeding-edge",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/VandorpeDavid/silex-postgres-simpleuser.git",
-                "reference": "479a9be8d9d706c499505929aec8d9f9223184e4"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/VandorpeDavid/silex-postgres-simpleuser/zipball/479a9be8d9d706c499505929aec8d9f9223184e4",
-                "reference": "479a9be8d9d706c499505929aec8d9f9223184e4",
-                "shasum": ""
-            },
-            "require": {
-                "doctrine/dbal": "~2.4",
-                "jasongrimes/paginator": "~1.0",
-                "php": ">=5.3.0",
-                "silex/silex": "~1.0",
-                "swiftmailer/swiftmailer": "~5.3",
-                "symfony/security": "~2.3",
-                "symfony/twig-bridge": "~2.3"
-            },
-            "require-dev": {
-                "ext-pdo_pgsql": "*",
-                "phpunit/phpunit": "~4.2"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "SimpleUser": "src/"
-                }
-            },
-            "autoload-dev": {
-                "psr-0": {
-                    "SimpleUser\\Tests": "tests/"
-                }
-            },
-            "authors": [
-                {
-                    "name": "Jason Grimes",
-                    "email": "jason@grimesit.com"
-                },
-                {
-                    "name": "David Vandorpe",
-                    "email": "david.vandorpe@wina.ugent.be"
-                }
-            ],
-            "description": "A simple postgres database-backed user provider for Silex, with associated services and controllers.",
-            "homepage": "https://github.com/VandorpeDavid/silex-postgres-simpleuser",
-            "keywords": [
-                "postgres",
-                "postgresql",
-                "silex",
-                "simple user provider",
-                "user",
-                "user provider"
-            ],
-            "support": {
-                "source": "https://github.com/VandorpeDavid/silex-postgres-simpleuser/tree/bleeding-edge"
-            },
-            "time": "2015-08-06 20:27:57"
-        },
         {
             "name": "dflydev/doctrine-orm-service-provider",
             "version": "v1.0.6",
@@ -2535,9 +2472,7 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "davdorpe/silex-postgres-simpleuser": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

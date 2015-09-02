@@ -1,12 +1,5 @@
 {
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/VandorpeDavid/silex-postgres-simpleuser"
-        }
-    ],
     "require": {
-        "davdorpe/silex-postgres-simpleuser": "dev-bleeding-edge",
         "dflydev/doctrine-orm-service-provider": "1.0.*",
         "knplabs/console-service-provider": "^1.0",
         "php":  ">=5.5",
@@ -24,7 +17,9 @@
 		"symfony/validator":"~2.3",
         "jasongrimes/paginator": "^1.0",
         "jsor/doctrine-postgis": "^1.0",
-        "PHPOffice/PHPExcel": "^1.8"
+        "PHPOffice/PHPExcel": "^1.8",
+        "symfony/security": "^2.7",
+        "swiftmailer/swiftmailer": "^5.4"
     },
     
     "autoload": {
@@ -39,7 +34,9 @@
             "Utils\\Database\\Types\\": "utils/database/types",
             "Utils\\Services\\Mapping\\": "utils/services/mapping",
             "MyApp\\Files\\Import\\": "src/files/import/",
-            "MyApp\\FormTypes\\Import\\": "src/formTypes/import/"
+            "MyApp\\FormTypes\\Import\\": "src/formTypes/import/",
+            "MyApp\\User\\": "src/user",
+            "MyApp\\Controllers\\": "app/controllers"
         }
     }
 }

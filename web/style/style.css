@@ -27,7 +27,31 @@ ul.nodes {
 }
 
 #nodesGraph {
-    height: 500px;
     width: 100%;
     display: inline-block;
+}
+
+.map {
+    width: 40%;
+    height:85vh;
+    padding:0;
+    float: left;
+    position: relative;
+    border: #222222;
+    border-width: 2px;
+    border-style: solid;
+}
+
+.info {
+    width: 20%;
+    height: 85vh;
+    padding: 5px 5px 5px 5px;
+    position: relative;
+    float: left;
+    overflow: auto;
+    border: #222222;
+    border-width: 2px;
+    border-style: solid;
+    background-color: #00bc8c;
+
 }

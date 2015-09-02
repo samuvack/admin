@@ -54,4 +54,12 @@ class PropertyLog {
 		$this->action = $action;
 		$this->action_time = new \DateTime();
 	}
+
+	public function getEntity(){
+		return $this->property;
+	}
+
+	public function getName() {
+		return $this->name;
+	}
 }
