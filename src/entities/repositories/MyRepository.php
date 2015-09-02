@@ -28,6 +28,7 @@ class MyRepository extends EntityRepository {
 			$params[] = $value;
 		}
 		$ps = $this->_em->getConnection()->prepare($sql);
+		$ps->execute($params);
 		foreach($ps->fetch() as $result) {
 			return $result;
 		}
