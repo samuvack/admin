@@ -20,7 +20,8 @@ abstract class FileParser {
 		try {
 			$this->run();
 			$this->endOfStream();
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
+			// Something went wrong, the file probably isn't parsed succesfully
 			return false;
 		}
 		return true;
@@ -28,13 +29,15 @@ abstract class FileParser {
 
 	protected $filename;
 	private $traceManager;
+	protected $headerLines;
 	/*
 	 * @param $filename the name of the file to parse
 	 * @param $tracemanager The manager receiving the outputstream of this parser
 	 */
-	public function __construct($filename, $traceManager) {
+	public function __construct($filename, $traceManager, $headerLines = 1) {
 		$this->filename = $filename;
 		$this->traceManager = $traceManager;
+		$this->headerLines = $headerLines;
 	}
 
 	/*

@@ -82,6 +82,7 @@ $app->match('/import', function(Silex\Application $app, Request $request) {
 	//generate the form
 	$form = $app['form.factory']->createBuilder('form')
 		->add('file', 'file')
+		->add('header_lines', 'integer', array('data'=>1))
 		->add('trace', new NodeImportType($app))
 		->add('context', new NodeImportType($app))
 		->add('structure', new NodeImportType($app))
@@ -93,7 +94,7 @@ $app->match('/import', function(Silex\Application $app, Request $request) {
 		$file = $form['file']->getData();
 
 		$manager = new TraceManager($app['orm.em'],$form->getData());
-		$parser = new SpreadsheetParser($file, $manager);
+		$parser = new SpreadsheetParser($file, $manager,$form['file']->getData()['header_lines']);
 		if($parser->parse())
 			return $app->render('import.twig', array('form'=>$form->createView(), 'text'=>'file successfully imported'));
 	}
