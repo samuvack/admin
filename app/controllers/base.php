@@ -235,7 +235,7 @@ $app->get('/node/{id}', function(Application $app, $id) {
     $addValue = function($value) use( &$idConverter, &$graphNodes) {
 		$id= sizeof($graphNodes);
 		$graphNodes[] = [
-			'name' => $value->getText(),
+			'name' => $value->__toString(),
 			'id'=> $id,
 			'nodeid' => null
 		];

@@ -153,7 +153,6 @@ function createGraph(nodes, links, svgSelector, url) {
         })
         .on("click", function (d) {
             //TODO: color selected node different
-            //TODO: change url to {{basepath
             $.get(
                 url + d.id,
                 d.id,

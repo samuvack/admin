@@ -103,7 +103,9 @@
                     stroke: new ol.style.Stroke({color: 'black', width: 2})
                 })
             }));
-            document.getElementById('nodeInfo').innerHTML = 'Selected: ' + selectedFeature.getId();
+            var geoId = selectedFeature.getId().replace(/\D+/g, "");
+            showNodeInfo(geoId);
+            //document.getElementById('nodeInfo').innerHTML = 'Selected: ' + selectedFeature.getId();
         } else {
             //If no feature is selected, try to get wms info
             //TODO: change to allow querying multi layers
@@ -146,6 +148,22 @@
         },
         Cesium.ScreenSpaceEventType.LEFT_CLICK
     );
+
+    function showNodeInfo(id) {
+        //ajax request to get the node info of the selected geometry
+        var currUrl = window.location.href;
+        var url = currUrl.substring(0,currUrl.search('/map')) + '/ajax/nodeInfoByGeo/';
+        //TODO: color selected node different
+        //TODO: change url to {{basepath
+        $.get(
+            url + id,
+            null,
+            function(data) {
+                var $info = $('#nodeInfo');
+                $info.html(data);
+            }
+        );
+    };
 
     $("#2dbutton").click(function() {
         ol3d.setEnabled(false);
