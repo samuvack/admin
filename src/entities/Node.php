@@ -28,6 +28,10 @@ class Node implements RenderableValue {
      * @OneToMany(targetEntity="Relation", mappedBy="startNode", cascade={"all"})
      **/
     private $relations;
+    /**
+     * @OneToMany(targetEntity="NodeLog", mappedBy="node", cascade={"all"})
+     **/
+    private $logs;
 
     function __construct($name="", $description="", $descr=null)
     {
@@ -90,6 +94,9 @@ class Node implements RenderableValue {
         return $this->relations;
     }
 
+    public function getHistory() {
+        return $this->logs;
+    }
     /**
     * Removes the given relation from the relations attribute
     *
