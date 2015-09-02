@@ -11,7 +11,7 @@ use MyApp\Entities\Node;
 	{
 		protected $app;
 		private $AJAX;
-		public function __construct(Application $app, $AJAX = true) {
+		public function __construct(Application $app, $AJAX = false) {
 			$this->app = $app;
 			$this->AJAX = $AJAX;
 		}
@@ -26,15 +26,15 @@ use MyApp\Entities\Node;
 			->add('description', 'textarea', array(
 				'constraints'=>array(new Assert\NotBlank(),new Assert\Length(array('min'=>3))),
 				'attr' => array('class'=>'form-control', 'placeholder'=>'The description of the item')
-				))
-			->add('relations', 'collection', array(
+				));
+			if(!$this->AJAX) {
+				// Dont add another submit, if this is the form for a relationship value
+				$builder->add('relations', 'collection', array(
 				'type' => new RelationType($this->app),
 				'allow_add' => true,
 				//'by_reference'=> true,
-				));
-			// Dont add another submit, if this is the form for a relationship value
-			if($this->AJAX) {
-				$builder->add('send', 'submit', array(
+				))
+				->add('send', 'submit', array(
 					'attr' => array('class' => 'btn btn-default')
 				));
 			}
@@ -49,6 +49,6 @@ use MyApp\Entities\Node;
 
 		public function getName()
 		{
-			return $this->AJAX?'node':'DO_REPLACE_';
+			return $this->AJAX?'DO_REPLACE_':'node';
 		}
 	}

@@ -11,7 +11,7 @@ use MyApp\Entities\Node;
 	{
 		protected $app;
 		private $AJAX;
-		public function __construct(Application $app, $AJAX = true) {
+		public function __construct(Application $app, $AJAX = false) {
 			$this->app = $app;
 			$this->AJAX = $AJAX;
 		}
@@ -24,7 +24,7 @@ use MyApp\Entities\Node;
 				'attr' => array('class'=>'form-control', 'placeholder'=>'The geometry of the item')
 				));
 			// Dont add another submit, if this is the form for a relationship value
-			if($this->AJAX) {
+			if(!$this->AJAX) {
 				$builder->add('send', 'submit', array(
 					'attr' => array('class' => 'btn btn-default')
 				));
@@ -40,6 +40,6 @@ use MyApp\Entities\Node;
 
 		public function getName()
 		{
-			return $this->AJAX?'node':'DO_REPLACE_';
+			return $this->AJAX?'DO_REPLACE_':'geometry';
 		}
 	}
