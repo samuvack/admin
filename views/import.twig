@@ -10,6 +10,7 @@
 		{# render the node's fields #}
 		test
 		{{ form_row(form.file) }}
+		{{ form_row(form.header_lines) }}
 
 		<h3>Relations</h3>
 		{% for node in [form.trace, form.context, form.structure] %}
@@ -28,9 +29,8 @@
 					</li>
 				{% endfor %}
 			</ul>
-			{{ form_widget(node) }}
 		{% endfor %}
-		{{ form_end(form) }}
+		{{ form_end(form, {render_rest: false}) }}
 	</div>
 
 	<div class="content">
