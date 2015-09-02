@@ -40,12 +40,13 @@ class PropertyLog {
 	 */
 	private $action_time;
 	/**
-	 * @Column(type="integer",name="action_by")
-	 */
+	 * @ManyToOne(targetEntity="User")
+	 * @JoinColumn(name="action_by", referencedColumnName="id")
+	 **/
 	private $user;
 
 	public function __construct(Property $property, User $user, $action) {
-		$this->user = $user->getId();
+		$this->user = $user;
 		$this->property = $property;
 		$this->name = $property->getName();
 		$this->datatype = $property->getDatatype();

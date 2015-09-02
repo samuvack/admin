@@ -121,7 +121,9 @@ class TraceManager {
 		if ($value === null)
 			return;
 		$prop = $this->dao->getPersistedProperty($prop);
-		$value = StringConverter::getConverter($prop->getDatatype())->toObject($value);
+		$converter = StringConverter::getConverter($prop->getDatatype());
+		$value = $converter->toObject($value);
+		$value = $converter->toString($value);
 		$rel = new Relation($node, $prop, $value);
 		$this->dao->addRelation($rel);
 	}

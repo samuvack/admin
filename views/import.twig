@@ -8,9 +8,10 @@
 		{{form_start(form, {'action':path('import'), 'method':'POST'})}}
 		{# form_start(form) #}
 		{# render the node's fields #}
-		test
+
 		{{ form_row(form.file) }}
 		{{ form_row(form.header_lines) }}
+		{{ form_errors(form) }}
 
 		<h3>Relations</h3>
 		{% for node in [form.trace, form.context, form.structure] %}
@@ -30,6 +31,8 @@
 				{% endfor %}
 			</ul>
 		{% endfor %}
+		{{  form_row(form.import) }}
+		{{ form_row(form._token) }}
 		{{ form_end(form, {render_rest: false}) }}
 	</div>
 

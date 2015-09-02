@@ -97,13 +97,9 @@ class DAO {
 	public function limitCache() {
 		if(sizeof($this->nodes) >= 200) {
 			$this->em->flush();
-			$this->em->clear();
+			$this->em->clear(':Node');
+			$this->em->clear(':Relation');
 			$this->nodes = array();
-			foreach($this->properties as $key=>$property) {
-				$merged = $this->em->merge($property);
-				$this->properties[$key] = $merged;
-				$this->propertiesById[$merged->getId()] = $merged;
-			}
 		}
 	}
 
