@@ -11,7 +11,7 @@ d3.selection.prototype.moveToFront = function () {
     });
 };
 
-function createGraph(nodes, links, svgSelector) {
+function createGraph(nodes, links, svgSelector, url) {
 
 
     //select svg canvas (width and height set in css)
@@ -150,6 +150,18 @@ function createGraph(nodes, links, svgSelector) {
         })
         .on("mouseout", function (d) {
             unhighlight(d3.select(this));
+        })
+        .on("click", function (d) {
+            //TODO: color selected node different
+            //TODO: change url to {{basepath
+            $.get(
+                url + d.id,
+                d.id,
+                function(data) {
+                    var $info = $('#nodeInfo');
+                    $info.html(data);
+                }
+                );
         })
         .call(drag);
 

@@ -11,3 +11,10 @@ $app->get('/ajax/form/{property}', function(Application $app, Request $request, 
 	$form->handleRequest($request);
 	return $app['twig']->render('values/ajaxform.twig', array('form'=> $form->createView()));
 })->bind('form');
+
+
+$app->get('/ajax/nodeInfo/{id}', function(Application $app, Request $request, $id) {
+	$result = $app["orm.em"]->getRepository(':Node')->find($id);
+
+	return $app['twig']->render('values/node.twig', array('node'=> $result, 'link'=>false));
+})->bind('form');
