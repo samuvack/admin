@@ -122,7 +122,7 @@ class TraceManager {
 			return;
 		$prop = $this->dao->getPersistedProperty($prop);
 		if($prop->getDataType() === 'node') {
-			$rel = new Relation($node, $prop,'', $value);
+			$rel = new Relation($node, $prop,'', $this->dao->getNode($value));
 			$this->dao->addRelation($rel);
 		} else if($prop->getDataType() === 'geometry') {
 			$rel = new Relation($node, $prop,'',null, $value);

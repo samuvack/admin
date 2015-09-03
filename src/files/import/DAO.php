@@ -25,14 +25,29 @@ class DAO {
 		$this->em = $em;
 	}
 
+	/*
+	 * Sets description if the current instance has an empty description.
+	 * @return true if description changed
+	 */
+	private function fillNodeDescription($node, $description) {
+		if($node->getDescription() == '' || $node->getDescription() === null) {
+			$node->setDescription($description);
+			return true;
+		}
+		return false;
+	}
+
 	public function getNode($name, $description = '') {
 		if(isset($this->nodes[$name])) {
+			$this->fillNodeDescription($this->nodes[$name], $description);
 			return $this->nodes[$name];
 		}
 
 		$node = $this->nodeRepo->findOneBy(array('name' => $name));
 		if($node === null) {
 			$node = new Node($name, $description);
+			$this->em->persist($node);
+		} else if($this->fillNodeDescription($node, $description)) {
 			$this->em->persist($node);
 		}
 
@@ -94,11 +109,14 @@ class DAO {
 	 * Limit the nodes in the entitymanager to avoid OOM-errors
 	 */
 	public function limitCache() {
-		if(sizeof($this->nodes) >= 200) {
+		if(sizeof($this->nodes)  + sizeof($this->relations)>= 600) {
 			$this->em->flush();
 			$this->em->clear(':Node');
+			$this->em->clear(':NodeLog');
 			$this->em->clear(':Relation');
+			$this->em->clear(':RelationLog');
 			$this->nodes = array();
+			$this->relations = array();
 		}
 	}
 
@@ -128,7 +146,15 @@ class DAO {
 		} else if(isset($this->nodeRelations[$relation->getStart()->getId()][$relation->getValue()->getId()])) {
 			return false; //relation already exists
 		}
-		$this->nodeRelations[$relation->getStart()->getId()][$relation->getValue()->getId()] = true;
+		if(!( $relation->getStart() instanceof Node && $relation->getValue() instanceof Node)){
+			print_r($relation->getValue());
+			die();
+		}
+		try {
+			$this->nodeRelations[$relation->getStart()->getId()][$relation->getValue()->getId()] = true;
+		} catch(\Exception $e) {
+
+		}
 		$dbrel = $this->em->getRepository(':Relation')->findOneBy(array('startNode' => $relation->getStart(), 'nodevalue' =>  $relation->getValue()));
 		if($dbrel !== null) {
 			return false;
