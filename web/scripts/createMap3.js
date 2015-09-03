@@ -197,4 +197,12 @@
             "display":"block"
         });
     });
+
+    $("#mapExport").click(function() {
+        map.once('postcompose', function(event) {
+            var canvas = event.context.canvas;
+            $("#mapExport").attr("href",canvas.toDataURL('image/png'));
+        });
+        map.renderSync();
+    })
 })();
