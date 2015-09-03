@@ -7,7 +7,7 @@
     var vectorSource = new ol.source.Vector({
         loader: function (extent, resolution, projection) {
 
-            var url = '/../cgi-bin/proxy.cgi?url=' + encodeURIComponent("http://localhost:8080/geoserver/archeowiki/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=archeowiki:geometries&maxFeatures=50&outputFormat=application%2Fjson");
+            var url = '/cgi-bin/proxy.cgi?url=' + encodeURIComponent("http://localhost:8080/geoserver/archeowiki/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=archeowiki:geometries&maxFeatures=50&outputFormat=application%2Fjson");
 
             $.ajax(url).then(function (response) {
                 var features = geojsonFormat.readFeatures(response, {
@@ -28,7 +28,7 @@
     //WMS layer (Archeologische zones) from onroerend erfgoed
     var archZones = new ol.layer.Image({
             source: new ol.source.ImageWMS({
-                url: '/../cgi-bin/proxy.cgi?url='+ encodeURIComponent('https://geo.onroerenderfgoed.be/geoserver/wms'),
+                url: '/cgi-bin/proxy.cgi?url='+ encodeURIComponent('https://geo.onroerenderfgoed.be/geoserver/wms'),
                 params: {
                     'LAYERS': 'vioe:cai_zone',
                     'STYLES': 'vioe_cai_zones',
