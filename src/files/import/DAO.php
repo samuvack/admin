@@ -25,7 +25,7 @@ class DAO {
 		$this->em = $em;
 	}
 
-	public function getNode($name, $description) {
+	public function getNode($name, $description = '') {
 		if(isset($this->nodes[$name])) {
 			return $this->nodes[$name];
 		}
@@ -82,12 +82,11 @@ class DAO {
 		return $prop;
 	}
 
-	/*
-	 * Add link between two nodes
-	 */
-	public function addLink(Node $parentNode, Node $childNode) {
-		$prop = $this->getPropertyById(5); // 'is_part_of' property
-		$relation = new Relation($parentNode, $prop, null, $childNode);
+	public function createNodeRelation(Node $parentNode, Node $childNode, Property $property = null) {
+		if($property === null) {
+			$property = $this->getPropertyById(5); // 'is_part_of' property
+		}
+		$relation = new Relation($parentNode, $property, null, $childNode);
 		$this->addRelation($relation);
 	}
 

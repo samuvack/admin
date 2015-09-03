@@ -121,11 +121,19 @@ class TraceManager {
 		if ($value === null)
 			return;
 		$prop = $this->dao->getPersistedProperty($prop);
-		$converter = StringConverter::getConverter($prop->getDatatype());
-		$value = $converter->toObject($value);
-		$value = $converter->toString($value);
-		$rel = new Relation($node, $prop, $value);
-		$this->dao->addRelation($rel);
+		if($prop->getDataType() === 'node') {
+			$rel = new Relation($node, $prop,'', $value);
+			$this->dao->addRelation($rel);
+		} else if($prop->getDataType() === 'geometry') {
+			$rel = new Relation($node, $prop,'',null, $value);
+			$this->dao->addRelation($rel);
+		} else {
+			$converter = StringConverter::getConverter($prop->getDatatype());
+			$value = $converter->toObject($value);
+			$value = $converter->toString($value);
+			$rel = new Relation($node, $prop, $value);
+			$this->dao->addRelation($rel);
+		}
 	}
 
 	/*
@@ -136,9 +144,9 @@ class TraceManager {
 		$context = $this->makeNode($row, 'context');
 		$structure = $this->makeNode($row, 'structure');
 		if ($structure !== null && $context !== null)
-			$this->dao->addLink($structure, $context);
+			$this->dao->createNodeRelation($structure, $context);
 		if ($trace !== null && $context !== null)
-			$this->dao->addLink($context, $trace);
+			$this->dao->createNodeRelation($context, $trace);
 		$this->dao->limitCache();
 	}
 
