@@ -28,7 +28,7 @@
     //WMS layer (Archeologische zones) from onroerend erfgoed
     var archZones = new ol.layer.Image({
             source: new ol.source.ImageWMS({
-                url: 'https://geo.onroerenderfgoed.be/geoserver/wms',
+                url: '/../cgi-bin/proxy.cgi?url='+ encodeURIComponent('https://geo.onroerenderfgoed.be/geoserver/wms'),
                 params: {
                     'LAYERS': 'vioe:cai_zone',
                     'STYLES': 'vioe_cai_zones',
