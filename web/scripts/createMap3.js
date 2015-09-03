@@ -143,7 +143,8 @@
                         stroke: new ol.style.Stroke({color: 'black', width: 2})
                     })
                 }));
-                document.getElementById('nodeInfo').innerHTML = 'Selected: ' + x;
+                var geoId = selectedFeature.getId().replace(/\D+/g, "");
+                showNodeInfo(geoId);
             }
         },
         Cesium.ScreenSpaceEventType.LEFT_CLICK
