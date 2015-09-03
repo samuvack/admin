@@ -77,30 +77,6 @@ $app->match('/insert', function(Request $request) use($app) {
 	return $app['twig']->render('insert.twig', array('form'=>$form->createView()));
 })->bind('insert');
 
-$app->match('/import', function(Silex\Application $app, Request $request) {
-
-	//generate the form
-	$form = $app['form.factory']->createBuilder('form')
-		->add('file', 'file')
-		->add('header_lines', 'integer', array('data'=>1))
-		->add('trace', new NodeImportType($app))
-		->add('context', new NodeImportType($app))
-		->add('structure', new NodeImportType($app))
-		->add('import', 'submit', array('label'=>'Start import'))
-		->getForm();
-
-	$form->handleRequest($request);
-	if($form->isValid()) {
-		$file = $form['file']->getData();
-
-		$manager = new TraceManager($app['orm.em'],$form->getData());
-		$parser = new SpreadsheetParser($file, $manager,$form['header_lines']->getData());
-		$parser->parse();
-		return $app->render('import.twig', array('form'=>$form->createView(), 'text'=>'file successfully imported'));
-	}
-
-	return $app['twig']->render('import.twig', array('form'=>$form->createView(), 'text'=>'no file imported'));
-})->bind('import');
 
 $app->get('/node/{id}', function(Application $app, $id) {
 	$node = $app['orm.em']->getRepository(':Node')->find($id);

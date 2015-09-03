@@ -11,13 +11,14 @@ abstract class FileParser {
 	 * Called when parsing the file, define file-type based logic here
 	 */
 	protected abstract function run();
+	protected $continueParsing = true;
 
 	/*
 	 * Call to parse the file
 	 */
 	public function parse() {
 		$this->run();
-		$this->endOfStream();
+		return $this->endOfStream();
 	}
 
 	protected $filename;
@@ -37,13 +38,13 @@ abstract class FileParser {
 	 * Call this for every line in your implementation of run()
 	 */
 	protected function streamLine(array $line) {
-		$this->traceManager->handle($line);
+		$this->continueParsing = $this->traceManager->handle($line);
 	}
 
 	/*
 	 * Called at the end of parse()
 	 */
 	protected function endOfStream() {
-		$this->traceManager->endofStream();
+		return $this->traceManager->endofStream();
 	}
 }

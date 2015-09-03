@@ -8,7 +8,7 @@ use \MyApp\Entities\Node;
 use \MyApp\Entities\Relation;
 use \MyApp\Entities\Property;
 
-class TraceManager {
+class TraceManager implements Manager {
 	private $em;
 	private $columnConfig;
 	private $dao;
@@ -138,6 +138,7 @@ class TraceManager {
 
 	/*
 	 * Convert a row fom the FileParser to (a) node(s) and (a) relation(s).
+	 * @return boolean Read more lines
 	 */
 	public function handle(array $row) {
 		$trace = $this->makeNode($row, 'trace');
@@ -148,10 +149,12 @@ class TraceManager {
 		if ($trace !== null && $context !== null)
 			$this->dao->createNodeRelation($context, $trace);
 		$this->dao->limitCache();
+		return true;
 	}
 
 	public function endOfStream() {
 		// Flush any remaining entities
 		$this->em->flush();
+		return true;
 	}
 }

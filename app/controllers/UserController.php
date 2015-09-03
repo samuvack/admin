@@ -52,7 +52,7 @@ class UserController
 	 * @param UserManager $userManager
 	 * @param array $deprecated - Deprecated. No longer used.
 	 */
-	public function __construct(UserManager $userManager, $deprecated = null)
+	public function __construct(UserManager $userManager)
 	{
 		$this->userManager = $userManager;
 	}

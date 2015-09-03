@@ -18,7 +18,9 @@ class SpreadsheetParser extends FileParser {
 		//  Loop through each row of the worksheet in turn
 
 		// skip header lines
-		for ($row = $this->headerLines + 1; $row <= $highestRow; ++$row){
+		for ($row = 1; $row <= $highestRow; ++$row){
+			if(!$this->continueParsing)
+				break;
 			// Read a row of data into an array
 			// param example: A5:C5
 			$rowData = $sheet->rangeToArray('A' . $row . ':' . $highestColumn . $row,

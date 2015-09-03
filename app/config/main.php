@@ -19,5 +19,6 @@ return array(
 	),
 	"pagination" => array(
 		'nodes_per_page'=>10
-	)
+	),
+	'importFileDir' => __DIR__ . "/../../files/"
 );
