@@ -49,6 +49,10 @@ class MappingManager {
 		$this->registerListeners[] = $listener;
 	}
 
+	public function getDataTypes() {
+		return array_keys($this->mappings);
+	}
+
 	private function noMappingException($type) {
 		$format = "Type %s is has no mapping.";
 		throw new TypeNotSupportedException(sprintf($format,$type));

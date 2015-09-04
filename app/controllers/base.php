@@ -4,11 +4,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use MyApp\Entities\Node;
+use MyApp\Entities\Property;
 use MyApp\Entities\Relation;
+use MyApp\FormTypes\PropertyType;
 use MyApp\FormTypes\FilterType;
 use MyApp\FormTypes\NodeType;
-use \MyApp\Entities\NodeLog;
-use \MyApp\Entities\RelationLog;
 use JasonGrimes\Paginator;
 require_once __DIR__.'/../ChromePhp.php';
 $app->match('/', function(Application $app){
@@ -377,7 +377,7 @@ $app->match('/filter', function(Application $app, Request $request) {
 	return $app['twig']->render('filter.twig', array('form'=>$form->createView(), 'nodes'=>array()));
 })->bind('filter');
 
-$app->get('/graph', function(Application $app, Request $request) {
+$app->get('/graph', function(Application $app) {
 	$relations = $app['orm.em']->getRepository(':Relation')->findAllNodeToNode();
 
 	$nodes = [];
@@ -410,3 +410,18 @@ $app->get('/graph', function(Application $app, Request $request) {
 
 	return $app['twig']->render('graph.twig', array('nodes'=>$nodes, 'links'=>$links));
 })->bind('graph');
+
+$app->match('/property', function(Application $app, Request $request) {
+	$property = new Property();
+	$form = $app['form.factory']->createBuilder(new PropertyType($app), $property)->getForm();
+	$form->handleRequest($request);
+
+	if($form->isValid()) {
+		$em = $app['orm.em'];
+		$em->persist($property);
+		$em->flush();
+
+		return $app->redirect($app->path('home'));
+	}
+	return $app['twig']->render('property.twig', array('form'=>$form->createView()));
+})->bind('property');

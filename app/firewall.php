@@ -26,4 +26,5 @@ $app['security.access_rules'] = array(
 	array('^/insert', 'ROLE_EDITOR'),
 	array('^/import', 'ROLE_EDITOR'),
 	array('^/update', 'ROLE_EDITOR'),
+	array('^/property', 'ROLE_ADMIN')
 );
