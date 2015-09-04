@@ -138,13 +138,13 @@ $app['mapping.manager']->register('year_period',
 );
 $app['mapping.manager']->register('node',
 	function($app){
-		return new \MyApp\FormTypes\NodeType($app, false);
+		return new \MyApp\FormTypes\NodeType($app, true);
 	},
 	new \MyApp\Converters\EntityConverter()
 );
 $app['mapping.manager']->register('geometry',
 	function($app){
-		return new \MyApp\FormTypes\GeometryType($app, false);
+		return new \MyApp\FormTypes\GeometryType($app, true);
 	},
 	new \MyApp\Converters\EntityConverter()
 );

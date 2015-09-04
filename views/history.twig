@@ -10,15 +10,7 @@
 	<h3>Edits</h3>
 	<ul class="nodes">
 		{% for edit in edits %}
-			{% if edit.action == 'I'%}
-				<li> INSERTED ON {{edit.action_time|date("j-n-Y g:i")}} BY {{edit.action_by}} : <br> 
-				{{edit.name}}, {{edit.description}} </li><br>
-			{% elseif edit.action == 'D'%}
-				<li> DELETED ON {{edit.action_time|date("j-n-Y g:i")}} BY {{edit.action_by}} </li><br>
-			{% elseif edit.action == 'U' %}
-				<li> UPDATED ON {{edit.action_time|date("j-n-Y g:i")}} BY {{edit.action_by}} : <br>
-				{{edit.name}}, {{edit.description}} </li><br>
-			{%endif%}	
+			<li> {{ edit.action|capitalize }}ed by {{  render(edit.user, {link:true}) }} on {{edit.time|date("j-n-Y g:i")}}</li><br>
 		{% endfor %}
 	</ul>
 	

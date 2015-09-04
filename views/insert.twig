@@ -11,7 +11,7 @@
 			{{ form_row(form.name) }}
 			{{ form_row(form.description) }}
 
-			<h3>Relations</h3>
+			<h3>{{ form_label(form.relations) }}</h3>
 			<ul class="relations" data-prototype="{{ form_widget(form.relations.vars.prototype)|e }}">
 				{# iterate over each existing property and render its fields #}
 				{% for rel in form.relations %}

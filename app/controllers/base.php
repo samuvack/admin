@@ -212,8 +212,9 @@ $app->get('/map', function(Application $app) {
 
 $app->get('/history/{id}', function(Application $app, $id) {
 	//get node info
-	$node = Node::findById($id);
-	$history = $node->findHistory();
+	$repo = $app['orm.em']->getRepository(':Node');
+	$node = $repo->find($id);
+	$history = $node->getHistory();
 
 	// TODO after user implemented
 

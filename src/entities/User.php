@@ -7,13 +7,14 @@
  */
 
 namespace MyApp\Entities;
+use MyApp\Values\RenderableValue;
 
 
 /**
  * @Entity(repositoryClass="MyApp\Entities\Repositories\MyRepository")
  * @Table(name="users")
  */
-class User extends \MyApp\User\AUser
+class User extends \MyApp\User\AUser implements RenderableValue
 {
 	/**
 	 * @Id @Column(type="integer")
@@ -52,6 +53,28 @@ class User extends \MyApp\User\AUser
 
 	public function getLogs() {
 		return new LogIterator($this->nodeLogs, $this->relationLogs);
+	}
+
+	/**
+	 * @return String simple string for use in e.g. the graph
+	 */
+	public function __toString() {
+		return $this->getRealUsername();
+	}
+
+	/**
+	 * Get FormType
+	 */
+	public function getFormType(\Silex\Application $app) {
+		// TODO: Implement getFormType() method.
+	}
+
+	/**
+	 * Extended view, for detailed representation
+	 */
+	public function render(\Twig_Environment $env, array $params) {
+		$params = array_merge(array('user'=> $this, 'link'=>false), $params);
+		$env->display('values/user.twig',$params);
 	}
 }
 
