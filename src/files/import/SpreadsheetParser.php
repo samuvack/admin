@@ -18,7 +18,7 @@ class SpreadsheetParser extends FileParser {
 		//  Loop through each row of the worksheet in turn
 
 		// skip header lines
-		for ($row = 2; $row <= $highestRow; ++$row){
+		for ($row = 1; $row <= $highestRow; ++$row){
 			if(!$this->continueParsing)
 				break;
 			// Read a row of data into an array

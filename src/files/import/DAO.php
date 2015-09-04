@@ -109,7 +109,7 @@ class DAO {
 	 * Limit the nodes in the entitymanager to avoid OOM-errors
 	 */
 	public function limitCache() {
-		if(sizeof($this->nodes)  + sizeof($this->relations)>= 600) {
+		if(sizeof($this->nodes)  + sizeof($this->relations)>= 350) {
 			$this->em->flush();
 			$this->em->clear(':Node');
 			$this->em->clear(':NodeLog');
@@ -145,10 +145,6 @@ class DAO {
 			$this->nodeRelations[$relation->getStart()->getId()] = array();
 		} else if(isset($this->nodeRelations[$relation->getStart()->getId()][$relation->getValue()->getId()])) {
 			return false; //relation already exists
-		}
-		if(!( $relation->getStart() instanceof Node && $relation->getValue() instanceof Node)){
-			print_r($relation->getValue());
-			die();
 		}
 		try {
 			$this->nodeRelations[$relation->getStart()->getId()][$relation->getValue()->getId()] = true;

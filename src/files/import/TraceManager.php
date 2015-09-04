@@ -12,7 +12,7 @@ class TraceManager implements Manager {
 	private $em;
 	private $columnConfig;
 	private $dao;
-
+	private $first = true;
 	/*
 	 * @param columnConfig:
 	 * pass an array mapping the column indexes. Example:
@@ -27,45 +27,15 @@ class TraceManager implements Manager {
 	}
 
 	/*
-	 * Get relations from the config for a node
-	 */
-	protected function makeNodeRelations(Node $node, array $row, $config) {
-		foreach ($config as $rel) {
-			$prop = $rel['property'];
-			$column = $rel['column'];
-			$this->makeRelation($node, $prop, $row[$column]);
-		}
-	}
-
-	/*
-	 * Create a relation with a value for a node
-	 */
-	protected function makeRelation(Node $node, Property $prop, $value) {
-		if ($value === null)
-			return;
-		$prop = $this->dao->getPersistedProperty($prop);
-		if($prop->getDataType() === 'node') {
-			$rel = new Relation($node, $prop,'', $this->dao->getNode($value));
-			$this->dao->addRelation($rel);
-		} else if($prop->getDataType() === 'geometry') {
-			$rel = new Relation($node, $prop,'',null, $value);
-			$this->dao->addRelation($rel);
-		} else {
-			$converter = StringConverter::getConverter($prop->getDatatype());
-			$value = $converter->toObject($value);
-			$value = $converter->toString($value);
-			$rel = new Relation($node, $prop, $value);
-			$this->dao->addRelation($rel);
-		}
-	}
-
-	/*
 	 * Convert a row fom the FileParser to (a) node(s) and (a) relation(s).
 	 * @return boolean Read more lines
 	 */
 	public function handle(array $row) {
+		if($this->first) { // skip first line
+			$this->first = false;
+			return true;
+		}
 		foreach($this->columnConfig as $column => $relations) {
-			--$column; // 1-indexed to 0-indexed
 			$value = null;
 			if(isset($relations['value'])) {
 				$value = $relations['value'];
