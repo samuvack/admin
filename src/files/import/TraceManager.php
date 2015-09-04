@@ -17,56 +17,6 @@ class TraceManager implements Manager {
 	 * @param columnConfig:
 	 * pass an array mapping the column indexes. Example:
 	 *
-	 * $columnConfig = array(
-	 *
-	 * 	[trace] => Array
-     *   (
-     *     [name_column] => 2
-     *      [description_column] => 4
-            [relations] => Array
-                (
-                    [0] => Array
-                        (
-                            [property] => MyApp\Entities\Property Object
-                                (
-                                    [id:MyApp\Entities\Property:private] => 6
-                                    [name:MyApp\Entities\Property:private] => has date
-                                    [description:MyApp\Entities\Property:private] =>
-                                    [datatype:MyApp\Entities\Property:private] => year_period
-                                    [descr:MyApp\Entities\Property:private] => Array
-                                        (
-                                            [0] => date
-                                        )
-
-                                )
-
-                            [column] => 5
-                        )
-
-                )
-
-        )
-
-		[context] => Array
-			(
-				[name_column] => 6
-				[description_column] => 7
-				[relations] => Array
-					(
-					)
-
-			)
-
-		[structure] => Array
-			(
-				[name_column] => 9
-				[description_column] => 10
-				[relations] => Array
-					(
-					)
-
-        )
-		);
 	 *
 	 * Only 'name_column' is required.
 	 */
@@ -74,33 +24,6 @@ class TraceManager implements Manager {
 		$this->em = $em;
 		$this->columnConfig = $columnConfig;
 		$this->dao = new DAO($em);
-	}
-
-	/*
-	 * @param $row The row that was passed to $this->handle()
-	 * @param $configName Name of the part of config array (in example above: 'trace'|'context'|'structure'
-	 */
-	protected function makeNode(array $row, $configName) {
-		if (!isset($this->columnConfig[$configName]))
-			return null;
-		$config = $this->columnConfig[$configName];
-		$name = $row[$config['name_column']];
-		if ($name === null) { // No name in file means we can't instantiate the node
-			return null;
-		}
-		unset($config['name_column']);
-
-		$description = null;
-		if (isset($config['description_column'])) {
-			// If there is a column for description, fetch it.
-			$description = $row[$config['description_column']];
-			unset($config['description_column']);
-		}
-		$node = $this->dao->getNode($name, $description);
-		// Create relations in the config for this node
-		$this->makeNodeRelations($node, $row, $config['relations']);
-
-		return $node;
 	}
 
 	/*
@@ -141,13 +64,41 @@ class TraceManager implements Manager {
 	 * @return boolean Read more lines
 	 */
 	public function handle(array $row) {
-		$trace = $this->makeNode($row, 'trace');
-		$context = $this->makeNode($row, 'context');
-		$structure = $this->makeNode($row, 'structure');
-		if ($structure !== null && $context !== null)
-			$this->dao->createNodeRelation($structure, $context);
-		if ($trace !== null && $context !== null)
-			$this->dao->createNodeRelation($context, $trace);
+		foreach($this->columnConfig as $column => $relations) {
+			--$column; // 1-indexed to 0-indexed
+			$value = null;
+			if(isset($relations['value'])) {
+				$value = $relations['value'];
+			} else {
+				$value = $row[$column];
+			}
+			if($value === null) {
+				continue; //no value
+			}
+			if($relations['type'] === 'ROOT') {
+				$this->dao->getNode($value);
+			} else {
+				$belongsToName = $row[$relations['belongsTo']];
+				if($belongsToName === null)
+					continue; // No node to attach this relation to.
+				$parent = $this->dao->getNode($belongsToName);
+
+				$property = $this->dao->getPropertyById($relations['type']);
+				$relationValue = null;
+				if($property->getDataType() == 'node') {
+					$relationValue = $this->dao->getNode($value);
+					$this->dao->createNodeRelation($parent, $relationValue, $property);
+				} else if($property->getDataType() == 'geometry') {
+					// TODO
+				} else {
+					$converter = StringConverter::getConverter($property->getDatatype());
+					$relationValue = $converter->toObject($value);
+					$relationValue = $converter->toString($relationValue);
+					$relation = New Relation($parent, $property, $relationValue);
+					$this->dao->addRelation($relation);
+				}
+			}
+		}
 		$this->dao->limitCache();
 		return true;
 	}

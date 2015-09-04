@@ -30,11 +30,7 @@ $import->match('/', function(Silex\Application $app, Request $request) {
 		move_uploaded_file($file, $location);
 		$manager = new HeaderManager();
 		$parser = new SpreadsheetParser($location, $manager);
-		$columns = $parser->parse();
-
-/*$manager = new TraceManager($app['orm.em'],$form->getData());
-$parser = new SpreadsheetParser($file, $manager,$form['header_lines']->getData());
-$parser->parse();*/
+		if($columns = $parser->parse())
 		return $app->render('import/columns.twig', array(
 			'file'=>$location,
 			'columns'=>$columns,
@@ -45,27 +41,17 @@ $parser->parse();*/
 	return $app['twig']->render('import/file.twig', array('form'=>$form->createView(), 'text'=>'no file imported'));
 })->bind('import');
 $import->match('/start', function(Silex\Application $app, Request $request) {
+	$columns = json_decode($_POST['columns'],true);
 
-	//generate the form
-	$form = $app['form.factory']->createBuilder('form')
-		->add('filename', 'hidden')
-		->add('trace', new NodeImportType($app))
-		->add('context', new NodeImportType($app))
-		->add('structure', new NodeImportType($app))
-		->add('import', 'submit', array('label'=>'Start import'))
-		->getForm();
+	$file = $_POST['file'];
 
-	$form->handleRequest($request);
-	if($form->isValid()) {
-		$file = $form['file']->getData();
+	$manager = new TraceManager($app['orm.em'],$columns);
+	$parser = new SpreadsheetParser($file, $manager);
+	$parser->parse();
+	return $app->redirect($app->path('home'));
 
-		$manager = new TraceManager($app['orm.em'],$form->getData());
-		$parser = new SpreadsheetParser($file, $manager);
-		$parser->parse();
-		return $app->render('import.twig', array('form'=>$form->createView(), 'text'=>'file successfully imported'));
-	}
 
-	return $app['twig']->render('import/file.twig', array('form'=>$form->createView(), 'text'=>'no file imported'));
+//	return $app['twig']->render('import/file.twig', array('form'=>$form->createView(), 'text'=>'no file imported'));
 })->bind('import/start');
 
 return $import;
