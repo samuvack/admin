@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "4d4d50b62b4561f102caff9a792b1c86",
+    "hash": "705456f90af1ad53a1a0e0980c3e63f2",
     "packages": [
         {
             "name": "dflydev/doctrine-orm-service-provider",

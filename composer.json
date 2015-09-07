@@ -33,7 +33,8 @@
             "Utils\\Database\\Types\\": "utils/database/types",
             "Utils\\Services\\Mapping\\": "utils/services/mapping",
             "MyApp\\User\\": "src/user",
-            "MyApp\\Controllers\\": "app/controllers"
+            "MyApp\\Controllers\\": "app/controllers",
+            "Utils\\Graph\\": "utils/graph"
         }
     }
 }
