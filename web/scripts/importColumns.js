@@ -18,8 +18,8 @@ var initDynamicForm = function(columns) {
             $row.find('.override-value').html('<input type="text"/>');
         }
 
+        var index = $row.attr('id').replace(/\D/g,'');
         if($dropdown.find(':selected').hasClass('node-property')) {
-            var index = $row.attr('id').replace(/\D/g,'');
             if(!(index in nodeRows)) {
                 nodeRows[index] = $row.find('.name').html();
                 var $option = $('<option class="parent-'+index+'" value="'+index+'">');
@@ -27,7 +27,6 @@ var initDynamicForm = function(columns) {
                 $('.select-parent').append($option);
             }
         } else {
-            var index = $row.attr('id');
             if(index in nodeRows) {
                 delete nodeRows[index];
                 $('.parent-'+index).remove();
