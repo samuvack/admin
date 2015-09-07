@@ -30,6 +30,10 @@ abstract class StringConverter {
         return self::$converterMap[$type];
     }
 
+    public static function getDataTypes() {
+
+    }
+
     public abstract function toString($object);
     public abstract function toObject($string);
 }
