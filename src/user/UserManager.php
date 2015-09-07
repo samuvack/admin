@@ -123,8 +123,6 @@ class UserManager implements UserProviderInterface
 	public function createUser($email, $plainPassword, $name = null, $roles = array())
 	{
 
-		$userClass = $this->getUserClass();
-
 		$user = new \MyApp\Entities\User($email);
 
 		if (!empty($plainPassword)) {

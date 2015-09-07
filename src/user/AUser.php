@@ -15,7 +15,7 @@ class AUser implements AdvancedUserInterface, \Serializable
 	protected $email;
 	protected $password;
 	protected $salt;
-	protected $roles = array();
+	protected $roles = array('ROLE_USER');
 	protected $name = '';
 	protected $timeCreated;
 	protected $username;

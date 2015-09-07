@@ -28,7 +28,7 @@ class User extends \MyApp\User\AUser implements RenderableValue
 	/** @Column(type="text") */
 	protected $salt;
 	/** @Column(type="simple_array") */
-	protected $roles = array();
+	protected $roles = array('ROLE_USER');
 	/** @Column(type="text") */
 	protected $name = '';
 	/** @Column(type="integer", name="time_created") */
