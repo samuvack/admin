@@ -15,6 +15,9 @@ class TextValue implements RenderableValue {
 	private $text;
 
 	public function __construct($text) {
+		if(! is_string($text) ) {
+			throw new \Exception(sprintf("Type %s is not a string.", gettype($text)));
+		}
 		$this->text = $text;
 	}
 

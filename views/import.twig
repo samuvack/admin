@@ -5,12 +5,43 @@
 	<div class="content">
 		<h1>Import</h1>
 		<p>Import file</p>
-		{{form(form, {'action':path('import'), 'method':'POST'})}}
-		{{form_rest(form)}}
+		{{form_start(form, {'action':path('import/start'), 'method':'POST'})}}
+		{# form_start(form) #}
+		{# render the node's fields #}
+
+		{{ form_row(form.file) }}
+		{{ form_row(form.header_lines) }}
+		{{ form_errors(form) }}
+
+		<h3>Relations</h3>
+		{% for node in [form.trace, form.context, form.structure] %}
+			{{ form_label(node) }}
+			{{ form_errors(node) }}
+
+
+
+			{{ form_row(node.name_column) }}
+			{{ form_row(node.description_column) }}
+			<ul class="relations" data-prototype="{{ form_widget(node.relations.vars.prototype)|e }}">
+				{# iterate over each existing property and render its fields #}
+				{% for rel in node.relations %}
+					<li>
+						{# TODO #}
+					</li>
+				{% endfor %}
+			</ul>
+		{% endfor %}
+		{{  form_row(form.import) }}
+		{{ form_row(form._token) }}
+		{{ form_end(form, {render_rest: false}) }}
 	</div>
 
 	<div class="content">
 		<p>File</p>
 		<p> {{text}} </p>
 	</div>
+{% endblock %}
+
+{% block script %}
+	<script src="scripts/addProperty.js" type="text/javascript"></script>
 {% endblock %}

@@ -1,0 +1,61 @@
+{% extends 'baselayout.twig' %}
+{% block title 'Import' %}
+{% block links%}
+    <link rel="stylesheet" href="{{ app.request.basepath }}/style/import.css">
+{% endblock links %}
+
+{% block content %}
+    <div class="content">
+        <h1>Import</h1>
+        <p>Choose columns</p>
+        <form id="column-form" action="{{path('import/start')}}" method="post" name="columns">
+            <input type="hidden" name="file" value="{{ file }}"/>
+            <input type="hidden" id="columns-json" name="columns" value=""/>
+            Select root node column.
+            <table>
+                <tr>
+                    <th>Column name</th>
+                    <th>Relation</th>
+                    <th>Belongs to</th>
+                    <th>Override value</th>
+                </tr>
+                {% for column in columns %}
+                    <tr id="column-{{ loop.index0 }}" class="import-column">
+                        <td class="name">
+                            {{ column }}
+                        </td>
+                        <td>
+                            <select class="property-select">
+                                <option value="ROOT" class="node-property">ROOT NODE</option>
+                                {% for property in properties %}
+                                    {% if property.datatype == 'node' %}
+                                         <option class="node-property" value="{{ property.id }}">{{ property.name }}</option>
+                                    {% else %}
+                                        <option value="{{ property.id }}">{{ property.name }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                                <option value="EMPTY" selected>EMPTY</option>
+                            </select>
+                        </td>
+                        <td class="belongs-to">
+                            &nbsp;
+                        </td>
+                        <td class="override-value">
+                            &nbsp;
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+    <script>
+        $(document).ready(function(){
+            initDynamicForm([]);
+        });
+    </script>
+{% endblock %}
+
+{% block script %}
+    <script src="{{ app.request.basepath }}/scripts/importColumns.js" type="text/javascript"></script>
+{% endblock %}

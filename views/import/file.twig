@@ -1,0 +1,20 @@
+{% extends 'baselayout.twig' %}
+{% block title 'Import' %}
+
+{% block content %}
+    <div class="content">
+        <h1>Import</h1>
+        <p>Import file</p>
+        {{form_start(form, {'action':path('import'), 'method':'POST'})}}
+        {# form_start(form) #}
+        {# render the node's fields #}
+
+        {{ form_row(form.file) }}
+
+        {{ form_end(form) }}
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script src="scripts/addProperty.js" type="text/javascript"></script>
+{% endblock %}

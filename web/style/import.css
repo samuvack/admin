@@ -1,0 +1,7 @@
+table {
+    width: 100%;
+}
+/* To switch columns and rows
+tr { display: block; float: left; }
+th, td { display: block; }
+*/

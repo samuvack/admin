@@ -169,5 +169,5 @@ $app['orm.em']->getConfiguration()->getEntityListenerResolver()->register($liste
 
 include __DIR__ . "/controllers/base.php"; //include controllers
 include __DIR__ . "/controllers/ajax.php"; //include controllers
-
+$app->mount('import', include 'controllers/import.php');
 return $app;

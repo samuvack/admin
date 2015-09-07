@@ -17,6 +17,7 @@
 		"symfony/validator":"~2.3",
         "jasongrimes/paginator": "^1.0",
         "jsor/doctrine-postgis": "^1.0",
+        "PHPOffice/PHPExcel": "^1.8",
         "symfony/security": "^2.7",
         "swiftmailer/swiftmailer": "^5.4"
     },
@@ -32,6 +33,8 @@
             "Utils\\Database\\Functions\\": "utils/database/functions",
             "Utils\\Database\\Types\\": "utils/database/types",
             "Utils\\Services\\Mapping\\": "utils/services/mapping",
+            "MyApp\\Files\\Import\\": "src/files/import/",
+            "MyApp\\FormTypes\\Import\\": "src/formTypes/import/",
             "MyApp\\User\\": "src/user",
             "MyApp\\Controllers\\": "app/controllers",
             "Utils\\Graph\\": "utils/graph"
