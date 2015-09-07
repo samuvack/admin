@@ -36,7 +36,8 @@
             "MyApp\\Files\\Import\\": "src/files/import/",
             "MyApp\\FormTypes\\Import\\": "src/formTypes/import/",
             "MyApp\\User\\": "src/user",
-            "MyApp\\Controllers\\": "app/controllers"
+            "MyApp\\Controllers\\": "app/controllers",
+            "Utils\\Graph\\": "utils/graph"
         }
     }
 }

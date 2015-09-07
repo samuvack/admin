@@ -9,6 +9,7 @@ use MyApp\FormTypes\NodeType;
 use MyApp\Entities\Property;
 use MyApp\FormTypes\PropertyType;;
 use JasonGrimes\Paginator;
+use Utils\Graph\GraphData;
 
 require_once __DIR__.'/../ChromePhp.php';
 $app->match('/', function(Application $app){
@@ -82,60 +83,13 @@ $app->get('/node/{id}', function(Application $app, $id) {
 	//get relations from and to this node
 	$relFrom = $node->getRelations();
 	$relTo = $app['orm.em']->getRepository(':Relation')->findBy(array("nodevalue"=>$id));
+	$graphData = new GraphData();
 
 
-    $graphNodes = [];
-    $idConverter = [];
-    $graphLinks = [];
+	$graphData->addRelations($relFrom);
+	$graphData->addRelations($relTo);
 
-    $addNode = function($node) use( &$idConverter, &$graphNodes) {
-        if( ! isset($idConverter[$node->getId()])) {
-            $idConverter[$node->getId()] = sizeof($graphNodes);
-            $graphNodes[] = [
-                'name' => $node->getName(),
-                'id'=>$idConverter[$node->getId()],
-                'nodeid' => $node->getId()
-            ];
-        }
-        return $idConverter[$node->getId()];
-    };
-
-    $addValue = function($value) use( &$idConverter, &$graphNodes) {
-		$id= sizeof($graphNodes);
-		$graphNodes[] = [
-			'name' => $value->__toString(),
-			'id'=> $id,
-			'nodeid' => null
-		];
-		return $id;
-    };
-    $addRelations = function($relations) use(&$idConverter, &$graphNodes, &$graphLinks, $addNode, $addValue) {
-        foreach( $relations as $relation ){
-            $nodeId = null;
-            //startnode is always of type node
-            $addNode($relation->getStart());
-            if($relation->getProperty()->getDatatype() == 'node'){
-                $nodeId = $addNode($relation->getValue());
-            } elseif ($relation->getProperty()->getDatatype() == 'geometry') {
-                //not added
-            } else {
-                $nodeId = $addValue($relation->getValue());
-            }
-            if(isset($nodeId)){
-                $graphLinks[] = [
-                    'source' => $idConverter[$relation->getStart()->getId()],
-                    'target' => $nodeId,
-                    'pname' => $relation->getProperty()->getName()
-                ];
-            }
-        }
-    };
-
-    //add relations from as links and values as nodes
-    $addRelations($relFrom);
-    $addRelations($relTo);
-
-	return $app['twig']->render('node.twig', ['node'=>$node, 'relFrom'=>$relFrom, 'relTo'=>$relTo, 'graphNodes'=>$graphNodes, 'graphLinks'=>$graphLinks]);
+	return $app['twig']->render('node.twig', ['node'=>$node, 'relFrom'=>$relFrom, 'relTo'=>$relTo, 'graphNodes'=>$graphData->getNodes(), 'graphLinks'=>$graphData->getLinks()]);
 })->bind('node');
 
 $app->get('nodes/{value}', function(Application $app, $value) {
@@ -247,36 +201,13 @@ $app->match('/filter', function(Application $app, Request $request) {
 
 $app->get('/graph', function(Application $app) {
 	$relations = $app['orm.em']->getRepository(':Relation')->findAllNodeToNode();
-
-	$nodes = [];
-	$idConverter = [];
-	$links = [];
-	/*
-	 * TODO: Functions like these are kindly ugly in PHP, find alternative
-	 * This isn't (node.)js
-	 *
-	 * Also, call $idConverter and $nodes by reference (&)
-	 */
-	$addNode = function($node) use( &$idConverter, &$nodes) {
-		if( ! isset($idConverter[$node->getId()])) {
-			$idConverter[$node->getId()] = sizeof($nodes);
-			$nodes[] = [
-				'name' => $node->getName(),
-				'id' => $node->getId()
-			];
-		}
-	};
+	$graphData = new GraphData();
 
 	foreach( $relations as $relation ){
-		$addNode($relation->getStart());
-		$addNode($relation->getValue());
-		$links[] = [
-			'source' => $relation->getStart()->getId(),
-			'target' =>$relation->getValue()->getId()
-		];
+		$graphData->addRelation($relation);
 	}
 
-	return $app['twig']->render('graph.twig', array('nodes'=>$nodes, 'links'=>$links));
+	return $app['twig']->render('graph.twig', array('nodes'=>$graphData->getNodes(), 'links'=>$graphData->getLinks()));
 })->bind('graph');
 
 $app->match('/property', function(Application $app, Request $request) {
