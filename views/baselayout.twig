@@ -44,6 +44,9 @@
         <li{% if active == 'insert' %} class="active"{% endif %}><a href="{{ path('insert') }}">Insert</a></li>
         <li{% if active == 'import' %} class="active"{% endif %}><a href="{{ path('import')}}">Import</a></li>
         {% endif %}
+        {% if is_granted('ROLE_ADMIN') %}
+          <li{% if active == 'property' %} class="active"{% endif %}><a href="{{ path('property') }}">New property</a></li>
+        {% endif %}
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="{{ path('user.list') }}">List users</a></li>
