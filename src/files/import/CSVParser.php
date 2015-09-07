@@ -21,5 +21,6 @@ class CSVParser extends FileParser {
 		while($this->continueParsing && ($data = fgetcsv($handle)) !== false) {
 			$this->streamLine($data);
 		}
+		fclose($handle);
 	}
 }
