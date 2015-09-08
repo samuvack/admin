@@ -44,7 +44,7 @@ class ARelation {
 
 	protected $valueObject = null;
 
-	function __construct($startNode = null, $property = null, $value = "", $nodevalue = null, $geometryvalue = null, $qualifier=null, $rank=null) {
+	function __construct($property = null, $value = "", $nodevalue = null, $geometryvalue = null, $qualifier=null, $rank=null) {
 		$this->property = $property;
 		$this->nodevalue = $nodevalue;
 		$this->geometryvalue = $geometryvalue;

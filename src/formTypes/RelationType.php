@@ -29,7 +29,7 @@ class RelationType extends AbstractType
                 'attr'=>array('class'=>'form-control type-selection','placeholder'=>'The property for the item')
             ));
 
-        $builder->addEventListener(FormEvents::POST_SET_DATA, array($this, 'onPreSetData'));
+        $builder->addEventListener(FormEvents::POST_SET_DATA, array($this, 'onPostSetData'));
         $builder->addEventListener(FormEvents::PRE_SUBMIT, array($this, 'onPreSubmit'));
     }
 
@@ -56,11 +56,12 @@ class RelationType extends AbstractType
         ));
     }
 
-    public function onPreSetData(FormEvent $event) {
+    public function onPostSetData(FormEvent $event) {
         $form = $event->getForm();
 
         $type = 'text';
         if(sizeof($event->getData())>0) {
+            $data = $event->getData();
             $type = $event->getData()->getProperty()->getDataType();
         }
         $this->renderFormType($form,$type);
