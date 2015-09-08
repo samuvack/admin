@@ -10,16 +10,17 @@
 	<h3>Properties and relations on {{node.getName}}</h3>
 	<ul class="nodes">
 		{% for relation in relFrom %}
-		<li>{{relation.getProperty.getName}} 
-			{% if relation.getProperty.getDatatype == 'node' %}
-				{#<a href="{{ path('node', {id:relation.getValue.getId}) }}">{{relation.getValue.getName}}</a>#}
+			<li>
+				{{relation.getProperty.getName}}
 				{{ render(relation.getValue, {link:true}) }}
-			{% elseif relation.getProperty.getDatatype == 'text' %}
-				{{ render(relation.getValue) }}
-			{% else %}
-				{#{{relation.getValue}}#}
-				{{ render(relation.getValue) }}
-			{% endif %}
+				{% if relation.secondaryRelations|length > 0 %}
+					<ul>
+						{% for secondaryRelation in relation.secondaryRelations %}
+							{{ secondaryRelation.getProperty.getName}}
+							{{ render(secondaryRelation.getValue) }}
+						{% endfor %}
+					</ul>
+				{% endif %}
 			</li>	
 		{% endfor %}
 	</ul>

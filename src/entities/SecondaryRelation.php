@@ -9,7 +9,7 @@ namespace MyApp\Entities;
 class SecondaryRelation extends ARelation {
 	/**
 	 * @ManyToOne(targetEntity="Relation", inversedBy="secondary_relations")
-	 * @JoinColumn(name="startRelation")
+	 * @JoinColumn(name="parent_relation")
 	 */
 	private $startRelation;
 
