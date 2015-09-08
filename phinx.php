@@ -1,4 +1,5 @@
 <?php
+$config = include __DIR__ . "/app/config/db.include.php";
 return array(
     "paths" => array(
         "migrations" => "app/migrations"
@@ -8,10 +9,10 @@ return array(
         "default_database" => "prod",
         "prod" => array(
             "adapter" => "pgsql",
-            "host" => "localhost",
-            "name" => "Wikidata",
-            "user" => "postgres",
-            "pass" => "postgres",
+            "host" => $config['host'],
+            "name" => $config['dbname'],
+            "user" => $config['user'],
+            "pass" => $config['password'],
         )
     )
 );

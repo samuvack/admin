@@ -11,7 +11,7 @@ d3.selection.prototype.moveToFront = function () {
     });
 };
 
-function createGraph(nodes, links, svgSelector) {
+function createGraph(nodes, links, svgSelector, url) {
 
 
     //select svg canvas (width and height set in css)
@@ -151,6 +151,17 @@ function createGraph(nodes, links, svgSelector) {
         .on("mouseout", function (d) {
             unhighlight(d3.select(this));
         })
+        .on("click", function (d) {
+            colorNode(this);
+            $.get(
+                url + d.id,
+                d.id,
+                function(data) {
+                    var $info = $('#nodeInfo');
+                    $info.html(data);
+                }
+                );
+        })
         .call(drag);
 
     node.append("circle")
@@ -252,5 +263,31 @@ function createGraph(nodes, links, svgSelector) {
         //change opacity of all nodes and links to 1
         node.attr("opacity", 1.0);
         link.attr("stroke-opacity", 1);
+    }
+
+    //color the clicked node
+    function colorNode(cur) {
+        unColorNode();
+        d3.select(cur).classed("colored", true);
+        d3.select(cur).select('circle')
+            .style("fill", "#00bc8c")
+            .style("stroke", 'white')
+            .style("stroke-width", '2px');
+
+    }
+
+    //uncolor nodes
+    function unColorNode() {
+        var colored = svg.selectAll(".colored")
+        if(colored[0].length > 0) {
+            var id = colored.node().id;
+            if (id) {
+                colored.select("circle").style("fill", 'grey');
+            } else {
+                colored.select("circle").style("fill", 'white');
+            }
+            colored.select("circle").classed("colored", false);
+            colored.select("circle").style("stroke", "none")
+        }
     }
 }
