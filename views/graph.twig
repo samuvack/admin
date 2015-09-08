@@ -24,7 +24,7 @@
         (function(){
             var nodes = {{nodes|json_encode|raw}};
             var links = {{links|json_encode|raw}};
-            createGraph(nodes,links, '#nodesGraph');
+            createGraph(nodes,links, '#nodesGraph', "{{ app.request.basepath }}/ajax/nodeInfo/");
         })();
     </script>
 {% endblock %}
