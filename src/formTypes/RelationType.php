@@ -49,7 +49,7 @@ class RelationType extends AbstractType
     }
 
     protected function renderSubRelations($form) {
-        $form->add('subrelations', 'collection', array(
+        $form->add('secondaryRelations', 'collection', array(
             'type' => new SubRelationType($this->app),
             'allow_add' => true,
             'prototype_name'=> '__SUB__'

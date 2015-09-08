@@ -17,7 +17,7 @@ class Relation extends ARelation {
     /**
      * @OneToMany(targetEntity="SecondaryRelation", mappedBy="startRelation")
      **/
-    private $secondary_relations = [];
+    private $secondaryRelations = [];
 
     function __construct($startNode = null, $property = null, $value = "", $nodevalue = null, $geometryvalue = null, $qualifier=null, $rank=null) {
         parent::__construct($property,$value, $nodevalue, $geometryvalue, $qualifier, $rank);
@@ -38,11 +38,11 @@ class Relation extends ARelation {
         return $this->startNode;
     }
 
-    function addRelation(SecondaryRelation $relation) {
-        $this->secondary_relations[]  = $relation;
+    function addSecondaryRelation(SecondaryRelation $relation) {
+        $this->secondaryRelations[]  = $relation;
     }
 
-    public function getRelations() {
-        return $this->secondary_relations;
+    public function getSecondaryRelations() {
+        return $this->secondaryRelations;
     }
 }
