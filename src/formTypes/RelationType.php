@@ -44,6 +44,16 @@ class RelationType extends AbstractType
             'attr' => array('class' => 'form-control', 'placeholder' => 'The id for the qualifier statement'),
             'required' => false
         ));
+
+        $this->renderSubRelations($form);
+    }
+
+    protected function renderSubRelations($form) {
+        $form->add('subrelations', 'collection', array(
+            'type' => new SubRelationType($this->app),
+            'allow_add' => true,
+            'prototype_name'=> '__SUB__'
+        ));
     }
 
     public function onPreSetData(FormEvent $event) {

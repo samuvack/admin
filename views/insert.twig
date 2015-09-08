@@ -12,13 +12,19 @@
 			{{ form_row(form.description) }}
 
 			<h3>{{ form_label(form.relations) }}</h3>
-			<ul class="relations" data-prototype="{{ form_widget(form.relations.vars.prototype)|e }}">
+			<ul class="relations collectionholder"
+				data-placeholder="__name__"
+				data-prototype="{{ include('import/subrelationForm.twig', {relation:form.relations.vars.prototype})|e }}">
 				{# iterate over each existing property and render its fields #}
 				{% for rel in form.relations %}
 					<li>
 						{{ form_row(rel.property) }}
-					</li><br>
+					</li>
+					<br>
 				{% endfor %}
+				<li>
+					<a href="#" class="add_relation_link">Add another relation</a>
+				</li>
 			</ul>
 		{{ form_end(form) }}
 {% endblock %}
