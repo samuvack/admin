@@ -1,5 +1,6 @@
 <?php
 namespace MyApp\Entities;
+use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -9,13 +10,13 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Relation extends ARelation {
     /**
-     * @ManyToOne(targetEntity="Node", inversedBy="relations")
+     * @ManyToOne(targetEntity="Node", inversedBy="relations", cascade={"all"})
      * @JoinColumn(name="startnode")
      */
     private $startNode;
 
     /**
-     * @OneToMany(targetEntity="SecondaryRelation", mappedBy="startRelation")
+     * @OneToMany(targetEntity="SecondaryRelation", mappedBy="startRelation",cascade={"all"})
      **/
     private $secondaryRelations = [];
 
@@ -40,9 +41,17 @@ class Relation extends ARelation {
 
     function addSecondaryRelation(SecondaryRelation $relation) {
         $this->secondaryRelations[]  = $relation;
+        $relation->setStart($this);
+    }
+
+    public function setSecondaryRelations($secondaryRelations) {
+        $this->secondaryRelations = $secondaryRelations;
+        foreach($secondaryRelations as $secondaryRelation) {
+            $secondaryRelation->setStart($this);
+        }
     }
 
     public function getSecondaryRelations() {
-        return $this->secondaryRelations;
+         return $this->secondaryRelations;
     }
 }

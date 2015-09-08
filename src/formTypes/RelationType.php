@@ -31,6 +31,7 @@ class RelationType extends AbstractType
 
         $builder->addEventListener(FormEvents::POST_SET_DATA, array($this, 'onPostSetData'));
         $builder->addEventListener(FormEvents::PRE_SUBMIT, array($this, 'onPreSubmit'));
+        $this->renderSubRelations($builder);
     }
 
     private function renderFormType($form, $type) {
@@ -45,11 +46,10 @@ class RelationType extends AbstractType
             'required' => false
         ));
 
-        $this->renderSubRelations($form);
     }
 
-    protected function renderSubRelations($form) {
-        $form->add('secondaryRelations', 'collection', array(
+    protected function renderSubRelations($builder) {
+        $builder->add('secondaryRelations', 'collection', array(
             'type' => new SubRelationType($this->app),
             'allow_add' => true,
             'prototype_name'=> '__SUB__'

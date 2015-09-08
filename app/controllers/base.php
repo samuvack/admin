@@ -66,6 +66,10 @@ $app->match('/insert', function(Request $request) use($app) {
 		$em = $app['orm.em'];
 		foreach($node->getRelations() as $relation) {
 			$relation->setStart($node); // Relation is on the owning side
+			foreach($relation->getSecondaryRelations() as  $second) {
+				$second->setStart($relation);
+				$em->persist($second);
+			}
 			$em->persist($relation);
 		}
 		$em->persist($node);
@@ -113,6 +117,10 @@ $app->match('/update/{id}', function(Application $app, Request $request, $id) {
 	if ($form->isValid()) {
         foreach($node->getRelations() as $relation) {
 			$relation->setStart($node);
+			foreach($relation->getSecondaryRelations() as  $second) {
+				$second->setStart($relation);
+				$em->persist($second);
+			}
 			$em->persist($relation); // Relation is on the owning side
 		}
         $em->persist($node);

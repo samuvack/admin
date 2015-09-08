@@ -8,7 +8,7 @@ namespace MyApp\Entities;
  */
 class SecondaryRelation extends ARelation {
 	/**
-	 * @ManyToOne(targetEntity="Relation", inversedBy="secondary_relations")
+	 * @ManyToOne(targetEntity="Relation", inversedBy="secondaryRelations",cascade={"persist"})
 	 * @JoinColumn(name="parent_relation")
 	 */
 	private $startRelation;
@@ -24,6 +24,7 @@ class SecondaryRelation extends ARelation {
 	}
 
 	public function setStart(Relation $new_start) {
+
 		$this->startRelation = $new_start;
 	}
 }

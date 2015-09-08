@@ -27,7 +27,7 @@ class Node implements RenderableValue {
     /**
      * @OneToMany(targetEntity="Relation", mappedBy="startNode", cascade={"all"})
      **/
-    private $relations;
+    private $relations = [];
     /**
      * @OneToMany(targetEntity="NodeLog", mappedBy="node", cascade={"all"})
      **/
@@ -38,7 +38,6 @@ class Node implements RenderableValue {
         $this->name = $name;
         $this->description = $description;
         $this->descr = $descr;
-        $this->relations = new ArrayCollection();
     }
 
     function getId()
