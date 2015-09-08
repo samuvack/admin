@@ -39,11 +39,24 @@ class NodeRepository extends MyRepository {
 		$qb->innerJoin("n.relations","rel",Join::WITH,
 			$qb->expr()->eq("n.id","rel.startNode")
 		);
-		$qb->where("rel.property = ?1 AND lower(rel.value) = lower(?2)");
+
+		$propQuery = $this->getEntityManager()->createQuery('SELECT p.datatype FROM :Property p WHERE p.id = ?1');
+		$propQuery->setParameter(1,$prop_id);
+		$propType = $propQuery->getSingleScalarResult();
+
+		if($propType == 'geometry'){
+			$qb->where("rel.property = ?1 AND rel.geometryvalue = ?2");
+		}elseif($propType == 'node'){
+			$qb->where("rel.property = ?1 AND rel.nodevalue = ?2");
+		}else {
+			$qb->where("rel.property = ?1 AND lower(rel.value) = lower(?2)");
+		}
+
 		$qb->setParameters(array(
 			1 => $prop_id,
 			2 => $rel_value
 		));
+		//return $qb->getQuery();
 		return $qb->getQuery()->getResult();
 	}
 

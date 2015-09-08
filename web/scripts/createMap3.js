@@ -7,7 +7,7 @@
     var vectorSource = new ol.source.Vector({
         loader: function (extent, resolution, projection) {
 
-            var url = '/../cgi-bin/proxy.cgi?url=' + encodeURIComponent("http://localhost:8080/geoserver/archeowiki/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=archeowiki:geometries&maxFeatures=50&outputFormat=application%2Fjson");
+            var url = '/cgi-bin/proxy.cgi?url=' + encodeURIComponent("http://localhost:8080/geoserver/archeowiki/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=archeowiki:geometries&maxFeatures=50&outputFormat=application%2Fjson");
 
             $.ajax(url).then(function (response) {
                 var features = geojsonFormat.readFeatures(response, {
@@ -28,7 +28,7 @@
     //WMS layer (Archeologische zones) from onroerend erfgoed
     var archZones = new ol.layer.Image({
             source: new ol.source.ImageWMS({
-                url: 'https://geo.onroerenderfgoed.be/geoserver/wms',
+                url: '/cgi-bin/proxy.cgi?url='+ encodeURIComponent('https://geo.onroerenderfgoed.be/geoserver/wms'),
                 params: {
                     'LAYERS': 'vioe:cai_zone',
                     'STYLES': 'vioe_cai_zones',
@@ -103,7 +103,9 @@
                     stroke: new ol.style.Stroke({color: 'black', width: 2})
                 })
             }));
-            document.getElementById('nodeInfo').innerHTML = 'Selected: ' + selectedFeature.getId();
+            var geoId = selectedFeature.getId().replace(/\D+/g, "");
+            showNodeInfo(geoId);
+            //document.getElementById('nodeInfo').innerHTML = 'Selected: ' + selectedFeature.getId();
         } else {
             //If no feature is selected, try to get wms info
             //TODO: change to allow querying multi layers
@@ -141,11 +143,28 @@
                         stroke: new ol.style.Stroke({color: 'black', width: 2})
                     })
                 }));
-                document.getElementById('nodeInfo').innerHTML = 'Selected: ' + x;
+                var geoId = selectedFeature.getId().replace(/\D+/g, "");
+                showNodeInfo(geoId);
             }
         },
         Cesium.ScreenSpaceEventType.LEFT_CLICK
     );
+
+    function showNodeInfo(id) {
+        //ajax request to get the node info of the selected geometry
+        var currUrl = window.location.href;
+        var url = currUrl.substring(0,currUrl.search('/map')) + '/ajax/nodeInfoByGeo/';
+        //TODO: color selected node different
+        //TODO: change url to {{basepath
+        $.get(
+            url + id,
+            null,
+            function(data) {
+                var $info = $('#nodeInfo');
+                $info.html(data);
+            }
+        );
+    };
 
     $("#2dbutton").click(function() {
         ol3d.setEnabled(false);
@@ -178,4 +197,12 @@
             "display":"block"
         });
     });
+
+    $("#mapExport").click(function() {
+        map.once('postcompose', function(event) {
+            var canvas = event.context.canvas;
+            $("#mapExport").attr("href",canvas.toDataURL('image/png'));
+        });
+        map.renderSync();
+    })
 })();
