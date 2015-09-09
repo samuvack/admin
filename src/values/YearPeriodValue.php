@@ -9,6 +9,7 @@
 namespace MyApp\Values;
 
 
+use MyApp\Entities\Relation;
 use MyApp\FormTypes\YearPeriodType;
 
 class YearPeriodValue implements RenderableValue {
@@ -54,5 +55,14 @@ class YearPeriodValue implements RenderableValue {
 	 */
 	public function render(\Twig_Environment $env, array $params) {
 		// TODO: Implement render() method.
+	}
+
+	/*
+	 * Returns true if the two periods overlap (=atleast 1 common year).
+	 */
+	public function filter(Relation $relation) {
+
+		$value = $relation->getValue();
+		return $this->start <= $value->getEndyear() && $value->getStartyear() <= $this->end;
 	}
 }

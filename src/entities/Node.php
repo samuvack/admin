@@ -130,4 +130,8 @@ class Node implements RenderableValue {
         $params = array_merge(array('node'=> $this, 'link'=>false), $params);
         $env->display("values/node.twig", $params);
     }
+
+    public function filter(Relation $relation) {
+        // TODO: Implement filter() method.
+    }
 }

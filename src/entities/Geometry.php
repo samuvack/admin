@@ -78,4 +78,7 @@ class Geometry implements RenderableValue
         $env->display("values/geo.twig", $params);
     }
 
+    public function filter(Relation $relation) {
+        // TODO: Implement filter() method.
+    }
 }

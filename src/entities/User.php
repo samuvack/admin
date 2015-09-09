@@ -76,6 +76,10 @@ class User extends \MyApp\User\AUser implements RenderableValue
 		$params = array_merge(array('user'=> $this, 'link'=>false), $params);
 		$env->display('values/user.twig',$params);
 	}
+
+	public function filter(Relation $relation) {
+		// TODO: Implement filter() method.
+	}
 }
 
 class LogIterator implements \Iterator {
