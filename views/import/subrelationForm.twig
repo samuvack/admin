@@ -1,0 +1,24 @@
+<div id="{{ relation.vars.id }}" >
+    {{ form_row(relation.property) }}
+    {{ form_row(relation.value) }}
+    {{ form_row(relation.rank) }}
+    {{ form_row(relation.qualifier) }}
+
+    <ul class="subrelations collectionholder"
+        data-placeholder="__SUB__"
+        data-prototype="{{ form_widget(relation.secondaryRelations.vars.prototype)|e }}"
+            >
+        {# iterate over each existing property and render its fields #}
+        {% for rel in relation.secondaryRelations %}
+            <li>
+                {{ form_row(relation.property) }}
+                {{ form_row(relation.value) }}
+                {{ form_row(relation.rank) }}
+                {{ form_row(relation.qualifier) }}
+            </li>
+        {% endfor %}
+        <li>
+            <a href="#" class="add_relation_link">Add another subrelation</a>
+        </li>
+    </ul>
+</div>

@@ -7,7 +7,9 @@ function initAjaxFormvalueHook(formurl) {
             url: formurl + val,
             success: function(data) {
                 var $parent = $that.closest('li > div');
+                console.log($parent);
                 var id = $parent.attr('id');
+                console.log(id);
                 var $outer = $("#" + id + "_value");
                 var name = $outer.attr('id').replace(/_/,'[');
                 name = name.replace(/_/g,'][') +']';

@@ -29,8 +29,9 @@ class RelationType extends AbstractType
                 'attr'=>array('class'=>'form-control type-selection','placeholder'=>'The property for the item')
             ));
 
-        $builder->addEventListener(FormEvents::POST_SET_DATA, array($this, 'onPreSetData'));
+        $builder->addEventListener(FormEvents::POST_SET_DATA, array($this, 'onPostSetData'));
         $builder->addEventListener(FormEvents::PRE_SUBMIT, array($this, 'onPreSubmit'));
+        $this->renderSubRelations($builder);
     }
 
     private function renderFormType($form, $type) {
@@ -44,13 +45,23 @@ class RelationType extends AbstractType
             'attr' => array('class' => 'form-control', 'placeholder' => 'The id for the qualifier statement'),
             'required' => false
         ));
+
     }
 
-    public function onPreSetData(FormEvent $event) {
+    protected function renderSubRelations($builder) {
+        $builder->add('secondaryRelations', 'collection', array(
+            'type' => new SubRelationType($this->app),
+            'allow_add' => true,
+            'prototype_name'=> '__SUB__'
+        ));
+    }
+
+    public function onPostSetData(FormEvent $event) {
         $form = $event->getForm();
 
         $type = 'text';
         if(sizeof($event->getData())>0) {
+            $data = $event->getData();
             $type = $event->getData()->getProperty()->getDataType();
         }
         $this->renderFormType($form,$type);
