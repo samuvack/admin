@@ -34,7 +34,7 @@ class RelationType extends AbstractType
         $this->renderSubRelations($builder);
     }
 
-    private function renderFormType($form, $type) {
+    protected function renderFormType($form, $type) {
         $formType = $this->app['mapping.manager']->getFormType($type);
         $form->add('value', $formType);
         $form->add('rank', 'choice', array(

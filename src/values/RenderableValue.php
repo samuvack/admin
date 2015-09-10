@@ -3,6 +3,8 @@
 namespace MyApp\Values;
 
 
+use MyApp\Entities\Relation;
+
 interface RenderableValue {
 	/**
 	 * @return String simple string for use in e.g. the graph
@@ -18,4 +20,6 @@ interface RenderableValue {
 	 * Extended view, for detailed representation
 	 */
 	public function render(\Twig_Environment $env, array $params);
+
+	public function filter(Relation $relation);
 }
