@@ -67,7 +67,10 @@ $app->register(new DoctrineOrmServiceProvider, array(
 // Postgis and custom types
 Type::addType('log_action', 'Utils\Database\Types\LogAction');
 
-$app->register(new \Silex\Provider\TwigServiceProvider(), array('twig.path' => __DIR__ . '/../views',));
+$app->register(new \Silex\Provider\TwigServiceProvider(), array('twig.path' =>array(
+	'default'=>__DIR__ . '/../views'
+)));
+$app['twig.loader.filesystem']->addPath($app['twig.loader.filesystem']->getPaths()[0].'/values', 'values');
 $app->register(new \Silex\Provider\UrlGeneratorServiceProvider());
 $app->register(new \Silex\Provider\FormServiceProvider());
 $app->register(new \Silex\Provider\ValidatorServiceProvider());
