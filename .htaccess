@@ -1,0 +1,11 @@
+Options -Indexes
+allow from all
+<IfModule mod_rewrite.c>
+    Options -MultiViews
+
+    RewriteEngine On
+    RewriteCond  %{DOCUMENT_ROOT}/geosearch/admin/web/$1 -f
+    RewriteRule  ^(.*)$  /geosearch/admin/web/$1  [L,QSA]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^ bootstrap.php [QSA,L]
+</IfModule>

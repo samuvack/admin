@@ -6,5 +6,5 @@ allow from all
     RewriteEngine On
 
     RewriteCond %{REQUEST_FILENAME} !-f
-    RewriteRule ^ index.php [QSA,L]
+    RewriteRule ^ bootstrap2.php [QSA,L]
 </IfModule>
