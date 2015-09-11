@@ -12,7 +12,7 @@ class NodeRepository extends MyRepository {
 	 */
 	public function findByDescription($search_term) {
 		$qb = $this->createQueryBuilder('n');
-		$qb->where("TS_MATCH_OP(n.descr, plainto_tsquery('english', :term)) = TRUE")
+		$qb->where("TS_MATCH_OP(n.descr, plainto_tsquery('dutch', :term)) = TRUE")
 			->setParameter('term', $search_term);
 		return $qb->getQuery()->getResult();
 	}
