@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__.'/../../vendor/autoload.php';
+use MyApp\Entities\ShadowEntities\Filter;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
@@ -184,27 +185,23 @@ $app->get('/history/{id}', function(Application $app, $id) {
 
 $app->match('/filter', function(Application $app, Request $request) {
 	//create form with default data
-	$default = array(
-		'type'=>'',
-		'property'=>'',
-		'value' =>''
-	);
+	$filter = new Filter();
 
-	$form = $app['form.factory']->createBuilder(new FilterType($app), $default)->getForm();
+	$form = $app['form.factory']->createBuilder(new FilterType($app), $filter)->getForm();
 	$form->handleRequest($request);
-
+	$nodes = [];
 	if ($form->isValid()) {
 		//get the property id and value
 		$data = $form->getData();
-		$id = $data['property'];
-		$value = $data['value'];
+		$prop = $data->getProperty();
+		$relations = $app['orm.em']->getRepository(':Relation')->findBy(array('property'=>$prop));
+		$relations = $filter->filter($relations);
 
-		//get the nodes with this property and value
-		$nodes = $app["orm.em"]->getRepository(':Node')->findByPropertyValue($id, $value);
-
-		return $app['twig']->render('filter.twig', array('form'=>$form->createView(), 'nodes'=>$nodes));
+		foreach($relations as $relation) {
+			$nodes[] = $relation->getStart();
+		}
 	}
-	return $app['twig']->render('filter.twig', array('form'=>$form->createView(), 'nodes'=>array()));
+	return $app['twig']->render('filter.twig', array('form'=>$form->createView(), 'nodes'=>$nodes));
 })->bind('filter');
 
 $app->get('/graph', function(Application $app) {
