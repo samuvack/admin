@@ -20,9 +20,9 @@ class Node implements RenderableValue {
 
     /** @Column(type="text") */
     private $name;
-    /** @Column(type="text") */
+    /** @Column(type="text", name="summary_nl") */
     private $description;
-    /** @Column(type="tsvector") */
+    /** @Column(type="tsvector", name="descr_nl") */
     private $descr;
     /**
      * @OneToMany(targetEntity="Relation", mappedBy="startNode", cascade={"all"})
