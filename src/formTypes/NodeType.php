@@ -1,5 +1,6 @@
 <?php
 namespace MyApp\FormTypes;
+use Doctrine\ORM\EntityRepository;
 use MyApp\Entities\Node;
 	use Symfony\Component\Form\AbstractType;
 	use Symfony\Component\Form\FormBuilderInterface;
@@ -23,10 +24,30 @@ use MyApp\Entities\Node;
 				'constraints'=>array(new Assert\NotBlank(),new Assert\Length(array('min'=>3))),
 				'attr' => array('class'=>'form-control', 'placeholder'=>'The name of the item')
 				))
-			->add('description', 'textarea', array(
-				'constraints'=>array(new Assert\NotBlank(),new Assert\Length(array('min'=>3))),
-				'attr' => array('class'=>'form-control', 'placeholder'=>'The description of the item')
-				));
+				->add('x', 'number', array(
+					'constraints'=>array(new Assert\NotBlank()),
+					'attr' => array('class'=>'form-control', 'placeholder'=>'The x-coordinate')
+				))
+				->add('y', 'number', array(
+					'constraints'=>array(new Assert\NotBlank()),
+					'attr' => array('class'=>'form-control', 'placeholder'=>'The y-coordinate')
+				))
+				->add('layer', 'entity', array(
+					'query_builder' => function(EntityRepository $layerRepo) {
+						$qb = $layerRepo->createQueryBuilder('l');
+						$qb->where("l.feature_info = 'true'");
+						return $qb;
+					},
+					'required' => true,
+					'class' => ':Layer',
+					'em' => $this->app['orm.em'],
+					'choice_label' => 'name',
+					'attr'=>array('class'=>'form-control type-selection','placeholder'=>'The layer for the item')
+				))
+				->add('description', 'textarea', array(
+					'constraints'=>array(new Assert\NotBlank(),new Assert\Length(array('min'=>3))),
+					'attr' => array('class'=>'form-control', 'placeholder'=>'The description of the item')
+					));
 			if(!$this->AJAX) {
 				// Dont add another submit, if this is the form for a relationship value
 				$builder->add('relations', 'collection', array(

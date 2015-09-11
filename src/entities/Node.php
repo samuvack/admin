@@ -27,11 +27,24 @@ class Node implements RenderableValue {
     /**
      * @OneToMany(targetEntity="Relation", mappedBy="startNode", cascade={"all"})
      **/
-    private $relations = [];
+    protected $relations = [];
     /**
      * @OneToMany(targetEntity="NodeLog", mappedBy="node", cascade={"all"})
      **/
     private $logs;
+    /** @Column(type="float") */
+    private $x = 0;
+    /** @Column(type="float") */
+    private $y = 0;
+    /** @Column(type="text") */
+    private $geo;
+    /** @Column(type="geometry",options={"srid"=4326}) */
+   private $geom;
+    /**
+     * @ManyToOne(targetEntity="Layer", inversedBy="nodes", cascade={"all"})
+     * @JoinColumn(name="layer_id")
+     */
+    protected $layer;
 
     function __construct($name="", $description="", $descr=null)
     {
@@ -133,5 +146,31 @@ class Node implements RenderableValue {
 
     public function filter(Relation $relation) {
         // TODO: Implement filter() method.
+    }
+
+    public function getX() {
+        return $this->x;
+    }
+
+    public function getY() {
+        return $this->y;
+    }
+
+    public function getLayer(){
+        return $this->layer;
+    }
+
+    public function setLayer($layer) {
+        $this->layer = $layer;
+    }
+
+    public function setX($x) {
+        $this->x = $x;
+        $this->geo = $this->geom = "POINT( ".$this->x." ".$this->y.")";
+    }
+
+    public function setY($y) {
+        $this->y = $y;
+        $this->geo = $this->geom = "POINT( ".$this->x." ".$this->y.")";
     }
 }
