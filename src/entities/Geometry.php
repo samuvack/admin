@@ -75,7 +75,7 @@ class Geometry implements RenderableValue
      */
     public function render(\Twig_Environment $env, array $params) {
         $params = array_merge(array('value'=> $this), $params);
-        $env->display("values/geo.twig", $params);
+        $env->display("@values/geo.twig", $params);
     }
 
     public function filter(Relation $relation) {
