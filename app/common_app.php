@@ -5,7 +5,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 Type::addType('tsvector', 'Utils\Database\Types\Tsvector');
 Type::addType('geometry', 'Utils\Database\Types\Geometry');
-
+$app->register(new \Silex\Provider\UrlGeneratorServiceProvider());
 $app->register(new Utils\Services\Mapping\MappingServiceProvider());
 $app['mapping.manager']->onRegister(function($type, $mapping) {
 	\MyApp\Converters\StringConverter::addConverter($type, $mapping->getDbConverter());

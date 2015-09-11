@@ -1,1 +1,5 @@
-{{ text|lower }}
+{% if plain %}
+    {{ text|lower }}
+{% else %}
+    <a href="{{ path('nodes', {value:text}) }}">{{ text|lower }}</a>
+{% endif %}
