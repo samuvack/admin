@@ -8,10 +8,10 @@
 
 			{{ form_start(form) }}
 				{# render the fields #}
-				{{ form_row(form.type) }}
+			<div id="{{ form.vars.id }}">
 				{{ form_row(form.property) }}
 				{{ form_row(form.value) }}
-
+			</div>
 			{{ form_end(form) }}
 		</div>
 	
@@ -32,4 +32,8 @@
 	<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js" type="text/javascript"></script>
 	<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 	<script src="scripts/updateFilterProperty.js" type="text/javascript"></script>
+	<script src="scripts/ajaxRelationvalue.js" type="text/javascript"></script>
+	<script type="text/javascript">
+		initAjaxFormvalueHook("{{ app.request.basepath }}/ajax/form/");
+	</script>
 {% endblock %}
