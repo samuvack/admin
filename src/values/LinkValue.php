@@ -9,6 +9,7 @@
 namespace MyApp\Values;
 
 
+use MyApp\Entities\Relation;
 use MyApp\FormTypes\TextType;
 
 class LinkValue implements RenderableValue {
