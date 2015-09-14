@@ -116,7 +116,9 @@ require_once __DIR__ . "/firewall.php";
 $app->register(new FormServiceProvider());
 $app->register(new DoctrineOrmManagerRegistryProvider());
 
+
 include __DIR__.'/common_app.php';
+
 $listener = new \MyApp\Entities\Listeners\NodeLogging($app);
 $app['orm.em']->getConfiguration()->getEntityListenerResolver()->register($listener);
 $listener = new \MyApp\Entities\Listeners\RelationLogging($app);

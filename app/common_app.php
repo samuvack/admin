@@ -34,6 +34,18 @@ $app['mapping.manager']->register('geometry',
 	},
 	new \MyApp\Converters\EntityConverter()
 );
+$app['mapping.manager']->register('date',
+	function($app){
+		return null; // TODO
+	},
+	new \MyApp\Converters\DateConverter()
+);
+$app['mapping.manager']->register('link',
+	function($app){
+		return new \MyApp\FormTypes\LinkType();
+	},
+	new \MyApp\Converters\LinkConverter()
+);
 
 $app->before(function (Request $request) use ($app) {
 	$app['twig']->addGlobal('active', $request->get("_route"));
