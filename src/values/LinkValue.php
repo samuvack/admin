@@ -11,7 +11,7 @@ namespace MyApp\Values;
 
 use MyApp\FormTypes\TextType;
 
-class LinkValue {
+class LinkValue implements RenderableValue {
 	private $url;
 
 	public function __construct($url) {
