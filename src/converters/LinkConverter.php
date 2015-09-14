@@ -9,6 +9,17 @@
 namespace MyApp\Converters;
 
 
-class LinkConverter extends TextConverter {
+use MyApp\Values\LinkValue;
 
+class LinkConverter extends StringConverter {
+	public function toString($object) {
+		if($object == null) {
+			return "";
+		}
+		return $object->getUrl();
+	}
+
+	public function toObject($string) {
+		return new LinkValue($string);
+	}
 }
