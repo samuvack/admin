@@ -3,7 +3,9 @@ namespace MyApp\FormTypes;
 namespace MyApp\FormTypes;
 
 use MyApp\Entities\Property;
+use MyApp\Values\TextValue;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\ChoiceList\ArrayChoiceList;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -18,6 +20,10 @@ class PropertyType extends AbstractType {
 		return 'property';
 	}
 	public function buildForm(FormBuilderInterface $builder, array $options) {
+		$choices = [];
+		foreach($this->app['mapping.manager']->getDataTypes() as $datatype) {
+			$choices[$datatype] = $datatype;
+		}
 		$builder->add('name','text', array(
 				'constraints'=>array(new Assert\NotBlank(),new Assert\Length(array('min'=>3))),
 				'attr' => array('class'=>'form-control', 'place-holder'=>'The name of the property.')
@@ -29,8 +35,10 @@ class PropertyType extends AbstractType {
 			->add('datatype', 'choice',
 				array(
 					'constraints'=>array(new Assert\NotBlank()),
-					'choices'=>$this->app['mapping.manager']->getDataTypes(),
-					'attr' => array('class'=>'form-control')
+					'choices'=>$choices,
+					'attr' => array('class'=>'form-control'),
+					'required'=>true,
+					'multiple'=>false
 				))
 		->add('Submit','submit');
 	}
