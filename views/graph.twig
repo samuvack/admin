@@ -7,6 +7,10 @@
 {% block map %}
     <div id="graph" class="map" style="width:80%;">
         <svg id="nodesGraph" class="map"></svg>
+        {% if is_granted('ROLE_EDITOR') %}
+            <button id="resetConsole">Reset listeners</button>
+            <button id="addLinks">Add links</button>
+        {% endif %}
     </div>
 
     <div id="infoPanel" class="info">
@@ -21,10 +25,17 @@
     <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
     <script src="{{ app.request.basepath }}/scripts/visualNodeRelations.js"> </script>
     <script type="text/javascript">
-        (function(){
+        var graphHandler = (function(){
             var nodes = {{nodes|json_encode|raw}};
             var links = {{links|json_encode|raw}};
-            createGraph(nodes,links, '#nodesGraph', "{{ app.request.basepath }}/ajax/nodeInfo/");
+            return createGraph(nodes,links, '#nodesGraph', "{{ app.request.basepath }}/ajax/nodeInfo/");
         })();
     </script>
+    {% if is_granted('ROLE_EDITOR') %}
+        <script src="{{ app.request.basepath }}/scripts/graphAdmin.js"> </script>
+        <script type="text/javascript">
+            makeAdminConsole(graphHandler, "{{ app.request.basepath }}");
+        </script>
+    {% endif %}
+
 {% endblock %}
