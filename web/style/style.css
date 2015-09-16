@@ -55,3 +55,7 @@ ul.nodes {
     background-color: #00bc8c;
 
 }
+
+.colored circle {
+    fill:red;
+}
