@@ -176,8 +176,8 @@ function createGraph(nodes, links, svgSelector, url) {
         .on("click", function (d) {
             colorNode(this);
             $.get(
-                url + d.id,
-                d.id,
+                url + d.nodeid,
+                d.nodeid,
                 function(data) {
                     var $info = $('#nodeInfo');
                     $info.html(data);
