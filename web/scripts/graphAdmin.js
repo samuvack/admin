@@ -1,10 +1,16 @@
 function makeAdminConsole(graphhandler, baseUrl) {
     $('#resetConsole').click(function() {
+        $('#resetConsole').hide();
+        $("#addLinks").show();
         graphHandler.resetNodeListener();
     });
 
     $("#addLinks").click(function () {
-        graphHandler.resetNodeListener();
+        //show button to stop adding links and remove the add links
+        $('#resetConsole').show();
+        $("#addLinks").hide();
+        //set handlers
+        graphHandler.removeNodeListener();
         var first = null;
         graphHandler.setNodeEvent(function (node) {
             if (first === null) {
@@ -20,7 +26,7 @@ function makeAdminConsole(graphhandler, baseUrl) {
                     }
 
                 });
-                graphHandler.addLink(node, first.node, 'is_part_of');
+                graphHandler.addLink(node, first.node, 'is part of');
                 d3.select(first.dom).classed("colored", false);
                 first = null;
             } else {

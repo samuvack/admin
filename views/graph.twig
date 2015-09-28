@@ -7,15 +7,15 @@
 {% block map %}
     <div id="graph" class="map" style="width:80%;">
         <svg id="nodesGraph" class="map"></svg>
-        {% if is_granted('ROLE_EDITOR') %}
-            <button id="resetConsole">Reset listeners</button>
-            <button id="addLinks">Add links</button>
-        {% endif %}
     </div>
 
     <div id="infoPanel" class="info">
         <h3 class="">Node info</h3>
         <div id="nodeInfo"></div>
+        {% if is_granted('ROLE_EDITOR') %}
+            <button id="addLinks" class="btn btn-default btn-sm">Add links</button>
+            <button id="resetConsole" class="btn btn-primary btn-sm" style="display:none;">Stop adding links</button>
+        {% endif %}
     </div>
 {% endblock %}
 
@@ -30,6 +30,7 @@
             var links = {{links|json_encode|raw}};
             return createGraph(nodes,links, '#nodesGraph', "{{ app.request.basepath }}/ajax/nodeInfo/");
         })();
+        graphHandler.resetNodeListener();
     </script>
     {% if is_granted('ROLE_EDITOR') %}
         <script src="{{ app.request.basepath }}/scripts/graphAdmin.js"> </script>

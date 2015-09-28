@@ -65,16 +65,10 @@ function createGraph(nodes, links, svgSelector, url) {
         })
         .on("drag", dragged);
 
-    var colorMap = {};
+    //dictionary to store colors for links based on property type
+    var colorMap = {'is part of': "#00bc8c"};
     //visualize links as line with a color based on pname of links
     var link = vis.selectAll(".link");
-
-
-    var linkMap = {};
-    link.each(function (d, i) {
-        linkMap[d.source.id + "," + d.target.id] = this;
-        linkMap[d.target.id + "," + d.source.id] = this;
-    });
 
     var edgepaths;
     var edgelabels;
@@ -87,7 +81,6 @@ function createGraph(nodes, links, svgSelector, url) {
             .attr("class", "link");
         linkgs.append("line")
             .attr("class", "link-line")
-            //.style("stroke", "#00bc8c")
             .style("stroke", function(d){
                 if(d.pname){
                     if(colorMap[d.pname]){
@@ -159,6 +152,12 @@ function createGraph(nodes, links, svgSelector, url) {
     }
     updateLinks();
 
+    var linkMap = {};
+    link.each(function (d, i) {
+        linkMap[d.source.id + "," + d.target.id] = this;
+        linkMap[d.target.id + "," + d.source.id] = this;
+    });
+
     //visualize nodes as g elements consisting of circle and text
     //add drag functionality to nodes via .call
     var node = vis.selectAll(".node")
@@ -173,17 +172,6 @@ function createGraph(nodes, links, svgSelector, url) {
         .on("mouseout", function (d) {
             unhighlight(d3.select(this));
         })
-        .on("click", function (d) {
-            colorNode(this);
-            $.get(
-                url + d.nodeid,
-                d.nodeid,
-                function(data) {
-                    var $info = $('#nodeInfo');
-                    $info.html(data);
-                }
-                );
-        })
         .call(drag);
 
     node.append("circle")
@@ -196,9 +184,9 @@ function createGraph(nodes, links, svgSelector, url) {
         })
         .attr("fill", function(d){
             if(d.nodeid){
-                return 'grey';
-            }else{
                 return 'white';
+            }else{
+                return 'darkgrey';
             }
         });
 
@@ -212,9 +200,9 @@ function createGraph(nodes, links, svgSelector, url) {
         .style("font-size", "12px")
         .style("fill", function(d){
             if(d.nodeid){
-                return "grey";
+                return "white";
             } else{
-                return 'white';
+                return 'darkgrey';
             }
         });
 
@@ -312,13 +300,15 @@ function createGraph(nodes, links, svgSelector, url) {
 
     //uncolor nodes
     function unColorNode() {
-        var colored = svg.selectAll(".colored")
-        if(colored[0].length > 0) {
-            var id = colored.node().id;
+        var colored = svg.selectAll(".colored");
+        if(colored.data().length > 0) {
+            var id = colored.data()[0].nodeid;
             if (id) {
-                colored.select("circle").style("fill", 'grey');
+                colored.select("circle")
+                    .style("fill", 'white');
             } else {
-                colored.select("circle").style("fill", 'white');
+                colored.select("circle")
+                    .style("fill", 'darkgrey');
             }
             colored.select("circle").classed("colored", false);
             colored.select("circle").style("stroke", "none")
@@ -334,14 +324,25 @@ function createGraph(nodes, links, svgSelector, url) {
     };
 
     Handler.prototype.addLink = function(source,target, name){
-        console.log(nodeMap);
-        console.log(target);
-        console.log(source);
         force.links().push({source:source, target:target, pname:name});
         updateLinks();
     };
 
     Handler.prototype.resetNodeListener = function(){
+        node.on("click", function (d) {
+            colorNode(this);
+            $.get(
+                url + d.nodeid,
+                d.nodeid,
+                function(data) {
+                    var $info = $('#nodeInfo');
+                    $info.html(data);
+                }
+            );
+        })
+    };
+
+    Handler.prototype.removeNodeListener = function(){
         node.on("click",null);
     };
 
