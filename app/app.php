@@ -184,10 +184,10 @@ $app['orm.em']->getConfiguration()->getEntityListenerResolver()->register($liste
 include __DIR__ . "/controllers/base.php"; //include controllers
 include __DIR__ . "/controllers/ajax.php"; //include controllers
 $app->mount('import', include 'controllers/import.php');
-return $app;
+
 
 // COPY VAN DAVID GEOSEARCH
-
+/*
 $app->match('/', function(Application $app) {
 	$em = $app['orm.em'];
 	$layerRepository = $em->getRepository(':Layer');
@@ -210,4 +210,8 @@ $app->match('ajax/featureinfo', function(Application $app) {
 	return $app['twig']->render('object.twig', array('layers'=>$layers));
 });
 include $config['wiki_dir'] .'/app/common_app.php';
+
+*/
+
 return $app;
+

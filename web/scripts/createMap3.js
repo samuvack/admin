@@ -184,13 +184,14 @@
     var map = new ol.Map({
         controls: [
             new ol.control.Zoom(),
-            new ol.control.Attribution(),
+            //new ol.control.Attribution(),
             new ol.control.MousePosition({
                 projection: 'EPSG:4326',
                 coordinateFormat: ol.coordinate.createStringXY(4)
             }),
             new ol.control.Rotate(),
-            new ol.control.ScaleLine()
+            new ol.control.ScaleLine(),
+
         ],
         target: container,
 
@@ -202,6 +203,7 @@
             zoom: 9.5
         })
     });
+
 
 
     //create 3d globe view
@@ -305,7 +307,7 @@
     };
 
     $("#2dbutton").click(function() {
-        ol3d.setEnabled(false);
+        ol3d.setEnabled(true);
         $("#map").css({
             "width": "80%",
             "display": 'block'
@@ -315,7 +317,7 @@
     });
 
     $("#3dbutton").click(function() {
-       ol3d.setEnabled(true);
+       ol3d.setEnabled(false);
         $("#map").css("display","none");
         $("#3dmap").css({
             "width":"80%",
@@ -324,7 +326,7 @@
     });
 
     $("#2d3dbutton").click(function() {
-        ol3d.setEnabled(true);
+        ol3d.setEnabled(false);
         $("#map").css({
             "width":"40%",
             "display":"block"
