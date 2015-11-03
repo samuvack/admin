@@ -1,29 +1,43 @@
+
+/*   */
 body {
-	padding-top: 15px;
+    background-color: white;
 }
 
+
+
+/*
 ul.nodes {
-
 }
+*/
 
-.nodes li {
+/*.nodes li {
         list-style-type: none;
 }
+*/
 
+/* Middenbox */
 .content {
-	padding: 40px 15px;
-    width: 100%;
-    max-width: 920px;
+	/*padding: 40px 15px; */
+    /*width: 100%;*/
+    background-color: white;
+    max-width: 100%;
+    max-height: 100%;
     margin-left: auto;
     margin-right: auto;
+    color: black;
 }
-
+/*   Hoofdbox */
 .content > h1 {
-    height: 250px;
+    height: 298px;
     background-image: url('../images/Header.png');
-    color: white;
+    background-size: 1100px 298px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: white;
+    color: black;
     box-sizing: border-box;
-	padding: 15px;
+	padding: 17px;
 }
 
 #nodesGraph {
@@ -36,13 +50,15 @@ ul.nodes {
     height: 45vh;
 }
 
+
+
 .map {
     width: 40%;
     height:85vh;
     padding:0;
     float: left;
     position: relative;
-    border: #222222;
+    border: white;
     border-width: 2px;
     border-style: solid;
 }
@@ -54,13 +70,21 @@ ul.nodes {
     position: relative;
     float: left;
     overflow: auto;
-    border: #222222;
+    border: white;
     border-width: 2px;
     border-style: solid;
-    background-color: #00bc8c;
+    background-color: black;
+
+}
+
+
+.form_control{
+    color: grey;
+
 
 }
 
 .colored circle {
     fill:red;
 }
+

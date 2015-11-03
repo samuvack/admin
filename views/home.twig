@@ -2,16 +2,26 @@
 {% block title 'Wiki' %}
 
 {% block content %}
-		<h1>Wiki</h1>
-		<p>Search node</p>
-		{{form(form, {'action':path('home'), 'method':'POST'})}}
+		<h1></h1>
+		<p> </p>
+
+
+{#
+
+{{form(form, {'action':path('home'), 'method':'POST'})}}
 		{{form_rest(form)}}
+		#}
+
 	</div>
 
 	<div class="content">
-	  <p>Nodes in the wiki</p>
+
+
+	  <p></p>
+
+		{#
 	  <ul class="nodes">
-	  {% for node in nodes %}
+		  	  {% for node in nodes %}
 		<li>
 		  {{ render(node) }}
 		</li>
@@ -23,7 +33,13 @@
 			{{ paginator|raw }}
 		  </div>
 		{% endif %}
+
+		#}
+
+
 {% endblock %}
+
+
 
 {% block script %}
 	<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js" type="text/javascript"></script>

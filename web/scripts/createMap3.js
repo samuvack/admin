@@ -59,7 +59,7 @@
         target: container,
         layers: [osm, untiled, archZones],
         view: new ol.View({
-            center: ol.proj.transform([3.60593711681199, 50.748987289315], 'EPSG:4326', 'EPSG:3857'),
+            center: ol.proj.transform([2.934895, 51.236610], 'EPSG:4326', 'EPSG:3857'),
             maxZoom: 25,
             zoom: 19
         })
