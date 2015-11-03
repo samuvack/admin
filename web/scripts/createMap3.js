@@ -25,6 +25,9 @@
     //allows the loader function to be called
     vectorSource.clear(true);
 
+    /*
+
+    VOORBEELD BERDIEN
     //WMS layer (Archeologische zones) from onroerend erfgoed
     var archZones = new ol.layer.Image({
             source: new ol.source.ImageWMS({
@@ -39,6 +42,139 @@
             })
         })
         ;
+
+    */
+
+    /*
+
+     VOORBEELD BART DE WIT
+   */
+
+
+    var ship = new ol.layer.Image({
+
+
+     source: new ol.source.ImageWMS({
+         url: 'http://we12s007.ugent.be:8080/geoserver/search/wms',
+             params: {
+                 'LAYERS': 'ships'},
+             serverType: 'geoserver'
+     }),
+     visible:false
+     })
+
+     var plains = new ol.layer.Image({
+            extent: [250000, 6630000, 500000, 6770000],
+            source: new ol.source.ImageWMS({
+            url: 'http://we12s007.ugent.be:8080/geoserver/search/wms',
+            params: {'LAYERS': 'plains'},
+            serverType: 'geoserver'
+            }),
+     visible:false
+     })
+
+
+
+     var artefacts = new ol.layer.Image({
+     extent: [250000, 6630000, 500000, 6770000],
+     source: new ol.source.ImageWMS({
+     url: 'http://we12s007.ugent.be:8080/geoserver/search/wms',
+     params: {'LAYERS': 'artefacts'},
+     serverType: 'geoserver'
+     }),
+     visible:false
+     })
+
+
+     var structures = new ol.layer.Image({
+     extent: [250000, 6630000, 500000, 6770000],
+     source: new ol.source.ImageWMS({
+     url: 'http://we12s007.ugent.be:8080/geoserver/search/wms',
+     params: {'LAYERS': 'structures'},
+     serverType: 'geoserver'
+     }),
+     visible:false
+     })
+
+
+      var events = new ol.layer.Image({
+        extent: [250000, 6630000, 500000, 6770000],
+        source: new ol.source.ImageWMS({
+        url: 'http://we12s007.ugent.be:8080/geoserver/search/wms',
+        params: {'LAYERS': 'events'},
+        serverType: 'geoserver'
+     }),
+     visible:false
+     })
+
+
+     var others = new ol.layer.Image({
+     extent: [250000, 6630000, 500000, 6770000],
+     source: new ol.source.ImageWMS({
+     url: 'http://we12s007.ugent.be:8080/geoserver/search/wms',
+     params: {'LAYERS': 'others'},
+     serverType: 'geoserver'
+     }),
+     visible:false
+     })
+
+
+     var contplaat = new ol.layer.Image({
+     extent: [250000, 6630000, 500000, 6770000],
+     source: new ol.source.ImageWMS({
+     url: 'http://we12s007.ugent.be:8080/geoserver/search/wms',
+     params: {'LAYERS': 'belgisch_continentaal_plat'},
+     serverType: 'geoserver'
+     }),
+     visible:true
+     })
+
+
+     var zandbanken = new ol.layer.Image({
+     extent: [250000, 6630000, 500000, 6770000],
+     source: new ol.source.ImageWMS({
+     url: 'http://we12s007.ugent.be:8080/geoserver/search/wms',
+     params: {'LAYERS': 'sandbanks_nl_en'},
+     serverType: 'geoserver'
+     }),
+     visible:true
+     })
+
+
+     var toppaleogenemorphology = new ol.layer.Image({
+     extent: [250000, 6630000, 500000, 6770000],
+     source: new ol.source.ImageWMS({
+     url: 'http://we12s007.ugent.be:8080/geoserver/search/wms',
+     params: {'LAYERS': 'toppaleogenemorphology_nl_en'},
+     serverType: 'geoserver'
+     }),
+     visible:false
+     })
+
+
+     var archaeology = new ol.layer.Image({
+     extent: [250000, 6630000, 500000, 6770000],
+     source: new ol.source.ImageWMS({
+     url: 'http://we12s007.ugent.be:8080/geoserver/search/wms',
+     params: {'LAYERS': 'archaeology'},
+     serverType: 'geoserver'
+     }),
+     visible:false
+     })
+
+
+     var zeebodem = new ol.layer.Image({
+     extent: [250000, 6630000, 500000, 6770000],
+     source: new ol.source.ImageWMS({
+     url: 'http://we12s007.ugent.be:8080/geoserver/search/wms',
+     params: {'LAYERS': 'zeebodem'},
+     serverType: 'geoserver'
+     }),
+     visible:false
+     })
+
+
+
 
     var osm = new ol.layer.Tile({
         source: new ol.source.OSM()
@@ -57,11 +193,13 @@
             new ol.control.ScaleLine()
         ],
         target: container,
-        layers: [osm, untiled, archZones],
+
+        //toevoegen aan kaart
+        layers: [osm, untiled, ship, plains, toppaleogenemorphology, contplaat, others, zeebodem, archaeology, zandbanken, events, artefacts, structures],
         view: new ol.View({
-            center: ol.proj.transform([2.934895, 51.236610], 'EPSG:4326', 'EPSG:3857'),
+            center: ol.proj.transform([2.7462, 51.5108], 'EPSG:4326', 'EPSG:3857'),
             maxZoom: 25,
-            zoom: 19
+            zoom: 9.5
         })
     });
 

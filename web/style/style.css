@@ -53,6 +53,7 @@ ul.nodes {
 
 
 .map {
+    margin-top: 100px;
     width: 40%;
     height:85vh;
     padding:0;
@@ -61,6 +62,8 @@ ul.nodes {
     border: white;
     border-width: 2px;
     border-style: solid;
+
+
 }
 
 .info {
@@ -70,10 +73,11 @@ ul.nodes {
     position: relative;
     float: left;
     overflow: auto;
-    border: white;
+    border: grey;
     border-width: 2px;
     border-style: solid;
-    background-color: black;
+    background-color: grey;
+    margin-top: 100px;
 
 }
 

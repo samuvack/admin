@@ -110,16 +110,11 @@ h1 small,.h1 small,h2 small,.h2 small,h3 small,.h3 small,h1 .small,.h1 .small,h2
 .navbar-collapse{margin-right:-15px;margin-left:-15px; margin-top: 0px}
 
 
-
-
-
-
-
 @media (min-width:768px){
     .container>.navbar-header,
     .container-fluid>.navbar-header,
     .container>.navbar-collapse,
-    .container-fluid>.navbar-collapse{margin-right:0;margin-left:100px; margin-top: 50px}}
+    .container-fluid>.navbar-collapse{margin-right:0;margin-left:50px; margin-top: 50px}}
 
 .navbar-static-top{
     z-index:1000;

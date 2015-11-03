@@ -185,3 +185,29 @@ include __DIR__ . "/controllers/base.php"; //include controllers
 include __DIR__ . "/controllers/ajax.php"; //include controllers
 $app->mount('import', include 'controllers/import.php');
 return $app;
+
+// COPY VAN DAVID GEOSEARCH
+
+$app->match('/', function(Application $app) {
+	$em = $app['orm.em'];
+	$layerRepository = $em->getRepository(':Layer');
+	$layers = $layerRepository->findBy(array(),array('order_draw'=>'ASC'));
+	$groupRepository = $em->getRepository(':Group');
+	$groups = $groupRepository->findBy(array(),array('order_legend'=>'ASC'));
+	return $app['twig']->render('home.twig', array('layers'=>$layers, "groups"=> $groups));
+});
+
+
+$app->match('ajax/featureinfo', function(Application $app) {
+	$tempLayers = $app['orm.em']->getRepository(':Layer')->findBy(array());
+	$layers = [];
+	foreach($tempLayers as $layer) {
+		if($layer->hasFeatureInfo() && $_GET['l'.$layer->getId()]=='true') {
+			$layers[$layer->getLegendName()] =
+				$app['orm.em']->getRepository(':Node')->findInCircle($layer, $_GET['x'], $_GET['y'], $_GET['res']);
+		}
+	}
+	return $app['twig']->render('object.twig', array('layers'=>$layers));
+});
+include $config['wiki_dir'] .'/app/common_app.php';
+return $app;
