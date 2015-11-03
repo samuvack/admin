@@ -50,7 +50,25 @@ ul.nodes {
     height: 45vh;
 }
 
+.logo {
+    position: absolute;
 
+    background-image: url('../images/Logo.png');
+    height: 100px;
+    width: 126px;
+    background-size: 126.5px 100px;
+    background-repeat: no-repeat;
+    margin-left: 0px;
+}
+
+.logo2 {
+    position: absolute;
+    height: 100px;
+    width: 100px;
+    margin-left: 130px;
+    padding: 1px;
+    color: darkslategrey;
+}
 
 .map {
     margin-top: 100px;
