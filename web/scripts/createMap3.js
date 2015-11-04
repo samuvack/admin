@@ -22,6 +22,7 @@
         source: vectorSource
     });
 
+
     //allows the loader function to be called
     vectorSource.clear(true);
 
@@ -51,19 +52,25 @@
    */
 
 
-    var ship = new ol.layer.Image({
 
 
-     source: new ol.source.ImageWMS({
-         url: 'http://we12s007.ugent.be:8080/geoserver/search/wms',
-             params: {
-                 'LAYERS': 'ships'},
-             serverType: 'geoserver'
-     }),
-     visible:false
-     })
+
+var ship = new ol.layer.Tile({
+    title: 'Scheepswrakken',
+    extent: [250000, 6630000, 500000, 6770000],
+    source: new ol.source.TileWMS({
+        url: 'http://we12s007.ugent.be:8080/geoserver/search/wms',
+        params: {'LAYERS': 'ships'},
+        serverType: 'geoserver'
+    }),
+    visible:false
+});
+
+
+
 
      var plains = new ol.layer.Image({
+            title: 'Vliegtuigwrakken',
             extent: [250000, 6630000, 500000, 6770000],
             source: new ol.source.ImageWMS({
             url: 'http://we12s007.ugent.be:8080/geoserver/search/wms',
@@ -71,11 +78,12 @@
             serverType: 'geoserver'
             }),
      visible:false
-     })
+     });
 
 
 
      var artefacts = new ol.layer.Image({
+     title: 'Artefacts',
      extent: [250000, 6630000, 500000, 6770000],
      source: new ol.source.ImageWMS({
      url: 'http://we12s007.ugent.be:8080/geoserver/search/wms',
@@ -83,10 +91,11 @@
      serverType: 'geoserver'
      }),
      visible:false
-     })
+     });
 
 
      var structures = new ol.layer.Image({
+     title: 'Structures',
      extent: [250000, 6630000, 500000, 6770000],
      source: new ol.source.ImageWMS({
      url: 'http://we12s007.ugent.be:8080/geoserver/search/wms',
@@ -94,10 +103,11 @@
      serverType: 'geoserver'
      }),
      visible:false
-     })
+     });
 
 
       var events = new ol.layer.Image({
+        title: 'Events',
         extent: [250000, 6630000, 500000, 6770000],
         source: new ol.source.ImageWMS({
         url: 'http://we12s007.ugent.be:8080/geoserver/search/wms',
@@ -105,10 +115,11 @@
         serverType: 'geoserver'
      }),
      visible:false
-     })
+     });
 
 
      var others = new ol.layer.Image({
+     title: 'Andere',
      extent: [250000, 6630000, 500000, 6770000],
      source: new ol.source.ImageWMS({
      url: 'http://we12s007.ugent.be:8080/geoserver/search/wms',
@@ -116,10 +127,11 @@
      serverType: 'geoserver'
      }),
      visible:false
-     })
+     });
 
 
      var contplaat = new ol.layer.Image({
+     title: 'Belgisch Continentale PLaat',
      extent: [250000, 6630000, 500000, 6770000],
      source: new ol.source.ImageWMS({
      url: 'http://we12s007.ugent.be:8080/geoserver/search/wms',
@@ -127,10 +139,11 @@
      serverType: 'geoserver'
      }),
      visible:true
-     })
+     });
 
 
      var zandbanken = new ol.layer.Image({
+     title: 'Zandbanken',
      extent: [250000, 6630000, 500000, 6770000],
      source: new ol.source.ImageWMS({
      url: 'http://we12s007.ugent.be:8080/geoserver/search/wms',
@@ -138,10 +151,11 @@
      serverType: 'geoserver'
      }),
      visible:true
-     })
+     });
 
 
      var toppaleogenemorphology = new ol.layer.Image({
+     title: 'Top paleogenemorphology',
      extent: [250000, 6630000, 500000, 6770000],
      source: new ol.source.ImageWMS({
      url: 'http://we12s007.ugent.be:8080/geoserver/search/wms',
@@ -149,10 +163,11 @@
      serverType: 'geoserver'
      }),
      visible:false
-     })
+     });
 
 
      var archaeology = new ol.layer.Image({
+     title: 'Archeology',
      extent: [250000, 6630000, 500000, 6770000],
      source: new ol.source.ImageWMS({
      url: 'http://we12s007.ugent.be:8080/geoserver/search/wms',
@@ -160,10 +175,11 @@
      serverType: 'geoserver'
      }),
      visible:false
-     })
+     });
 
 
      var zeebodem = new ol.layer.Image({
+     title: 'Zeebodem',
      extent: [250000, 6630000, 500000, 6770000],
      source: new ol.source.ImageWMS({
      url: 'http://we12s007.ugent.be:8080/geoserver/search/wms',
@@ -171,38 +187,114 @@
      serverType: 'geoserver'
      }),
      visible:false
-     })
+     });
 
 
 
+       var OpenStreetMap = new ol.layer.Tile({
+            title: 'OpenStreet Map',
+            type: 'base',
+            visible: true,
+            source: new ol.source.OSM()
+        });
 
-    var osm = new ol.layer.Tile({
-        source: new ol.source.OSM()
-    });
-
-    //new OL map element in container div with specified options
-    var map = new ol.Map({
-        controls: [
-            new ol.control.Zoom(),
-            //new ol.control.Attribution(),
-            new ol.control.MousePosition({
-                projection: 'EPSG:4326',
-                coordinateFormat: ol.coordinate.createStringXY(4)
-            }),
-            new ol.control.Rotate(),
-            new ol.control.ScaleLine(),
-
-        ],
-        target: container,
-
-        //toevoegen aan kaart
-        layers: [osm, untiled, ship, plains, toppaleogenemorphology, contplaat, others, zeebodem, archaeology, zandbanken, events, artefacts, structures],
-        view: new ol.View({
-            center: ol.proj.transform([2.7462, 51.5108], 'EPSG:4326', 'EPSG:3857'),
-            maxZoom: 25,
-            zoom: 9.5
+    var Watercolor =  new ol.layer.Tile({
+        title: 'Water Color',
+        type: 'base',
+        visible: false,
+        source: new ol.source.Stamen({
+            layer: 'watercolor'
         })
     });
+
+
+
+       var Satellite = new ol.layer.Tile({
+            title: 'Satellite',
+            type: 'base',
+            visible: false,
+            source: new ol.source.MapQuest({layer: 'sat'})
+        });
+
+    var Hybride = new ol.layer.Tile({
+        title: 'Hybride',
+        type: 'base',
+        visible: false,
+        source: new ol.source.MapQuest({layer: 'hyb'})
+    });
+
+
+
+
+        var osm = new ol.layer.Tile({
+            source: new ol.source.OSM()
+         });
+
+             //new OL map element in container div with specified options
+             var map = new ol.Map({
+                 controls: [
+                     new ol.control.Zoom(),
+                     //new ol.control.Attribution(),
+                     new ol.control.MousePosition({
+                         projection: 'EPSG:4326',
+                         coordinateFormat: ol.coordinate.createStringXY(4)
+                     }),
+                     new ol.control.Rotate(),
+                     new ol.control.ScaleLine(),
+
+                 ],
+                 target: container,
+
+                 //toevoegen aan kaart
+                 layers: [
+                     new ol.layer.Group({
+                         'title': 'Base maps',
+
+                         layers: [OpenStreetMap, Watercolor, Satellite, Hybride]
+                     }),
+
+                     new ol.layer.Group({
+                         'title': 'Dieptemodel',
+                         layers: [ zeebodem ]
+                     }),
+
+                     new ol.layer.Group({
+                         'title': 'Situering',
+                         layers: [ toppaleogenemorphology,zandbanken, contplaat]
+                     }),
+
+
+                     new ol.layer.Group({
+                         'title': 'Archeologische vondsten',
+                         layers: [ archaeology]
+                     }),
+
+                     new ol.layer.Group({
+                         'title': 'Erfgoed',
+                         layers: [ ship, plains,artefacts, structures, events, others ]
+                     }),
+
+
+
+    ],
+
+                 view: new ol.View({
+                     center: ol.proj.transform([2.7462, 51.5108], 'EPSG:4326' , 'EPSG:3857' ),
+                     maxZoom: 25,
+                     zoom: 9.5
+                 })
+             });
+
+
+             var layerSwitcher = new ol.control.LayerSwitcher({
+                 tipLabel: 'Legend' // Optional label for button
+             });
+             map.addControl(layerSwitcher);
+
+
+
+
+
 
 
 
@@ -219,6 +311,35 @@
      scene.terrainProvider = terrainProvider;*/
     ol3d.setEnabled(true);
 
+
+    map.on('singleclick', function(evt) {
+        document.getElementById('info').innerHTML = '';
+        var viewResolution = /** @type {number} */ (view.getResolution());
+        var url = ship.getGetFeatureInfoUrl(
+            evt.coordinate, viewResolution, 'EPSG:3857',
+            {'INFO_FORMAT': 'text/html'});
+        if (url) {
+            document.getElementById('info').innerHTML =
+                '<iframe seamless src="' + url + '"></iframe>';
+        }
+    });
+
+
+
+    map.on('singleclick', function(evt) {
+        document.getElementById('info').innerHTML = '';
+        var viewResolution = /** @type {number} */ (view.getResolution());
+        var url = Satellite.getGetFeatureInfoUrl(
+            evt.coordinate, viewResolution, 'EPSG:3857',
+            {'INFO_FORMAT': 'text/html'});
+        if (url) {
+            document.getElementById('info').innerHTML =
+                '<iframe seamless src="' + url + '"></iframe>';
+        }
+    });
+
+
+/*
 
     // Add an click event handler for the map which displays the id/info and styles the feature
     var selectedFeature;
@@ -262,6 +383,8 @@
             }
         }
     });
+
+
 
     //Add event handler to the cesium map to allow selecting features, style and show id
     var giveInfoHandler = new Cesium.ScreenSpaceEventHandler(ol3d.getCesiumScene().canvas);
@@ -344,5 +467,25 @@
             $("#mapExport").attr("href",canvas.toDataURL('image/png'));
         });
         map.renderSync();
+
+
+
     })
+*/
+
+    map.on('click', function(evt) {
+        document.getElementById('info2').innerHTML = '';
+        var viewResolution = /** @type {number} */ (view.getResolution());
+        var url = wmsSource.getGetFeatureInfoUrl(
+            evt.coordinate, viewResolution, 'EPSG:4326',
+            {'INFO_FORMAT': 'text/html'});
+        if (url) {
+            document.getElementById('info2').innerHTML =
+                '<iframe seamless src="' + url + '"></iframe>';
+        }
+    });
+
+
+
+
 })();

@@ -52,7 +52,6 @@ ul.nodes {
 
 .logo {
     position: absolute;
-
     background-image: url('../images/Logo.png');
     height: 100px;
     width: 126px;
@@ -70,10 +69,27 @@ ul.nodes {
     color: darkslategrey;
 }
 
+
+.info2{
+
+    width: 100%;
+    height: 100px;
+    padding: 10px 5px 5px 5px;
+    position: absolute;
+    float: left;
+    overflow: auto;
+    background-color: white;
+    margin-top: 50%;
+    color: black;
+
+
+}
+
+
 .map {
     margin-top: 100px;
     width: 50%;
-    height:85vh;
+    height:75vh;
     padding:0;
     float: left;
     position: relative;
@@ -86,7 +102,7 @@ ul.nodes {
 
 .info {
     width: 20%;
-    height: 85vh;
+    height: 75vh;
     padding: 20px 5px 5px 5px;
     position: relative;
     float: left;
@@ -103,7 +119,7 @@ ul.nodes {
 
 .legend {
     width: 15%;
-    height: 85vh;
+    height: 75vh;
     padding: 20px 0 5px;
     position: relative;
     float: left;
@@ -120,7 +136,7 @@ ul.nodes {
 
 .layers {
     width: 15%;
-    height: 85vh;
+    height: 75vh;
     padding: 20px 5px 5px 5px;
     position: relative;
     float: left;

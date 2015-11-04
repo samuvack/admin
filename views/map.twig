@@ -25,6 +25,8 @@
     </div>
 
 
+
+
         <div id="layers" class="layers">
         <h3>Layers</h3>
 
@@ -62,63 +64,85 @@
 
 
 
-        <div id="legend" class="legend">
-            <div id="box" class="box">
+        <div>
 
-            <h3>Legend</h3>
+
+            <div id="legend" class="legend">
+                <div id="box" class="box">
+
+                    <h3>Legend</h3>
+                </div>
+
+
+            </div>
+
+
+
+
+            <div id="map" class="map"></div>
+
+
+
+
+            <!--
+            <div id="3dmap" class="map"></div>
+            -->
+
+
+
+            <div id="infoPanel" class="info">
+                <h3>Infopanel</h3>
+
+                <!--
+
+                <button id="2dbutton" class="btn btn-default btn-sm">Full 2D view</button>
+
+                 <button id="3dbutton" class="btn btn-default btn-sm">Full 3D view</button>
+
+
+
+
+                 <button id="2d3dbutton" class="btn btn-default btn-sm">Splitted 2D/3D view</button>
+                 <p></p>
+                 <p></p>
+                 <h3 class=""> </h3>
+
+
+                 -->
+
+                <div id="nodeInfo">
+                    <p></p>
+                    <!-- <p>All nodes with geographical information</p> -->
+                    <p> </p>
+                    <p> </p>
+
+                    <ul class="nodes">
+                        {% for node in nodes %}
+                            {{ render(node) }}
+                        {% endfor %}
+                    </ul>
+                </div>
+
+
+                <b></b>
+                <a id="mapExport" class="btn btn-default btn-sm" download="map.png">Export map as image</a>
             </div>
 
 
         </div>
 
 
+    <div>
+
+        <div id="info2" class="info2">
+            <h3>test</h3>
 
 
-		<div id="map" class="map"></div>
+        </div>
 
-        <!--
-		<div id="3dmap" class="map"></div>
-        -->
+        </div>
 
 
-
-        <div id="infoPanel" class="info">
-        <h3>Infopanel</h3>
-
-            <!--
-
-            <button id="2dbutton" class="btn btn-default btn-sm">Full 2D view</button>
-
-             <button id="3dbutton" class="btn btn-default btn-sm">Full 3D view</button>
-
-
-
-
-             <button id="2d3dbutton" class="btn btn-default btn-sm">Splitted 2D/3D view</button>
-             <p></p>
-             <p></p>
-             <h3 class=""> </h3>
-
-
-             -->
-
-            <div id="nodeInfo">
-                <p></p>
-               <!-- <p>All nodes with geographical information</p> -->
-                <p> </p>
-                <p> </p>
-
-                <ul class="nodes">
-                    {% for node in nodes %}
-                        {{ render(node) }}
-                    {% endfor %}
-                </ul>
-            </div>
-
-
-            <b></b>
-			<a id="mapExport" class="btn btn-default btn-sm" download="map.png">Export map as image</a>
-		</div>
 
 
 
@@ -138,6 +162,16 @@
 	<!--Ol3-Cesium-->
 	<script src="http://openlayers.org/ol3-cesium/ol3cesium.js"></script>
 
+    <!--GetElement-->
+    <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <!--Exportmap-->
+    <script src="{{ app.request.basepath }}/scripts/loader.js"> </script>
+
+        <!--Layer Switcher-->
+    <script src="{{ app.request.basepath }}/scripts/LayerSwitcher.js"> </script>
+    <link rel="stylesheet" href="{{ app.request.basepath }}/style/LayerSwitcher.css" type="text/css">
 
 	<script src="{{ app.request.basepath }}/scripts/createMap3.js"> </script>
 
