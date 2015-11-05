@@ -235,6 +235,16 @@ var ship = new ol.layer.Tile({
                  controls: [
                      new ol.control.Zoom(),
                      //new ol.control.Attribution(),
+
+                     new ol.control.ZoomToExtent({
+                         extent: [
+                             250000, 6630000,
+                             500000, 6770000
+                         ]
+                     }),
+
+                    new ol.control.OverviewMap(),
+
                      new ol.control.MousePosition({
                          projection: 'EPSG:4326',
                          coordinateFormat: ol.coordinate.createStringXY(4)
@@ -298,6 +308,11 @@ var ship = new ol.layer.Tile({
 
 
 
+
+
+
+
+
     //create 3d globe view
     var ol3d = new olcs.OLCesium({
         map: map,
@@ -309,12 +324,13 @@ var ship = new ol.layer.Tile({
      url: '//cesiumjs.org/stk-terrain/tilesets/world/tiles'
      });
      scene.terrainProvider = terrainProvider;*/
+
     ol3d.setEnabled(true);
 
 
-    map.on('singleclick', function(evt) {
+   /* map.on('singleclick', function(evt) {
         document.getElementById('info').innerHTML = '';
-        var viewResolution = /** @type {number} */ (view.getResolution());
+        var viewResolution = // @type {number} // (view.getResolution());
         var url = ship.getGetFeatureInfoUrl(
             evt.coordinate, viewResolution, 'EPSG:3857',
             {'INFO_FORMAT': 'text/html'});
@@ -324,11 +340,9 @@ var ship = new ol.layer.Tile({
         }
     });
 
-
-
     map.on('singleclick', function(evt) {
         document.getElementById('info').innerHTML = '';
-        var viewResolution = /** @type {number} */ (view.getResolution());
+        var viewResolution = // @type {number} // (view.getResolution());
         var url = Satellite.getGetFeatureInfoUrl(
             evt.coordinate, viewResolution, 'EPSG:3857',
             {'INFO_FORMAT': 'text/html'});
@@ -338,13 +352,13 @@ var ship = new ol.layer.Tile({
         }
     });
 
+*/
 
-/*
 
     // Add an click event handler for the map which displays the id/info and styles the feature
     var selectedFeature;
     map.on('click', function (evt) {
-        document.getElementById('nodeInfo').innerHTML = '';
+        document.getElementById('info').innerHTML = '';
         if (selectedFeature) {
             selectedFeature.setStyle(null);
         }
@@ -370,7 +384,7 @@ var ship = new ol.layer.Tile({
         } else {
             //If no feature is selected, try to get wms info
             //TODO: change to allow querying multi layers
-            var url = archZones.getSource().getGetFeatureInfoUrl(
+            var url = plains.getSource().getGetFeatureInfoUrl(
                 evt.coordinate,
                 map.getView().getResolution(),
                 map.getView().getProjection(),
@@ -379,13 +393,13 @@ var ship = new ol.layer.Tile({
 
             //TODO: change from iframe to display in text
             if (url) {
-                document.getElementById('nodeInfo').innerHTML = '<iframe seamless src="' + url + '"></iframe>';
+                document.getElementById('info').innerHTML = '<iframe seamless src="' + url + '"></iframe>';
             }
         }
     });
 
 
-
+/*
     //Add event handler to the cesium map to allow selecting features, style and show id
     var giveInfoHandler = new Cesium.ScreenSpaceEventHandler(ol3d.getCesiumScene().canvas);
     giveInfoHandler.setInputAction(
@@ -485,7 +499,28 @@ var ship = new ol.layer.Tile({
         }
     });
 
+    map.on('singleclick', function(evt){
+        var coord = evt.coordinate;
+        var transformed_coordinate = ol.proj.transform(coord, "EPSG:4326", "EPSG:3857");
+        console.log(transformed_coordinate);
+    })
 
+    //pop up
+    map.on('singleclick', function(evt){
+        var coord = evt.coordinate;
+        spawnPopup(coord);
+    });
+
+    function spawnPopup(coord){
+        var popup = $("<div class='popup'></div>");
+
+        var overlay = new ol.Overlay({
+            element:popup
+        });
+
+        map.addOverlay(overlay);
+        overlay.setPosition(coord);
+    }
 
 
 })();

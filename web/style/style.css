@@ -88,7 +88,7 @@ ul.nodes {
 
 .map {
     margin-top: 100px;
-    width: 50%;
+    width: 80%;
     height:75vh;
     padding:0;
     float: left;
@@ -98,6 +98,13 @@ ul.nodes {
     border-style: solid;
 
 
+}
+
+.popup{
+    background:black;
+    width:250px;
+    height:200px;
+    border-radius:5px;
 }
 
 .info {
@@ -148,6 +155,8 @@ ul.nodes {
     margin-top: 100px;
     color: white;
 }
+
+
 .box {
     width: 100%;
     height: 50px;
