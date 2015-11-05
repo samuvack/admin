@@ -9,12 +9,15 @@
 
             var url = '/cgi-bin/proxy.cgi?url=' + encodeURIComponent("http://localhost:8080/geoserver/archeowiki/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=archeowiki:geometries&maxFeatures=50&outputFormat=application%2Fjson");
 
+
+
             $.ajax(url).then(function (response) {
                 var features = geojsonFormat.readFeatures(response, {
                     featureProjection: projection
                 });
                 vectorSource.addFeatures(features);
             });
+
         }
     });
 
@@ -65,7 +68,6 @@ var ship = new ol.layer.Tile({
     }),
     visible:false
 });
-
 
 
 
