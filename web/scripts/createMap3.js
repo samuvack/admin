@@ -200,14 +200,7 @@ var ship = new ol.layer.Tile({
             source: new ol.source.OSM()
         });
 
-    var Watercolor =  new ol.layer.Tile({
-        title: 'Water Color',
-        type: 'base',
-        visible: false,
-        source: new ol.source.Stamen({
-            layer: 'watercolor'
-        })
-    });
+
 
 
 
@@ -225,7 +218,7 @@ var ship = new ol.layer.Tile({
         source: new ol.source.MapQuest({layer: 'hyb'})
     });
 
-
+   // var test
 
 
         var osm = new ol.layer.Tile({
@@ -259,10 +252,11 @@ var ship = new ol.layer.Tile({
 
                  //toevoegen aan kaart
                  layers: [
+
                      new ol.layer.Group({
                          'title': 'Base maps',
 
-                         layers: [OpenStreetMap, Watercolor, Satellite, Hybride]
+                         layers: [OpenStreetMap, Satellite, Hybride]
                      }),
 
                      new ol.layer.Group({

@@ -35,6 +35,7 @@ ol.control.LayerSwitcher = function(opt_options) {
         this_.showPanel();
     };
 
+
     button.onclick = function(e) {
         this_.showPanel();
     };
