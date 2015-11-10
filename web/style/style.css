@@ -18,14 +18,6 @@ ul.nodes {
     margin-right: auto;
 }
 
-.content > h1 {
-    height: 250px;
-    background-image: url('../images/Header.png');
-    color: white;
-    box-sizing: border-box;
-	padding: 15px;
-}
-
 #nodesGraph {
     width: 100%;
     display: inline-block;
