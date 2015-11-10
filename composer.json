@@ -2,6 +2,7 @@
     "require": {
         "dflydev/doctrine-orm-service-provider": "1.0.*",
         "knplabs/console-service-provider": "^1.0",
+		"phpunit/phpunit": "3.7.*",
         "php":  ">=5.5",
         "robmorgan/phinx": "^0.4.4",
         "twig/twig": "~1.18",
@@ -19,7 +20,16 @@
         "jsor/doctrine-postgis": "^1.0",
         "PHPOffice/PHPExcel": "^1.8",
         "symfony/security": "^2.7",
-        "swiftmailer/swiftmailer": "^5.4"
+        "swiftmailer/swiftmailer": "^5.4",
+        "maslosoft/cachetest": "dev-master",
+        "essentialdots/headless": "dev-master",
+        "behat/mink-bundle": "dev-master",
+        "behat/mink-extension": "2.1.x-dev",
+        "phpspec/prophecy": "dev-master",
+        "phpspec/prophecy-phpunit": "dev-master",
+        "adambrett/array_search_keys": "0.2",
+        "adammbalogh/key-value-store-memcached": "0.5.1",
+        "propaganistas/laravel-cache-keywords": "1.1.1"
     },
     
     "autoload": {

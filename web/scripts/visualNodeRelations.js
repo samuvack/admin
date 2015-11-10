@@ -65,60 +65,67 @@ function createGraph(nodes, links, svgSelector, url) {
         })
         .on("drag", dragged);
 
-    var colorMap = {};
+    //dictionary to store colors for links based on property type
+    var colorMap = {'is part of': "#00bc8c"};
     //visualize links as line with a color based on pname of links
-    var link = vis.selectAll(".link")
-        .data(links)
-        .enter().append("g")
-        .attr("class", "link")
-        .append("line")
-        .attr("class", "link-line")
-        //.style("stroke", "#00bc8c")
-        .style("stroke", function(d){
-            if(d.pname){
-                if(colorMap[d.pname]){
-                    return colorMap[d.pname];
-                } else {
-                    colorMap[d.pname] = '#'+Math.floor(Math.random()*16777215).toString(16);
-                    return colorMap[d.pname];
-                }
-            }else {
-                return "#00bc8c";
-            }
-        })
-        .style("stroke-width", "5px")
-        .attr("id", function(d, i) {
-            return "link_" + i;
+    var link = vis.selectAll(".link");
+
+    var edgepaths;
+    var edgelabels;
+    var lines;
+    function updateLinks() {
+        link = link.data(force.links(), function(d){
+            return d.source.id + "-" + d.target.id;
         });
+        var linkgs = link.enter().append("g")
+            .attr("class", "link");
+        linkgs.append("line")
+            .attr("class", "link-line")
+            .style("stroke", function(d){
+                if(d.pname){
+                    if(colorMap[d.pname]){
+                        return colorMap[d.pname];
+                    } else {
+                        colorMap[d.pname] = '#'+Math.floor(Math.random()*16777215).toString(16);
+                        return colorMap[d.pname];
+                    }
+                }else {
+                    return "#00bc8c";
+                }
+            })
+            .style("stroke-width", "5px")
+            .attr("id", function(d, i) {
+                return "link_" + i;
+            });
+        lines = link.select('line');
+        linkgs
+            .append('path')
+            .attr({
+                'd': function (d) {
+                    return 'M ' + d.source.x + ' ' + d.source.y + ' L ' + d.target.x + ' ' + d.target.y
+                },
+                'class': 'edgepath',
+                'id': function (d, i) {
+                    return 'edgepath' + i
+                }
+            })
+            .style("pointer-events", "none");
+        edgepaths = link.select('path');
 
-    var linkMap = {};
-    link.each(function (d, i) {
-        linkMap[d.source.id + "," + d.target.id] = this;
-        linkMap[d.target.id + "," + d.source.id] = this;
-    });
-
-    //define a path allong the edges
-    var edgepaths = vis.selectAll(".edgepath")
-        .data(links)
-        .enter()
-        .append('path')
-        .attr({'d': function(d) {return 'M '+d.source.x+' '+d.source.y+' L '+ d.target.x +' '+d.target.y},
-            'class':'edgepath',
-            'id':function(d,i) {return 'edgepath'+i}})
-        .style("pointer-events", "none");
-
-    //define a label with same color as link
-    var edgelabels = vis.selectAll(".edgelabel")
-        .data(links)
-        .enter()
-        .append('text')
-        .style("pointer-events", "none")
-        .attr({'class':'edgelabel',
-            'id':function(d,i){return 'edgelabel'+i},
-            'dx':10,
-            'dy':'-0.25em',
-            'font-size':10})
-        .style('fill', function(d) {
+            //define a label with same color as link
+        edgelabels = linkgs
+            .append('text')
+            .style("pointer-events", "none")
+            .attr({
+                'class': 'edgelabel',
+                'id': function (d, i) {
+                    return 'edgelabel' + i
+                },
+                'dx': 10,
+                'dy': '-0.25em',
+                'font-size': 10
+            })
+            .style('fill', function (d) {
                 if (d.pname) {
                     if (colorMap[d.pname]) {
                         return colorMap[d.pname];
@@ -131,16 +138,30 @@ function createGraph(nodes, links, svgSelector, url) {
                 }
             });
 
-    //define a textPath and append this to the labels, reference to the path of the link
-    edgelabels.append('textPath')
-        .attr('xlink:href',function(d,i) {return '#edgepath'+i})
-        .style("pointer-events", "none")
-        .text(function(d){return d.pname});
+        //define a textPath and append this to the labels, reference to the path of the link
+        edgelabels.append('textPath')
+            .attr('xlink:href', function (d, i) {
+                return '#edgepath' + i
+            })
+            .style("pointer-events", "none")
+            .text(function (d) {
+                return d.pname
+            });
+        link.exit().remove();
+        force.start();
+    }
+    updateLinks();
+
+    var linkMap = {};
+    link.each(function (d, i) {
+        linkMap[d.source.id + "," + d.target.id] = this;
+        linkMap[d.target.id + "," + d.source.id] = this;
+    });
 
     //visualize nodes as g elements consisting of circle and text
     //add drag functionality to nodes via .call
     var node = vis.selectAll(".node")
-        .data(nodes, function (d) {
+        .data(force.nodes(), function (d) {
             return d.id
         })
         .enter().append("g")
@@ -150,17 +171,6 @@ function createGraph(nodes, links, svgSelector, url) {
         })
         .on("mouseout", function (d) {
             unhighlight(d3.select(this));
-        })
-        .on("click", function (d) {
-            colorNode(this);
-            $.get(
-                url + d.id,
-                d.id,
-                function(data) {
-                    var $info = $('#nodeInfo');
-                    $info.html(data);
-                }
-                );
         })
         .call(drag);
 
@@ -174,11 +184,11 @@ function createGraph(nodes, links, svgSelector, url) {
         })
         .attr("fill", function(d){
             if(d.nodeid){
-                return 'grey';
-            }else{
                 return 'white';
+            }else{
+                return 'darkgrey';
             }
-        })
+        });
 
     node.append("text")
         .attr("dx", 12)
@@ -190,9 +200,9 @@ function createGraph(nodes, links, svgSelector, url) {
         .style("font-size", "12px")
         .style("fill", function(d){
             if(d.nodeid){
-                return "grey";
+                return "white";
             } else{
-                return 'white';
+                return 'darkgrey';
             }
         });
 
@@ -215,6 +225,18 @@ function createGraph(nodes, links, svgSelector, url) {
         edgepaths.attr('d', function(d) {
             return 'M ' + d.source.x + ' ' + d.source.y + ' L ' + d.target.x + ' ' + d.target.y;
         });
+        lines.attr("x1", function (d) {
+            return d.source.x;
+        })
+            .attr("y1", function (d) {
+                return d.source.y;
+            })
+            .attr("x2", function (d) {
+                return d.target.x;
+            })
+            .attr("y2", function (d) {
+                return d.target.y;
+            });
 
         node.attr("transform", function (d) {
             return "translate(" + d.x + "," + d.y + ")";
@@ -278,16 +300,51 @@ function createGraph(nodes, links, svgSelector, url) {
 
     //uncolor nodes
     function unColorNode() {
-        var colored = svg.selectAll(".colored")
-        if(colored[0].length > 0) {
-            var id = colored.node().id;
+        var colored = svg.selectAll(".colored");
+        if(colored.data().length > 0) {
+            var id = colored.data()[0].nodeid;
             if (id) {
-                colored.select("circle").style("fill", 'grey');
+                colored.select("circle")
+                    .style("fill", 'white');
             } else {
-                colored.select("circle").style("fill", 'white');
+                colored.select("circle")
+                    .style("fill", 'darkgrey');
             }
             colored.select("circle").classed("colored", false);
             colored.select("circle").style("stroke", "none")
         }
     }
+
+    function Handler(){
+
+    }
+
+    Handler.prototype.setNodeEvent = function(callback){
+        node.on("click",callback);
+    };
+
+    Handler.prototype.addLink = function(source,target, name){
+        force.links().push({source:source, target:target, pname:name});
+        updateLinks();
+    };
+
+    Handler.prototype.resetNodeListener = function(){
+        node.on("click", function (d) {
+            colorNode(this);
+            $.get(
+                url + d.nodeid,
+                d.nodeid,
+                function(data) {
+                    var $info = $('#nodeInfo');
+                    $info.html(data);
+                }
+            );
+        })
+    };
+
+    Handler.prototype.removeNodeListener = function(){
+        node.on("click",null);
+    };
+
+    return new Handler();
 }

@@ -1,49 +1,174 @@
+
+/*   */
 body {
-	padding-top: 15px;
+    background-color: white;
 }
 
+
+
+/*
 ul.nodes {
-
 }
+*/
 
-.nodes li {
+/*.nodes li {
         list-style-type: none;
 }
+*/
 
+/* Middenbox */
 .content {
-	padding: 40px 15px;
-    width: 100%;
-    max-width: 920px;
+	/*padding: 40px 15px; */
+    /*width: 100%;*/
+    background-color: white;
+    max-width: 100%;
+    max-height: 100%;
     margin-left: auto;
     margin-right: auto;
+    color: black;
 }
 
 #nodesGraph {
     width: 100%;
+    height: 100%;
     display: inline-block;
 }
 
+.minigraph {
+    height: 45vh;
+}
+
+.logo {
+    position: absolute;
+    background-image: url('../images/Logo.png');
+    height: 100px;
+    width: 126px;
+    background-size: 126.5px 100px;
+    background-repeat: no-repeat;
+    margin-left: 0px;
+}
+
+.logo2 {
+    position: absolute;
+    height: 100px;
+    width: 100px;
+    margin-left: 130px;
+    padding: 1px;
+    color: darkslategrey;
+}
+
+
+.info2{
+
+    width: 100%;
+    height: 100px;
+    padding: 10px 5px 5px 5px;
+    position: absolute;
+    float: left;
+    overflow: auto;
+    background-color: white;
+    margin-top: 50%;
+    color: black;
+
+
+}
+
+
 .map {
-    width: 40%;
+    margin-top: 100px;
+    width: 100%;
     height:85vh;
     padding:0;
     float: left;
     position: relative;
-    border: #222222;
-    border-width: 2px;
+    border: lightgrey;
+    border-width: 0px;
     border-style: solid;
+
+
+}
+
+.popup{
+    background:black;
+    width:250px;
+    height:200px;
+    border-radius:5px;
 }
 
 .info {
     width: 20%;
-    height: 85vh;
-    padding: 5px 5px 5px 5px;
+    height: 75vh;
+    padding: 20px 5px 5px 5px;
     position: relative;
     float: left;
     overflow: auto;
-    border: #222222;
-    border-width: 2px;
+    border: lightgrey;
+    border-width: 0px;
     border-style: solid;
-    background-color: #00bc8c;
+    background-color: rgb(37, 42, 58);
+    margin-top: 100px;
+    color: white;
 
 }
+
+
+.legend {
+    width: 15%;
+    height: 75vh;
+    padding: 20px 0 5px;
+    position: relative;
+    float: left;
+    overflow: auto;
+    border: lightgrey;
+    border-width: 0px;
+    border-style: solid;
+    background-color: white;
+    margin-top: 100px;
+}
+
+
+
+
+.layers {
+    width: 15%;
+    height: 75vh;
+    padding: 20px 5px 5px 5px;
+    position: relative;
+    float: left;
+    overflow: auto;
+    border: #CCCC99;
+    border-width: 0px;
+    border-style: solid;
+    background-color: rgb(37, 42, 58);
+    margin-top: 100px;
+    color: white;
+}
+
+
+.box {
+    width: 100%;
+    height: 50px;
+    position: relative;
+    top: 0px;
+    padding: 20px 0px 5px 5px;
+    float: left;
+    overflow: auto;
+    background-color: #de6800;
+    margin-top: -20px;
+    margin-left: 0px;
+    margin-right: 0px;
+    color: white;
+
+}
+
+
+.form_control{
+    color: grey;
+
+
+}
+
+.colored circle {
+    fill:red;
+}
+

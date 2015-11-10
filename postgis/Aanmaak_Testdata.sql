@@ -2,7 +2,9 @@
 TRUNCATE nodes, nodes_logging, properties, properties_logging, statements, statements_logging, geometries;
 
 ---TEST DATA TOEVOEGEN (concept)---
-INSERT INTO nodes (id, name, description) VALUES (default, 'node1', 'Description number 1. This is a test.');
+INSERT INTO nodes (id, name, description) VALUES (default, 'nodes', 'Description number 1. This is a test.');
+
+
 INSERT INTO nodes (name, description) VALUES ('node2', 'Description 2 on node 1');
 INSERT INTO nodes (name, description) VALUES ('node3', 'Description on 3');
 INSERT INTO statements (startID, propertyName, value) VALUES ('2', '1', '3');
@@ -14,7 +16,6 @@ INSERT INTO properties (name, datatype) values ('in','node');
 INSERT INTO properties (name, datatype) values ('contains', 'node');
 INSERT INTO properties (name, datatype) values ('has property', 'text');
 INSERT INTO properties (name, datatype) VALUES ('has geometry', 'geometry');
-INSERT INTO geometries_point (geom) VALUES (ST_GeomFromText('POINT(2 10)', 4326));
 
 ---TEST DATA TOEVOEGEN (echt ~ Project Ronse De Stadstuin-Solva)---
 --NODES
