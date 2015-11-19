@@ -3,12 +3,12 @@
 
 {% block content %}
 		<h1></h1>
-		<p>Give the search term</p>
+		<p><br /><br />Geef de zoekterm</p>
 		{{form(form, {'action':path('search'), 'method':'POST'})}}
 	</div>
 	
 	<div class="content" id="results">
-		<p>Search results</p>
+		<p>Zoek resultaten</p>
 		<ul class="nodes">
 			{% for node in nodes %}
 			<li>

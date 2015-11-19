@@ -2,8 +2,10 @@
 {% block title 'Nodes' %}
 
 {% block content %}
-    <h1>Nodes with value {{value|lower}}</h1>
-    <p>All nodes with value {{value|lower}} in the wiki</p>
+    <h1><br/><br/><br/>
+
+        Knopen met waarde '{{value|lower}}'</h1>
+    <p>Alle knopen met waarde '{{value|lower}}' in de database</p>
     <ul class="nodes">
         {% for node in nodes %}
         <li>
@@ -12,5 +14,5 @@
         </li>
         {% endfor %}
     </ul>
-    <a href="{{ path('insert') }}">Insert new info</a>
+    <a href="{{ path('insert') }}">Voeg nieuwe informatie toe</a>
     {% endblock %}

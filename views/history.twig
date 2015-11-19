@@ -1,13 +1,13 @@
 {% extends 'baselayout.twig' %}
 {% block title 'History of node info' %}
 {% block content %}
-	<h1>History of {{node.getName|e}}</h1>
+	<h1><p><br /><br /></p>Geschiedenis van '{{node.getName|e}}'</h1>
 	<ul class="nodes">
-		<li>NAME: {{node.getName}}</li>
-		<li>DESCRIPTION: {{node.getDescription}}</li>
+		<li>NAAM: {{node.getName}}</li>
+		<li>OMSCHRIJVING: {{node.getDescription}}</li>
 	</ul>
 	
-	<h3>Edits</h3>
+	<h3><p><br /><br /></p>Edits</h3>
 	<ul class="nodes">
 		{% for edit in edits %}
 			<li> {{ edit.action|capitalize }}ed by {{  render(edit.user, {link:true}) }} on {{edit.time|date("j-n-Y g:i")}}</li><br>

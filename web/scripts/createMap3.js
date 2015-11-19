@@ -1,6 +1,10 @@
+
+
 /**
  * Created by Berdien De Roo on 21/08/2015.
  */
+/*
+
 (function() {
     var container = 'map';
     var geojsonFormat = new ol.format.GeoJSON();
@@ -60,7 +64,7 @@
      VOORBEELD BART DE WIT
    */
 
-
+/*
 
 
 
@@ -291,7 +295,7 @@ var ship = new ol.layer.Tile({
     ],
 
                  view: new ol.View({
-                     center: ol.proj.transform([2.7462, 51.5108], 'EPSG:4326' , 'EPSG:3857' ),
+                     center: ol.proj.transform([2.67, 51.46], 'EPSG:4326' , 'EPSG:3857' ),
                      maxZoom: 25,
                      zoom: 9.5
                  })
@@ -355,7 +359,7 @@ var ship = new ol.layer.Tile({
     });
 
 */
-
+/*
 
     // Add an click event handler for the map which displays the id/info and styles the feature
     var selectedFeature;
@@ -488,10 +492,12 @@ var ship = new ol.layer.Tile({
 
     })
 */
-
+/*
     map.on('click', function(evt) {
         document.getElementById('info2').innerHTML = '';
-        var viewResolution = /** @type {number} */ (view.getResolution());
+        var viewResolution = /** @type {number} */
+
+/*      (view.getResolution());
         var url = wmsSource.getGetFeatureInfoUrl(
             evt.coordinate, viewResolution, 'EPSG:4326',
             {'INFO_FORMAT': 'text/html'});

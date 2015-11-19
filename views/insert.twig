@@ -3,7 +3,11 @@
 
 {% block content %}
 		<h1></h1>
-		<p>Add all info</p>
+		<h1><p></p></h1>
+
+
+
+		<p><br /><br />Add all info</p>
 
 		
 		{{ form_start(form) }}
@@ -13,18 +17,21 @@
 			{{ form_row(form.x) }}
 			{{ form_row(form.y) }}
 			{{ form_row(form.layer) }}
-
+	<br /><br /><br />
 			<h3>{{ form_label(form.relations) }}</h3>
 			<ul class="relations collectionholder"
 				data-placeholder="__name__"
 				data-prototype="{{ include('import/subrelationForm.twig', {relation:form.relations.vars.prototype})|e }}">
 				{# iterate over each existing property and render its fields #}
+
 				{% for rel in form.relations %}
 					<li>
 						{{ form_row(rel.property) }}
 					</li>
 					<br>
+					<br />
 				{% endfor %}
+
 				<li>
 					<a href="#" class="add_relation_link">Add another relation</a>
 				</li>

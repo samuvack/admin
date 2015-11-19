@@ -75,7 +75,7 @@ function initGeoSearch(layerObjects) {
         $("#leg").toggleClass('display-none');
     }
 
-    $('.legende_knop').click(toggle_legende);
+    $('#legende_knop').click(toggle_legende);
 
 
     function ajax(alink, aelementid, adata, aconfirm) {

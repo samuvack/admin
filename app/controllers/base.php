@@ -146,7 +146,7 @@ $app->match('/search', function (Application $app, Request $request) {
 			'attr' => array('class'=>'form-control')
 		))
 		->add('send', 'submit', array(
-			'attr' => array('class'=>'btn btn-default'), 'label'=>'Start searching'
+			'attr' => array('class'=>'btn btn-default'), 'label'=>'Start zoekfunctie'
 		))
 		->getForm();
 	$form->handleRequest($request);
