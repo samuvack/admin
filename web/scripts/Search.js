@@ -1,3 +1,5 @@
+
+
 function initGeoSearch(layerObjects) {
     var layers = [
         new ol.layer.Tile({
@@ -33,6 +35,14 @@ function initGeoSearch(layerObjects) {
         target: 'map',
         view: view
     });
+
+
+
+
+
+
+
+
 
     function visible(nr) {
         return ! $('#l'+nr).hasClass('layer');
