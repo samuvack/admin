@@ -20,6 +20,13 @@ $app->match('/', function(Application $app){
 $app->match('/home/{page}/{term}', function(Application $app, Request $request, $page, $term) {
 
 	$nodeRepository = $app['orm.em']->getRepository(':Node');
+
+
+
+
+
+
+
 	//create form
 	$form = $app['form.factory']->createBuilder('form', array('name' =>''))
 		->add('name', 'search', array(
@@ -35,6 +42,17 @@ $app->match('/home/{page}/{term}', function(Application $app, Request $request, 
 		$term =  $form->getData()['name'];
 	}
 	$itemsPerPage = $app['config']['pagination']['nodes_per_page'];
+
+
+
+
+
+
+
+
+
+
+
 
 	//check form
 	if ($term !== null) {
@@ -55,8 +73,20 @@ $app->match('/home/{page}/{term}', function(Application $app, Request $request, 
 
 $app->match('/insert', function(Request $request) use($app) {
 
+
+
+
+
+
 	//default data for the form to be displayed
 	$node = new Node();
+
+
+
+
+
+
+
 
 	//generate the form
 	$form = $app['form.factory']->createBuilder(new NodeType($app), $node)->getForm();
@@ -85,6 +115,11 @@ $app->match('/insert', function(Request $request) use($app) {
 
 $app->get('/node/{id}', function(Application $app, $id) {
 	$node = $app['orm.em']->getRepository(':Node')->find($id);
+
+
+
+
+
 	//get relations from and to this node
 	$relFrom = $node->getRelations();
 	$relTo = $app['orm.em']->getRepository(':Relation')->findBy(array("nodevalue"=>$id));
@@ -98,6 +133,15 @@ $app->get('/node/{id}', function(Application $app, $id) {
 })->bind('node');
 
 $app->get('nodes/{value}', function(Application $app, $value) {
+
+
+
+
+
+
+
+
+
 	//get all the nodes with $value as value for a property
 	$nodes = $app['orm.em']->getRepository(':Node')->findByValue($value);
 	return $app['twig']->render('nodes.twig', ['nodes'=>$nodes, 'value'=>$value]);
@@ -108,11 +152,23 @@ $app->match('/update/{id}', function(Application $app, Request $request, $id) {
 	$em = $app['orm.em'];
 	$noderepo = $em->getRepository(':Node');
 
+
+
+
+
+
+
 	//get the node information for the given id
 	$node = $noderepo->find($id);
 
 	$form = $app['form.factory']->createBuilder(new NodeType($app), $node)->getForm();
 	$form->handleRequest($request);
+
+
+
+
+
+
 
 	//check form
 	if ($form->isValid()) {
@@ -151,6 +207,13 @@ $app->match('/search', function (Application $app, Request $request) {
 		->getForm();
 	$form->handleRequest($request);
 
+
+
+
+
+
+
+
 	//check form
 	if ($form->isValid()) {
 		//get the search term
@@ -163,7 +226,7 @@ $app->match('/search', function (Application $app, Request $request) {
 
 		return $app['twig']->render('search.twig', array('form'=>$form->createView(),'nodes'=>$result));
 	}
-	return $app['twig']->render('search.twig', array('form'=>$form->createView(), 'nodes'=>[]));
+		return $app['twig']->render('search.twig', array('form'=>$form->createView(), 'nodes'=>[]));
 })->bind('search');
 
 $app->get('/map', function(Application $app) {
@@ -191,6 +254,15 @@ $app->match('/filter', function(Application $app, Request $request) {
 	$form->handleRequest($request);
 	$nodes = [];
 	if ($form->isValid()) {
+
+
+
+
+
+
+
+
+
 		//get the property id and value
 		$data = $form->getData();
 		$prop = $data->getProperty();
