@@ -18,7 +18,7 @@ class DateConverter extends StringConverter {
 	}
 
 	public function toObject($string) {
-		$arr = explode('/',$string);
+		$arr = explode('-',$string);
 		return new DateValue($arr[0], $arr[1], $arr[2]);
 	}
 }

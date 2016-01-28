@@ -69,7 +69,7 @@ function initGeoSearch(layerObjects) {
         ajax(url, 'info', '', '');
 
     });
-
+    console.log( visible(tlayer.id));
     function layer() {
         var $this = $(this);
         var nr = $this.data('layer-id');
