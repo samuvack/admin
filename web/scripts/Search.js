@@ -14,7 +14,7 @@ function initGeoSearch(layerObjects) {
         var image = new ol.layer.Image({
             extent: [250000, 6630000, 500000, 6770000],
             source: new ol.source.ImageWMS({
-                url: 'http://we12s007.ugent.be:8080/geoserver/search/wms',
+                url: 'http://we12s007.ugent.be:8080/geoserver/search/wms', //search
                 params: {'LAYERS': tlayer.name},
                 serverType: 'geoserver'
             }),
