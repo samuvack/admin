@@ -141,7 +141,7 @@ class Mailer
 		return $this->resetTokenTtl;
 	}
 
-	public function sendConfirmationMessage(User $user)
+	public function sendConfirmationMessage(AUser $user)
 	{
 		$url = $this->urlGenerator->generate(self::ROUTE_CONFIRM_EMAIL, array('token' => $user->getConfirmationToken()), true);
 
@@ -153,7 +153,7 @@ class Mailer
 		$this->sendMessage($this->confirmationTemplate, $context, $this->getFromEmail(), $user->getEmail());
 	}
 
-	public function sendResetMessage(User $user)
+	public function sendResetMessage(AUser $user)
 	{
 		$url = $this->urlGenerator->generate(self::ROUTE_RESET_PASSWORD, array('token' => $user->getConfirmationToken()), true);
 
