@@ -177,7 +177,7 @@ class UserServiceProvider implements ServiceProviderInterface, ControllerProvide
 				throw new \RuntimeException('To access the SimpleUser mailer you must enable the following missing dependencies: ' . implode(', ', $missingDeps));
 			}
 
-			$mailer = new Mailer($app['mailer'], $app['url_generator'], $app['twig']);
+			$mailer = new Mailer($app['mailer'], $app['url_generator'], $app['twig'], $app['config']['baseUrl']);
 			$mailer->setFromAddress($app['user.options']['mailer']['fromEmail']['address'] ?: null);
 			$mailer->setFromName($app['user.options']['mailer']['fromEmail']['name'] ?: null);
 			$mailer->setConfirmationTemplate($app['user.options']['emailConfirmation']['template']);

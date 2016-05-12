@@ -54,8 +54,11 @@ class Mailer
 	protected $resetTemplate;
 	protected $resetTokenTtl = 86400;
 
-	public function __construct(\Swift_Mailer $mailer, UrlGeneratorInterface $urlGenerator, \Twig_Environment $twig)
+	protected $baseUrl;
+
+	public function __construct(\Swift_Mailer $mailer, UrlGeneratorInterface $urlGenerator, \Twig_Environment $twig, $baseUrl="")
 	{
+		$this->baseUrl = $baseUrl;
 		$this->mailer = $mailer;
 		$this->urlGenerator = $urlGenerator;
 		$this->twig = $twig;
@@ -143,7 +146,7 @@ class Mailer
 
 	public function sendConfirmationMessage(AUser $user)
 	{
-		$url = $this->urlGenerator->generate(self::ROUTE_CONFIRM_EMAIL, array('token' => $user->getConfirmationToken()), true);
+		$url = $this->baseUrl . $this->urlGenerator->generate(self::ROUTE_CONFIRM_EMAIL, array('token' => $user->getConfirmationToken()), true);
 
 		$context = array(
 			'user' => $user,
@@ -155,7 +158,7 @@ class Mailer
 
 	public function sendResetMessage(AUser $user)
 	{
-		$url = $this->urlGenerator->generate(self::ROUTE_RESET_PASSWORD, array('token' => $user->getConfirmationToken()), true);
+		$url = $this->baseUrl . $this->urlGenerator->generate(self::ROUTE_RESET_PASSWORD, array('token' => $user->getConfirmationToken()), true);
 
 		$context = array(
 			'user' => $user,
