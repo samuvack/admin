@@ -10,7 +10,7 @@
         <a href="{{path('update',{id: node.getId})}}">Update</a>
     {% endif %}
     {%  if node.x != 0 %}
-        <button class="focus-map" data-x="{{ node.x }}" data-y="{{ node.y }}">
+        <button class="focus-map" data-layer="{{ node.layer.id }}" data-x="{{ node.x }}" data-y="{{ node.y }}">
             Focus
         </button>
     {% endif %}

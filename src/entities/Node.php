@@ -41,7 +41,7 @@ class Node implements RenderableValue {
     /** @Column(type="geometry",options={"srid"=4326}) */
    private $geom;
     /**
-     * @ManyToOne(targetEntity="Layer", inversedBy="nodes", cascade={"all"})
+     * @ManyToOne(targetEntity="Layer", inversedBy="nodes", cascade={"all"}, fetch="EAGER")
      * @JoinColumn(name="layer_id")
      */
     protected $layer;
