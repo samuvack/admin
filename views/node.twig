@@ -11,19 +11,20 @@
     <ul class="nodes">
         {% for relation in relFrom %}
             <li>
-                {{ relation.getProperty.getName }}
                 {% if relation.getValue != '' %}
+
+                    {{ relation.getProperty.getName }}
                     {{ render(relation.getValue, {link:true}) }}
-                {% endif %}
-                {% if relation.secondaryRelations|length > 0 %}
-                    <ul>
-                        {% for secondaryRelation in relation.secondaryRelations %}
-                            {{ secondaryRelation.getProperty.getName }}
-                            {% if secondaryRelation.getValue != '' %}
-                                {{ render(secondaryRelation.getValue) }}
-                            {% endif %}
-                        {% endfor %}
-                    </ul>
+                    {% if relation.secondaryRelations|length > 0 %}
+                        <ul>
+                            {% for secondaryRelation in relation.secondaryRelations %}
+                                {% if secondaryRelation.getValue != '' %}
+                                    {{ secondaryRelation.getProperty.getName }}
+                                    {{ render(secondaryRelation.getValue) }}
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
                 {% endif %}
             </li>
         {% endfor %}
