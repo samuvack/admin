@@ -10,8 +10,8 @@
     <h3><p><br/><br/></p>Eigenschappen en relaties van '{{ node.getName }}'</h3>
     <ul class="nodes">
         {% for relation in relFrom %}
-            <li>
-                {% if relation.getValue != '' %}
+            {% if relation.getValue != '' %}
+                <li>
 
                     {{ relation.getProperty.getName }}
                     {{ render(relation.getValue, {link:true}) }}
@@ -19,14 +19,16 @@
                         <ul>
                             {% for secondaryRelation in relation.secondaryRelations %}
                                 {% if secondaryRelation.getValue != '' %}
-                                    {{ secondaryRelation.getProperty.getName }}
-                                    {{ render(secondaryRelation.getValue) }}
+                                    <li>
+                                        {{ secondaryRelation.getProperty.getName }}
+                                        {{ render(secondaryRelation.getValue) }}
+                                    </li>
                                 {% endif %}
                             {% endfor %}
                         </ul>
                     {% endif %}
-                {% endif %}
-            </li>
+                </li>
+            {% endif %}
         {% endfor %}
     </ul>
 
