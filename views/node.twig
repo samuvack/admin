@@ -12,7 +12,7 @@
         {% for relation in relFrom %}
             <li>
                 {{ relation.getProperty.getName }}
-                {% if relation.getProperty.getValue != '' %}
+                {% if relation.getValue != '' %}
                     {{ render(relation.getValue, {link:true}) }}
                 {% endif %}
                 {% if relation.secondaryRelations|length > 0 %}
