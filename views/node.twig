@@ -1,58 +1,62 @@
 {% extends 'baselayout.twig' %}
 {% block title 'Node info' %}
 {% block content %}
-	<h1><p><br /><br /></p>Info on {{node.getName|e}}</h1>
-	<h4>{{node.getName|e}}</h4>
-	<ul class="nodes">
-		<li>{{node.getDescription}}</li>
-	</ul>
+    <h1><p><br/><br/></p>Info on {{ node.getName|e }}</h1>
+    <h4>{{ node.getName|e }}</h4>
+    <ul class="nodes">
+        <li>{{ node.getDescription }}</li>
+    </ul>
 
-	<h3><p><br /><br /></p>Eigenschappen en relaties van '{{node.getName}}'</h3>
-	<ul class="nodes">
-		{% for relation in relFrom %}
-			<li>
-				{{relation.getProperty.getName}}
-				{{ render(relation.getValue, {link:true}) }}
-				{% if relation.secondaryRelations|length > 0 %}
-					<ul>
-						{% for secondaryRelation in relation.secondaryRelations %}
-							{{ secondaryRelation.getProperty.getName}}
-							{{ render(secondaryRelation.getValue) }}
-						{% endfor %}
-					</ul>
-				{% endif %}
-			</li>	
-		{% endfor %}
-	</ul>
-	
-	<h3><p><br /><br /></p>Relaties van '{{node.getName}}'</h3>
-	<ul class="nodes">
-		{% for relation in relTo %}
-			<li><a href="{{ path('node', {id:relation.getStart.getId}) }}">{{relation.getStart.getName}}</a>
-			{{relation.getProperty.getName}} {{node.getName}}
-			</li>
-		{% endfor %}
-	</ul>
+    <h3><p><br/><br/></p>Eigenschappen en relaties van '{{ node.getName }}'</h3>
+    <ul class="nodes">
+        {% for relation in relFrom %}
+            <li>
+                {{ relation.getProperty.getName }}
+                {% if relation.getProperty.getName != '' %}
+                    {{ render(relation.getValue, {link:true}) }}
+                {% endif %}
+                {% if relation.secondaryRelations|length > 0 %}
+                    <ul>
+                        {% for secondaryRelation in relation.secondaryRelations %}
+                            {{ secondaryRelation.getProperty.getName }}
+                            {% if secondaryRelation.getProperty.getName != '' %}
+                                {{ render(secondaryRelation.getValue) }}
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
 
-	<div id="graph" class="minigraph">
-		<svg id="nodesGraph"></svg>
-	</div>
+    <h3><p><br/><br/></p>Relaties van '{{ node.getName }}'</h3>
+    <ul class="nodes">
+        {% for relation in relTo %}
+            <li><a href="{{ path('node', {id:relation.getStart.getId}) }}">{{ relation.getStart.getName }}</a>
+                {{ relation.getProperty.getName }} {{ node.getName }}
+            </li>
+        {% endfor %}
+    </ul>
 
-	<a href="{{path('history', {id:node.id})}}"> Toon geschiedenis</a> <br>
-	<a href="{{path('update',{id: node.id})}}">Update</a> <br>
-	<a href="{{ path('home') }}">Terug naar overzicht</a>
+    <div id="graph" class="minigraph">
+        <svg id="nodesGraph"></svg>
+    </div>
+
+    <a href="{{ path('history', {id:node.id}) }}"> Toon geschiedenis</a> <br>
+    <a href="{{ path('update',{id: node.id}) }}">Update</a> <br>
+    <a href="{{ path('home') }}">Terug naar overzicht</a>
 {% endblock %}
 
 {% block script %}
-	<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js" type="text/javascript"></script>
-	<link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-	<script src="{{ app.request.basepath }}/scripts/visualNodeRelations.js"> </script>
-	<script type="text/javascript">
-		(function(){
-			var nodes = {{graphNodes|json_encode|raw}};
-			var links = {{graphLinks|json_encode|raw}};
-			createGraph(nodes,links, '#nodesGraph');
-		})();
-	</script>
+    <script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="{{ app.request.basepath }}/scripts/visualNodeRelations.js"></script>
+    <script type="text/javascript">
+        (function () {
+            var nodes = {{ graphNodes|json_encode|raw }};
+            var links = {{ graphLinks|json_encode|raw }};
+            createGraph(nodes, links, '#nodesGraph');
+        })();
+    </script>
 {% endblock %}
