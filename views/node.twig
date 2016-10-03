@@ -19,7 +19,7 @@
                     <ul>
                         {% for secondaryRelation in relation.secondaryRelations %}
                             {{ secondaryRelation.getProperty.getName }}
-                            {% if secondaryRelation.getProperty.getValue != '' %}
+                            {% if secondaryRelation.getValue != '' %}
                                 {{ render(secondaryRelation.getValue) }}
                             {% endif %}
                         {% endfor %}
