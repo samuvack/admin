@@ -12,14 +12,14 @@
         {% for relation in relFrom %}
             <li>
                 {{ relation.getProperty.getName }}
-                {% if relation.getProperty.getName != '' %}
+                {% if relation.getProperty.getValue != '' %}
                     {{ render(relation.getValue, {link:true}) }}
                 {% endif %}
                 {% if relation.secondaryRelations|length > 0 %}
                     <ul>
                         {% for secondaryRelation in relation.secondaryRelations %}
                             {{ secondaryRelation.getProperty.getName }}
-                            {% if secondaryRelation.getProperty.getName != '' %}
+                            {% if secondaryRelation.getProperty.getValue != '' %}
                                 {{ render(secondaryRelation.getValue) }}
                             {% endif %}
                         {% endfor %}
