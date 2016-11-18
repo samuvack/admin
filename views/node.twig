@@ -35,19 +35,6 @@
         Klik op link om een lijst van archeologisch erfgoed weer te geven met dezelfde eigenschappen.
     </p>
 
-    <h3><p><br/><br/></p>Relaties van '{{ node.getName }}'</h3>
-    <ul class="nodes">
-        {% for relation in relTo %}
-            <li><a href="{{ path('node', {id:relation.getStart.getId}) }}">{{ relation.getStart.getName }}</a>
-                {{ relation.getProperty.getName }} {{ node.getName }}
-            </li>
-        {% endfor %}
-    </ul>
-
-    <div id="graph" class="minigraph">
-        <svg id="nodesGraph"></svg>
-    </div>
-
     <a href="{{ path('history', {id:node.id}) }}"> Toon geschiedenis</a> <br>
     <a href="{{ path('update',{id: node.id}) }}">Update</a> <br>
     <a href="{{ path('home') }}">Terug naar overzicht</a>
