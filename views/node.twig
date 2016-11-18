@@ -1,13 +1,13 @@
 {% extends 'baselayout.twig' %}
 {% block title 'Node info' %}
 {% block content %}
-    <h1><p><br/><br/></p>Info on {{ node.getName|e }}</h1>
+    <h1><p><br/><br/></p>Info van {{ node.getName|e }}</h1>
     <h4>{{ node.getName|e }}</h4>
     <ul class="nodes">
         <li>{{ node.getDescription }}</li>
     </ul>
 
-    <h3><p><br/><br/></p>Eigenschappen en relaties van '{{ node.getName }}'</h3>
+    <h3><p><br/><br/></p>Eigenschappen van '{{ node.getName }}'</h3>
     <ul class="nodes">
         {% for relation in relFrom %}
             {% if relation.getValue != '' %}
@@ -31,6 +31,9 @@
             {% endif %}
         {% endfor %}
     </ul>
+    <p>
+        Klik op link om een lijst van archeologisch erfgoed weer te geven met dezelfde eigenschappen.
+    </p>
 
     <h3><p><br/><br/></p>Relaties van '{{ node.getName }}'</h3>
     <ul class="nodes">
